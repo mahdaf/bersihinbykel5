@@ -1,4 +1,4 @@
-<nav class="sticky top-0 bg-white shadow-md px-12">
+<nav class="sticky top-0 bg-white shadow-sm px-12 z-30">
     <div class="container mx-auto px-4 flex items-center justify-between h-28">
         <!-- Logo kiri -->
         <a href="#" class="flex items-center">
