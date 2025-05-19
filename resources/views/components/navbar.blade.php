@@ -1,51 +1,71 @@
-<!doctype html>
-<html lang="en">
+<nav class="sticky top-0 bg-white shadow-md px-12">
+    <div class="container mx-auto px-4 flex items-center justify-between h-28">
+        <!-- Logo kiri -->
+        <a href="#" class="flex items-center">
+            <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-22 w-auto" />
+        </a>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Hamburger button (mobile) -->
+        <button id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false"
+            class="lg:hidden focus:outline-none">
+            <svg class="h-6 w-6 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16" />
+                <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- Menu kanan -->
+        <ul id="navbar-menu" class="hidden lg:flex space-x-8 font-light" style="color: #810000;">
+            <li>
+                <a href="/dashboard"
+                    class="relative px-1 pb-3
+       {{ request()->is('dashboard') ? 'text-[#810000] border-b-2 border-[#810000]' : 'text-[#810000] hover:border-b-2 hover:border-[#810000]' }}">
+                    HOME
+                </a>
+            </li>
+            <li>
+                <a href="/profil"
+                    class="relative px-1 pb-3
+       {{ request()->is('profil') ? 'text-[#810000] border-b-2 border-[#810000]' : 'text-[#810000] hover:border-b-2 hover:border-[#810000]' }}">
+                    PROFIL
+                </a>
+            </li>
+        </ul>
 
+    </div>
 
-    <!-- Tailwind (via Laravel Vite) -->
-    @vite('resources/css/app.css')
-    <link href="{{ asset('css/navbar.css') }}" rel="stylesheet">
-
-</head>
-
-<body>
-    <nav class="sticky-top navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <!-- Logo kiri -->
-            <a class="navbar-brand" href="#">
-                <img src="{{ asset('Logo.png') }}" alt="Logo" class="d-inline-block align-text-top">
+    <!-- Mobile menu (hidden by default) -->
+    <ul id="mobile-menu" class="lg:hidden hidden flex-col bg-white border-t border-gray-200">
+        <li class="border-b border-gray-200">
+            <a href="/dashboard"
+                class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('dashboard') ? 'bg-gray-100 font-bold' : '' }}">
+                HOME
             </a>
+        </li>
+        <li class="pb-2">
+            <a href="/profil"
+                class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('profil') ? 'bg-gray-100 font-bold' : '' }}">
+                PROFIL
+            </a>
+        </li>
+    </ul>
 
-            <!-- Hamburger -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <script>
+        // Toggle mobile menu
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
 
-            <!-- Menu kanan -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-                <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item mx-2">
-                        <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">HOME</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a class="nav-link {{ request()->is('profil') ? 'active' : '' }}" href="/profil">PROFIL</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+        btn.addEventListener('click', () => {
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', !isHidden);
+        });
     </script>
-</body>
-
-</html>
+</nav>
