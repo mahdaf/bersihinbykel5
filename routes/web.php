@@ -15,7 +15,7 @@ Route::post('register', function () {
 })->name('account/register');
 
 Route::get('password-reset', function () {
-    // halaman reset password
+    // halaman reset password halo di sini
     return view('account/password-reset');
 })->name('password.request');
 
