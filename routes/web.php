@@ -6,18 +6,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/detail-campaign',function (){
-    return view('detailcampaign');
+Route::get('register', function () {
+    return view('account/register');
+})->name('register');
+
+Route::post('register', function () {
+    // Proses pendaftaran pengguna baru
+})->name('account/register');
+
+Route::get('password-reset', function () {
+    // halaman reset password
+    return view('account/password-reset');
+})->name('password.request');
+
+Route::get('/login', function () {
+    return view('account/login');
+})->name('login');
+
+Route::post('/login', function () {
+    // Proses autentikasi login
+})->name('login');
+
+Route::get('/dashboard',function (){
+    return view('dashboard');
 });
 
 Route::get('/profil',function (){
     return view('profil');
-});
-
-Route::get('/edit-campaign', function () {
-    return view('editcampaign');
-});
-
-Route::get('/hapus-campaign', function () {
-    return view('hapuscampaign');
 });
