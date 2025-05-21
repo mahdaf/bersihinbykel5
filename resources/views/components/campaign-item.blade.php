@@ -1,17 +1,31 @@
-<div class="max-w-sm bg-white rounded-2xl shadow-md overflow-hidden">
-  <img src="/images/sample-campaign.jpg" alt="Pilah Sampah Keputih Yuk" class="w-full h-48 object-cover">
-  <div class="p-4">
-    <h3 class="text-lg font-semibold text-gray-900">Pilah Sampah Keputih Yuk</h3>
-    <p class="text-sm text-gray-700 mt-2 font-semibold">Peserta terdaftar</p>
-    <div class="w-full h-3 mt-1 bg-gray-200 rounded-full overflow-hidden">
-      <div class="h-full bg-green-500" style="width: 40%"></div>
+<a href="#" class="block max-w-sm bg-white rounded-2xl overflow-hidden border"
+    style="border-color: rgba(0, 0, 0, 0.15);">
+    {{-- gambar sementara nanti diubah --}}
+    <img src="{{ asset('samplecampaign.jpg') }}" alt="Pilah Sampah Keputih Yuk" class="w-full h-52 object-cover">
+
+    <div class="p-6">
+        <h3 class="text-[16px] mt-2 font-semibold">Pilah Sampah Keputih Yuk</h3>
+        <p class="text-[16px] mt-4 text-gray-800">Gerakan edukasi dan implementasi pemilahan sampah organik dan anorganik
+            di kawasan Keputih. Bertujuan mengurangi volume sampah ke TPA dan mengoptimalkan pengelolaan sampah dari
+            sumbernya.</p>
+        <p class="text-[10px] mt-6 font-semibold">Peserta terdaftar</p>
+
+        <div class="flex items-center justify-between ">
+            <!-- Progress Bar -->
+            <div>
+
+            </div>
+            <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden mr-4">
+                <div class="h-full" style="width: 40%; background-color: #3B9E51;"></div>
+            </div>
+
+            <!-- Tombol -->
+            <button href="#"
+                class="text-xs px-3 py-2 text-white bg-[#810000] border border-[#810000] rounded-lg hover:bg-transparent hover:text-[#810000] hover:border whitespace-nowrap">
+                LIHAT DETAIL
+            </button>
+        </div>
+
+
     </div>
-    <div class="flex items-center mt-4 text-sm text-gray-700">
-      <svg class="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z" />
-      </svg>
-      Remaining 45 Days
-    </div>
-  </div>
-</div>
+</a>

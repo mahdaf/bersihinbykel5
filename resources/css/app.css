@@ -10,7 +10,7 @@
 /* Custom CSS tambahan di bawah */
 html {
     overflow-y: scroll;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
