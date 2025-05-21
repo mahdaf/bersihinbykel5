@@ -14,7 +14,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <!-- Gambar Campaign -->
             <div>
-                <img src="https://source.unsplash.com/featured/?trash" alt="Campaign Image" class="rounded-lg shadow-md">
+                 <img src="https://source.unsplash.com/featured/?trash" alt="Campaign Image" class="rounded-lg shadow-md">
                 <div class="flex justify-center mt-4 space-x-2">
                     <span class="w-3 h-3 rounded-full bg-purple-400"></span>
                     <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
