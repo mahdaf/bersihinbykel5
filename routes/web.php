@@ -11,20 +11,25 @@ Route::get('register', function () {
 })->name('register');
 
 Route::post('register', function () {
-    // Proses pendaftaran pengguna baru
 })->name('account/register');
 
-Route::get('password-reset', function () {
-    // halaman reset password
+Route::get('reset-password', function () {
     return view('account/password-reset');
 })->name('password.request');
+
+Route::get('/check-email', function () {
+  return view('account/check-email');
+});
+
+Route::get('change-password', function () {
+    return view('account/change-password');
+})->name('password.reset');
 
 Route::get('/login', function () {
     return view('account/login');
 })->name('login');
 
 Route::post('/login', function () {
-    // Proses autentikasi login
 })->name('login');
 
 Route::get('/dashboard',function (){
