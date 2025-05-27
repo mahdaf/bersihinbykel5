@@ -60,7 +60,49 @@
                     </div>
                 </div>
 
-                <button class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">IKUTI CAMPAIGN</button>
+                <button onclick="toggleModal()" class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">
+                IKUTI CAMPAIGN
+                </button>
+
+                                <!-- Modal Pendaftaran Campaign -->
+                <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-3xl p-8 w-full max-w-md relative shadow-2xl">
+                        <!-- Tombol Close -->
+                        <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+
+                        <!-- Form -->
+                        <h2 class="text-xl font-bold text-[#55a7aa] mb-6 text-center">Form Pendaftaran Campaign</h2>
+                        <form>
+                            <input type="text" placeholder="Nama Lengkap"
+                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+
+                            <input type="email" placeholder="Email"
+                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+
+                            <div class="flex gap-2 mb-3">
+                                <button type="button" class="bg-[#55a7aa] text-white px-4 rounded-2xl text-lg">+62</button>
+                                <input type="text" placeholder="Nomor Ponsel"
+                                    class="w-full p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="text-[#55a7aa] text-lg font-medium block mb-2">Upload KTP</label>
+                                <input type="file" class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3" />
+                            </div>
+
+                            <button type="submit"
+                                    class="w-full bg-[#810000] hover:bg-[#810000]/90 text-white py-3 rounded-2xl text-lg font-medium">
+                                Daftar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+
 
                 <div class="mt-8 border-t pt-4">
                     <div class="flex items-center mb-2">
@@ -78,5 +120,12 @@
 
     <!-- Font Awesome CDN buat icon kalender & jam -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+    function toggleModal() {
+        const modal = document.getElementById("popupModal");
+        modal.classList.toggle("hidden");
+    }
+</script>
+
 </body>
 </html>
