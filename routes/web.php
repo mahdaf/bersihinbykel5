@@ -34,3 +34,15 @@ Route::get('/dashboard',function (){
 Route::get('/profil',function (){
     return view('profil');
 });
+
+Route::get('/editcampaign',function (){
+    return view('editcampaign');
+});
+
+Route::get('/hapuscampaign',function (){
+    return view('hapuscampaign');
+});
+
+Route::get('/detailcampaign',function (){
+    return view('detailcampaign');
+});
