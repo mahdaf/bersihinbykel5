@@ -64,3 +64,7 @@ Route::get('/hapuscampaign',function (){
 Route::get('/detailcampaign',function (){
     return view('detailcampaign');
 });
+
+Route::get('/pendaftaran',function (){
+    return view('pendaftaran-campaign');
+});
