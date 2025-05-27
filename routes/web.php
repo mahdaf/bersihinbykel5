@@ -52,3 +52,15 @@ Route::get('/campaign/tambah', function () {
     return view('components.TambahCampaign');
 })->name('campaign.tambah');
 
+
+Route::get('/editcampaign',function (){
+    return view('editcampaign');
+});
+
+Route::get('/hapuscampaign',function (){
+    return view('hapuscampaign');
+});
+
+Route::get('/detailcampaign',function (){
+    return view('detailcampaign');
+});
