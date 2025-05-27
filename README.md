@@ -6,26 +6,26 @@ Bersih.in adalah aplikasi digital yang mendukung pengelolaan sampah melalui part
 
 ## Fitur Aplikasi
 
-- **Registrasi**  
-  Pengguna dapat membuat akun dengan mengisi data pribadi, seperti nama, email, dan kata sandi.
+1. **Registrasi**  
+   Pengguna dapat membuat akun dengan mengisi data pribadi, seperti nama, email, dan kata sandi.
 
-- **Login**  
-  Pengguna dapat login dengan menggunakan email dan kata sandi yang telah terdaftar.
+2. **Login**  
+   Pengguna dapat login dengan menggunakan email dan kata sandi yang telah terdaftar.
 
-- **Halaman Utama**  
-  Pengguna dapat melihat daftar campaign yang telah diikuti, rekomendasi campaign, dan mengakses fitur-fitur lainnya seperti pencarian campaign, lokasi, dan notifikasi.
+3. **Halaman Utama**  
+   Pengguna dapat melihat daftar campaign yang telah diikuti, rekomendasi campaign, dan mengakses fitur-fitur lainnya seperti pencarian campaign, lokasi, dan notifikasi.
 
-- **Pencarian Campaign**  
-  Pengguna dapat mencari campaign berdasarkan teks atau suara, serta menggunakan filter untuk mempersempit pencarian.
+4. **Pencarian Campaign**  
+   Pengguna dapat mencari campaign berdasarkan teks atau suara, serta menggunakan filter untuk mempersempit pencarian.
 
-- **Campaign (Volunteer)**  
-  Volunteer dapat mendaftar, menandai, menambah, dan mengedit komentar pada campaign yang tersedia.
+5. **Campaign (Volunteer)**  
+   Volunteer dapat mendaftar, menandai, menambah, dan mengedit komentar pada campaign yang tersedia.
 
-- **Campaign (Komunitas)**  
-  Komunitas dapat membuat dan mengelola pendaftaran serta informasi detail campaign.
+6. **Campaign (Komunitas)**  
+   Komunitas dapat membuat dan mengelola pendaftaran serta informasi detail campaign.
 
-- **Profil Pengguna**  
-  Pengguna dapat melihat dan mengedit daftar komentar yang dipublikasikan, melihat penandaan campaign yang diminati, serta campaign yang telah didaftarkan.
+7. **Profil Pengguna**  
+   Pengguna dapat melihat dan mengedit daftar komentar yang dipublikasikan, melihat penandaan campaign yang diminati, serta campaign yang telah didaftarkan.
 
-- **Profil Komunitas**  
-  Komunitas dapat melihat dan mengedit campaign yang dilaksanakan, interaksi antara partisipan, komentar yang dipublikasikan, serta campaign yang telah dilaksanakan.
+8. **Profil Komunitas**  
+   Komunitas dapat melihat dan mengedit campaign yang dilaksanakan, interaksi antara partisipan, komentar yang dipublikasikan, serta campaign yang telah dilaksanakan.
