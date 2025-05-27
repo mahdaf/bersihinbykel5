@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>Detail Campaign</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new Swiper('.mySwiper', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            });
+        });
+    </script>
 </head>
 <body class="bg-white text-gray-800 font-sans">
 
@@ -14,15 +29,27 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <!-- Gambar Campaign -->
             <div>
-                 <img src="https://source.unsplash.com/featured/?trash" alt="Campaign Image" class="rounded-lg shadow-md">
-                <div class="flex justify-center mt-4 space-x-2">
-                    <span class="w-3 h-3 rounded-full bg-purple-400"></span>
-                    <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
-                    <span class="w-3 h-3 rounded-full bg-gray-400"></span>
-                </div>
-                <div class="mt-4 text-sm text-gray-600">
-                    <p><strong>Lokasi Campaign:</strong></p>
-                    <p><i class="fas fa-map-marker-alt"></i> Institut Teknologi Sepuluh Nopember, Keputih, Surabaya</p>
+                <div class="w-full max-w-md mx-auto">
+                <!-- Slider container -->
+                    <div class="swiper mySwiper rounded-xl overflow-hidden">
+                        <div class="swiper-wrapper">
+                            <!-- Slide -->
+                            <div class="swiper-slide">
+                                <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full object-cover" />
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full object-cover" />
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full object-cover" />
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="swiper-pagination"></div>
+
+                        <div class="swiper-button-prev text-black"></div>
+                        <div class="swiper-button-next text-black"></div>
+                    </div>
                 </div>
             </div>
 
@@ -60,7 +87,11 @@
                     </div>
                 </div>
 
-                <button class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">IKUTI CAMPAIGN</button>
+                <button class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">
+                    <a href = "/editcampaign"> 
+                        EDIT CAMPAIGN
+                    </a>
+                </button>
 
                 <div class="mt-8 border-t pt-4">
                     <div class="flex items-center mb-2">
