@@ -43,6 +43,10 @@ Route::get('/hapuscampaign',function (){
     return view('hapuscampaign');
 });
 
-Route::get('/detailcampaign',function (){
-    return view('detailcampaign');
+Route::get('/detailcampaigncom',function (){
+    return view('detailcampaigncom');
+});
+
+Route::get('/detailcampaignvol',function (){
+    return view('detailcampaignvol');
 });

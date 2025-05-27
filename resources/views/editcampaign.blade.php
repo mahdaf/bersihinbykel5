@@ -10,19 +10,20 @@
   {{-- NAVBAR --}}
   @include('components.navbar')
 
-  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-10">
+  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-10 items-stretch">
     
-    {{-- LEFT PREVIEW (IMAGE + MAP) --}}
-    <div class="flex-1 space-y-6">
-      <button class="text-gray-600 hover:text-gray-900 text-xl">
-            &larr;
+    {{-- LEFT COLUMN --}}
+    <div class="flex-1 flex flex-col gap-6">
+      {{-- Header --}}
+      <div class="flex items-center gap-2">
+        <button class="text-gray-600 hover:text-gray-900 text-xl">
+          &larr;
         </button>
-        <h2 class="text-2xl font-bold">
-            Edit Campaign
-        </h2>
+        <h2 class="text-2xl font-bold">Edit Campaign</h2>
+      </div>
 
-      {{-- Image carousel placeholder --}}
-      <div class="bg-[#E4F9F5] rounded-lg p-4 flex justify-center items-center h-48">
+      {{-- Gambar placeholder --}}
+      <div class="bg-[#E4F9F5] rounded-lg p-4 flex justify-center items-center h-48 w-full">
         <div class="border-2 border-dashed border-[#B2EBF2] rounded-lg w-full h-full flex justify-center items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#50C7B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -32,12 +33,13 @@
       </div>
 
       {{-- Map placeholder --}}
-      <div class="bg-gray-100 rounded-lg h-40"></div>
+      <div class="bg-gray-100 rounded-lg flex-1"></div>
     </div>
 
     {{-- RIGHT FORM --}}
-    <div class="w-full lg:w-1/3 space-y-4">
-      <form class="space-y-4">
+    <div class="flex-1 flex flex-col space-y-4">
+      <form class="flex flex-col gap-4 h-full">
+
         {{-- Nama Campaign --}}
         <div class="bg-[#E4F9F5] rounded-xl p-4">
           <label class="text-sm font-medium text-[#50C7B8] block mb-1">Nama campaign</label>
@@ -71,14 +73,14 @@
         </div>
 
         {{-- Syarat & Ketentuan --}}
-        <div class="bg-[#E4F9F5] rounded-xl p-4">
+        <div class="bg-[#E4F9F5] rounded-xl p-4 flex-1">
           <label class="text-sm font-medium text-[#50C7B8] block mb-2">Syarat dan Ketentuan</label>
-          <ol class="list-decimal list-inside text-sm text-gray-700 space-y-1">
-            <li><input type="text" placeholder="Membawa sarung tangan karet" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"></li>
-            <li><input type="text" placeholder="Menggunakan boots" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"></li>
-            <li><input type="text" placeholder="Membawa kantung plastik minimal 2" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"></li>
-            <li><input type="text" placeholder="Menggunakan masker" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"></li>
-          </ol>
+          <textarea
+            name="terms"
+            rows="6"
+            placeholder="Membawa sarung tangan karet, menggunakan boots, membawa kantung plastik minimal 2, dan menggunakan masker."
+            class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"
+          ></textarea>
         </div>
 
         {{-- Submit --}}

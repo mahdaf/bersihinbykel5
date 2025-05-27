@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Detail Campaign</title>
-    script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <!-- JS -->
