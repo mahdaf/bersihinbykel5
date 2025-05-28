@@ -68,3 +68,7 @@ Route::get('/detailcampaign',function (){
 Route::get('/pendaftaran',function (){
     return view('pendaftaran-campaign');
 });
+
+Route::get('/error404',function (){
+    return view('halamanerror');
+});
