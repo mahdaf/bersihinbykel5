@@ -50,3 +50,7 @@ Route::get('/detailcampaigncom',function (){
 Route::get('/detailcampaignvol',function (){
     return view('detailcampaignvol');
 });
+
+Route::get('/detailcampaign',function (){
+    return view('detailcampaign');
+});

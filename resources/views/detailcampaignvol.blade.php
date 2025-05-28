@@ -2,23 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Detail Campaign</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- CSS -->
+    <title>Daur Sampah Yuk - Bersih.in</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- Pastikan app.js tidak mengimpor Swiper jika Anda menggunakan CDN di bawah --}}
+
+    {{-- Swiper via CDN --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-    <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            new Swiper('.mySwiper', {
-            loop: true,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            });
-        });
-    </script>
+
+    {{-- Lucide Icons --}}
+    <style>
+        /* MODIFIED: Penyesuaian pagination Swiper */
+        .mySwiper .swiper-pagination {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            width: 100%;
+            margin-top: 1rem; /* Jarak dari gambar ke dots */
+            text-align: center;
+        }
+
+        /* NEW: Styling untuk dot pagination tidak aktif */
+        .mySwiper .swiper-pagination-bullet {
+            background-color: #FDBA74; /* Tailwind orange-300 (sesuaikan dengan preferensi kuning/oranye muda Anda) */
+            opacity: 1; /* Pastikan terlihat jelas */
+            width: 8px; /* Ukuran default, bisa disesuaikan */
+            height: 8px; /* Ukuran default, bisa disesuaikan */
+        }
+
+        /* MODIFIED: Styling untuk dot pagination aktif */
+        .mySwiper .swiper-pagination-bullet-active {
+            background-color: #F97316; /* Tailwind orange-600 (sesuaikan dengan preferensi oranye Anda) */
+        }
+    </style>
 </head>
 <body class="bg-white text-gray-800 font-sans">
 
@@ -31,24 +46,19 @@
             <div>
                  <div class="w-full max-w-md mx-auto">
                 <!-- Slider container -->
-                    <div class="swiper mySwiper rounded-xl overflow-hidden">
-                        <div class="swiper-wrapper">
-                            <!-- Slide -->
-                            <div class="swiper-slide">
-                                <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full object-cover" />
+                    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" /> {{-- Sedikit menambah tinggi gambar agar lebih proporsional jika lebar --}}
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full h-72 md:h-96 object-cover" />
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full h-72 md:h-96 object-cover" />
+                                </div>
                             </div>
-                            <div class="swiper-slide">
-                                <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full object-cover" />
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full object-cover" />
-                            </div>
-                        </div>
-                        <!-- Pagination -->
                         <div class="swiper-pagination"></div>
-
-                        <div class="swiper-button-prev text-black"></div>
-                        <div class="swiper-button-next text-black"></div>
                     </div>
                 </div>
             </div>
