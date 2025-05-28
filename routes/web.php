@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -11,11 +12,29 @@ Route::get('register', function () {
 })->name('register');
 
 Route::post('register', function () {
+    return redirect()->route('register3');
 })->name('account/register');
 
-Route::get('reset-password', function () {
+Route::get('register2', function () {
+    return view('account.register2');
+})->name('register2');
+
+Route::get('register3', function () {
+    return view('account.register3');
+})->name('register3');
+
+Route::get('password-reset', function () {
     return view('account/password-reset');
 })->name('password.request');
+
+Route::get('/check-email', function () {
+    return view('account/check-email');
+});
+
+Route::get('change-password', function () {
+    return view('account/change-password');
+})->name('password.reset');
+
 
 Route::get('/check-email', function () {
   return view('account/check-email');
@@ -38,4 +57,25 @@ Route::get('/dashboard',function (){
 
 Route::get('/profil',function (){
     return view('profil');
+});
+
+Route::get('/campaign/tambah', function () {
+    return view('components.TambahCampaign');
+})->name('campaign.tambah');
+
+
+Route::get('/editcampaign',function (){
+    return view('editcampaign');
+});
+
+Route::get('/hapuscampaign',function (){
+    return view('hapuscampaign');
+});
+
+Route::get('/detailcampaign',function (){
+    return view('detailcampaign');
+});
+
+Route::get('/pendaftaran',function (){
+    return view('pendaftaran-campaign');
 });
