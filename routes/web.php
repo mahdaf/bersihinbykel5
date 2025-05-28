@@ -45,7 +45,7 @@ Route::get('/dashboard',function (){
 });
 
 Route::get('/profil',function (){
-    return view('profil');
+    return view('profilvolunteer');
 });
 
 Route::get('/campaign/tambah', function () {
