@@ -94,3 +94,7 @@ Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->n
 Route::get('/error404',function (){
     return view('halamanerror');
 });
+
+Route::get('/landingpage', function () {
+    return view('landingpage');
+})->name('landingpage');
