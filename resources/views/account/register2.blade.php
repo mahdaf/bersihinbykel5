@@ -6,8 +6,7 @@
     <title>Buat Akun Baru</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-white min-h-screen">
-    @include('components.navbar')
+<body class="bg-white min-h-screen my-10">
 
     <div class="flex flex-col items-center justify-center min-h-screen pt-4">
         <div class="flex flex-col items-center w-full">

@@ -7,7 +7,6 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-white min-h-screen">
-    @include('components.navbar')
 
     <div class="flex flex-col items-center justify-center min-h-screen">
         <div class="flex flex-col items-center">
