@@ -2,51 +2,64 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'akun';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'namaPengguna',
+        'fotoProfil',
+        'nomorTelepon',
+        'jenis_akun_id'
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password'
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Get the user's type of account
      */
-    protected function casts(): array
+    public function jenisAkun()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(JenisAkun::class, 'jenis_akun_id');
     }
+
+    /**
+     * Get user's campaign participations
+     */
     public function partisipanCampaigns()
     {
-        return $this->hasMany(\App\Models\PartisipanCampaign::class, 'akun_id');
+        return $this->hasMany(PartisipanCampaign::class, 'akun_id');
+    }
+
+    /**
+     * Get user's community profile if exists
+     */
+    public function akunKomunitas()
+    {
+        return $this->hasOne(AkunKomunitas::class, 'akun_id');
     }
 }

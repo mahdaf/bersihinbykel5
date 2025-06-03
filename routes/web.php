@@ -3,26 +3,37 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('register', function () {
-    return view('account/register');
+Route::get('choose-role', function () {
+    return view('account/reg-role');
 })->name('register');
 
 Route::post('register', function () {
-    return redirect()->route('register3');
-})->name('account/register');
+    return redirect()->route('reg-success');
+})->name('account/reg-success');
 
-Route::get('register2', function () {
-    return view('account.register2');
-})->name('register2');
+Route::get('/reg-role', function () {
+    return view('account.reg-role');
+})->name('reg-role');
 
-Route::get('register3', function () {
-    return view('account.register3');
-})->name('register3');
+Route::get('/register', function (\Illuminate\Http\Request $request) {
+    $role = $request->query('role');
+    if (!in_array($role, ['komunitas', 'volunteer'])) {
+        abort(404);
+    }
+    return view('account.register', compact('role'));
+})->name('register');
+
+Route::post('/register', [RegisterController::class, 'register'])->name('account.register');
+
+Route::get('/reg-success', function () {
+    return view('account.reg-success');
+})->name('reg-success');
 
 Route::get('password-reset', function () {
     return view('account/password-reset');
@@ -49,8 +60,8 @@ Route::get('/login', function () {
     return view('account/login');
 })->name('login');
 
-Route::post('/login', function () {
-})->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/profil',function (){
     return view('profilvolunteer');
@@ -85,7 +96,9 @@ Route::get('/pendaftaran',function (){
     return view('pendaftaran-campaign');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth');
 
 Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
 
