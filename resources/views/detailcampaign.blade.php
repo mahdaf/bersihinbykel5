@@ -206,7 +206,7 @@
                 IKUTI CAMPAIGN
                 </button>
 
-                                <!-- Modal Pendaftaran Campaign -->
+                <!-- Modal Pendaftaran Campaign -->
                 <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
                     <div class="bg-white rounded-3xl p-8 w-full max-w-md relative shadow-2xl">
                         <!-- Tombol Close -->

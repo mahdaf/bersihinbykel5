@@ -53,7 +53,7 @@ Route::post('/login', function () {
 })->name('login');
 
 Route::get('/profil',function (){
-    return view('profilecommunity');
+    return view('profilvolunteer');
 });
 
 Route::get('/campaign/tambah', function () {
@@ -90,3 +90,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
 
 Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+
+Route::get('/error404',function (){
+    return view('halamanerror');
+});
