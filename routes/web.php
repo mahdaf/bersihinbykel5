@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,10 +52,6 @@ Route::get('/login', function () {
 Route::post('/login', function () {
 })->name('login');
 
-Route::get('/dashboard',function (){
-    return view('dashboard');
-});
-
 Route::get('/profil',function (){
     return view('profilecommunity');
 });
@@ -79,3 +76,9 @@ Route::get('/detailcampaign',function (){
 Route::get('/pendaftaran',function (){
     return view('pendaftaran-campaign');
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
+
+Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');

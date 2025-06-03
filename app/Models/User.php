@@ -45,4 +45,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function partisipanCampaigns()
+    {
+        return $this->hasMany(\App\Models\PartisipanCampaign::class, 'akun_id');
+    }
 }
