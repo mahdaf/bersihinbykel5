@@ -2,12 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daur Sampah Yuk - Bersih.in</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- Pastikan app.js tidak mengimpor Swiper jika Anda menggunakan CDN di bawah --}}
+    @vite(['resources/css/app.css']) {{-- Pastikan app.js tidak mengimpor Swiper jika Anda menggunakan CDN di bawah --}}
 
     {{-- Swiper via CDN --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.mySwiper', {
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        });
+    });
+    </script>
 
     {{-- Lucide Icons --}}
     <style>
@@ -41,12 +53,12 @@
     @include('components.navbar')
 
     <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div class="grid lg:grid-cols-2 gap-8">
             <!-- Gambar Campaign -->
             <div>
                  <div class="w-full max-w-md mx-auto">
                 <!-- Slider container -->
-                    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg">
+                    <div class="swiper mySwiper rounded-xl overflow-hidden">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
                                     <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" /> {{-- Sedikit menambah tinggi gambar agar lebih proporsional jika lebar --}}
