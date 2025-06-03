@@ -8,6 +8,17 @@
     {{-- Swiper via CDN --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.mySwiper', {
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        });
+    });
+    </script>
 
     {{-- Lucide Icons --}}
     <style>
@@ -41,7 +52,7 @@
     @include('components.navbar')
 
     <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div class="grid lg:grid-cols-2 gap-8">
             <!-- Gambar Campaign -->
             <div>
                  <div class="w-full max-w-2xl mx-auto">
