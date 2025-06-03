@@ -71,10 +71,9 @@
             {{-- All Campaigns --}}
             <div x-show="tab === 'all'" x-transition>
                 <div class="space-y-4">
-                    @include('components.campaignprofile-item')
-                    @include('components.campaignprofile-item')
-                    @include('components.campaignprofile-item')
-                    @include('components.campaignprofile-item')
+                    @foreach ($campaigns as $campaign)
+                        @include('components.campaignprofile-item', ['campaign' => $campaign])
+                    @endforeach
                 </div>
             </div>
 

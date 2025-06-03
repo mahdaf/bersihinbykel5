@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfilCommunityController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,6 +56,8 @@ Route::post('/login', function () {
 Route::get('/profil',function (){
     return view('profilvolunteer');
 });
+
+Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 
 Route::get('/campaign/tambah', function () {
     return view('components.TambahCampaign');
