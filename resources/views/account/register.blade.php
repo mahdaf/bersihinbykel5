@@ -6,11 +6,10 @@
     <title>Daftar Akun</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-white min-h-screen">
-    @include('components.navbar')
+<body class="bg-white min-h-screen flex items-center justify-center">
 
-    <div class="flex flex-col items-center justify-center min-h-screen pt-8">
-        <h1 class="text-4xl font-bold text-[#810000] mb-2 text-center mt-8">
+    <div class="flex flex-col items-center justify-center">
+        <h1 class="text-4xl font-bold text-[#810000] mb-2 text-center">
             Selamat datang di Bersih.in!
         </h1>
         <p class="text-gray-700 text-base mb-10 text-center">
