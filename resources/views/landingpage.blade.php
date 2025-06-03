@@ -165,7 +165,7 @@
     </style>
 </head>
 <body class="bg-light animate-fade-in mb-20">
-    @include('components.navbar2')
+    @include('components.navbar')
 
     <!-- Hero Section -->
     <section class="relative">
