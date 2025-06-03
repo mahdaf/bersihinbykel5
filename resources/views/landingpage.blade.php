@@ -26,6 +26,30 @@
     </script>
 
     <style>
+              .hero-outer-shadow {
+            width: 900px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(129,0,0,0.13) 0%, rgba(129,0,0,0.07) 60%, rgba(129,0,0,0.01) 100%);
+            filter: blur(48px);
+            opacity: 0.7;
+            animation: shadowFloat 8s ease-in-out infinite;
+            transition: opacity 0.3s;
+        }
+        .hero-shadow-animate {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(129,0,0,0.12) 0%, rgba(129,0,0,0.08) 60%, rgba(129,0,0,0.04) 100%);
+            filter: blur(48px);
+            opacity: 0.85;
+            animation: shadowFloat 8s ease-in-out infinite;
+            transition: opacity 0.3s;
+        }
+        @keyframes shadowFloat {
+            0%, 100% { transform: scale(1) translateY(0); opacity: 0.85; }
+            50% { transform: scale(1.08) translateY(18px); opacity: 1; }
+        }
                 .hero-img-animate {
             animation: heroZoomFloat 12s ease-in-out infinite;
             will-change: transform;
@@ -210,13 +234,28 @@
 
     <!-- Hero Section -->
     <section class="relative">
+          <!-- OUTER SHADOW -->
+        <div class="absolute left-1/2 top-[420px] -translate-x-1/2 -z-10 pointer-events-none">
+            <div class="hero-outer-shadow"></div>
+        </div>
         <div class="max-w-7xl mx-auto px-4 py-8">
-            <div class="relative rounded-2xl overflow-hidden h-[500px] bg-gradient-to-r from-black/60 to-black/40">
-                <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                alt="People cleaning beach" 
-                class="absolute inset-0 w-full h-full object-cover -z-10 hero-img-animate">
-                <div class="absolute inset-0 bg-black/40"></div>
-                <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-8 animate-fade-in">
+            <!-- ...hero container dan konten lain... -->
+        </div>
+        <div class="max-w-7xl mx-auto px-4 py-8">
+                <div class="relative rounded-2xl overflow-hidden h-[500px] bg-gradient-to-r from-black/60 to-black/40">
+                    <!-- Dynamic Shadow (z-0, di bawah gambar) -->
+                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                        <div class="hero-shadow-animate"></div>
+                    </div>
+                    <!-- Hero Image (z-10) -->
+                    <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                        alt="People cleaning beach" 
+                        class="absolute inset-0 w-full h-full object-cover z-10 hero-img-animate">
+                    <!-- Overlay (z-20) -->
+                    <div class="absolute inset-0 bg-black/40 z-20"></div>
+                    <!-- Konten Hero (z-30) -->
+                    <div class="relative z-30 flex flex-col items-center justify-center h-full text-center text-white px-8 animate-fade-in">
+                        <!-- ...konten hero... -->
                     <h1 class="text-4xl md:text-5xl font-bold mb-6 max-w-4xl">
                         Cara termudah untuk aksi lingkungan nyata.
                     </h1>
