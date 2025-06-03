@@ -26,6 +26,27 @@
     </script>
 
     <style>
+        /* Animated Gradient Background */
+                    .animated-gradient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            /* Warna lebih soft dan trust */
+            background: linear-gradient(120deg, #ebf2e8 0%, #f7fafc 40%, #b7e4c7 70%, #e3f6f5 100%);
+            background-size: 200% 200%; /* Lebih kecil, area warna lebih fokus */
+            background-position: var(--bg-x, 50%) var(--bg-y, 50%);
+            transition: background-position 0.3s cubic-bezier(.4,2,.6,1);
+            opacity: 0.22; /* Cukup jelas tapi tetap nyaman */
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         /* Keyframe Animations */
         @keyframes fade-in {
             from {
@@ -164,8 +185,10 @@
         }
     </style>
 </head>
-<body class="bg-light animate-fade-in mb-20">
+<body class="relative overflow-hidden bg-light animate-fade-in mb-20">
+    <div class="animated-gradient-bg"></div>
     @include('components.navbar')
+    <!-- ...konten lain... -->
 
     <!-- Hero Section -->
     <section class="relative">
@@ -263,7 +286,7 @@
                 <!-- Testimonial 1 -->
                 <div class="text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-light p-6 rounded-lg cursor-pointer group stagger-animation animate-fade-in">
                     <div class="w-16 h-16 bg-green rounded-full mx-auto mb-4 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
-                        <div class="w-12 h-12 bg-gray rounded-full transition-all duration-300 group-hover:bg-primary"></div>
+                         <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Rina Puspita" class="w-12 h-12 rounded-full object-cover">
                     </div>
                     <h4 class="font-bold text-dark mb-1 group-hover:text-primary transition-colors duration-300">
                         Rina Puspita
@@ -277,7 +300,7 @@
                 <!-- Testimonial 2 -->
                 <div class="text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-light p-6 rounded-lg cursor-pointer group stagger-animation animate-fade-in">
                     <div class="w-16 h-16 bg-green rounded-full mx-auto mb-4 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
-                        <div class="w-12 h-12 bg-gray rounded-full transition-all duration-300 group-hover:bg-primary"></div>
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agus Salim" class="w-12 h-12 rounded-full object-cover">
                     </div>
                     <h4 class="font-bold text-dark mb-1 group-hover:text-primary transition-colors duration-300">
                         Agus Salim
@@ -291,7 +314,7 @@
                 <!-- Testimonial 3 -->
                 <div class="text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-light p-6 rounded-lg cursor-pointer group stagger-animation animate-fade-in">
                     <div class="w-16 h-16 bg-green rounded-full mx-auto mb-4 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
-                        <div class="w-12 h-12 bg-gray rounded-full transition-all duration-300 group-hover:bg-primary"></div>
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dewi Lestari" class="w-12 h-12 rounded-full object-cover">
                     </div>
                     <h4 class="font-bold text-dark mb-1 group-hover:text-primary transition-colors duration-300">
                         Dewi Lestari
@@ -439,6 +462,13 @@
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
             })
         })
+        
+        document.addEventListener('mousemove', function(e) {
+        const x = Math.round((e.clientX / window.innerWidth) * 100);
+        const y = Math.round((e.clientY / window.innerHeight) * 100);
+        document.querySelector('.animated-gradient-bg').style.setProperty('--bg-x', `${x}%`);
+        document.querySelector('.animated-gradient-bg').style.setProperty('--bg-y', `${y}%`);
+    });
     </script>
 </body>
 </html>
