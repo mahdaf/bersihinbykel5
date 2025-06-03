@@ -9,14 +9,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('choose-role', function () {
-    return view('account/reg-role');
-})->name('register');
-
-Route::post('register', function () {
-    return redirect()->route('reg-success');
-})->name('account/reg-success');
-
+// Route yang bebas diakses (misal register, login, dll)
 Route::get('/reg-role', function () {
     return view('account.reg-role');
 })->name('reg-role');
@@ -34,6 +27,38 @@ Route::post('/register', [RegisterController::class, 'register'])->name('account
 Route::get('/reg-success', function () {
     return view('account.reg-success');
 })->name('reg-success');
+
+// Route yang hanya bisa diakses jika sudah login
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profil', function () {
+        return view('profilvolunteer');
+    });
+    Route::get('/campaign/tambah', function () {
+        return view('components.TambahCampaign');
+    })->name('campaign.tambah');
+    // ...tambahkan semua route lain yang ingin dibatasi login di sini...
+    Route::get('/editcampaign', function () {
+        return view('editcampaign');
+    });
+    Route::get('/hapuscampaign', function () {
+        return view('hapuscampaign');
+    });
+    Route::get('/detailcampaigncom', function () {
+        return view('detailcampaigncom');
+    });
+    Route::get('/detailcampaignvol', function () {
+        return view('detailcampaignvol');
+    });
+    Route::get('/detailcampaign', function () {
+        return view('detailcampaign');
+    });
+    Route::get('/pendaftaran', function () {
+        return view('pendaftaran-campaign');
+    });
+    Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
+    Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+});
 
 Route::get('password-reset', function () {
     return view('account/password-reset');
@@ -62,47 +87,6 @@ Route::get('/login', function () {
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-Route::get('/profil',function (){
-    return view('profilvolunteer');
-});
-
-Route::get('/campaign/tambah', function () {
-    return view('components.TambahCampaign');
-})->name('campaign.tambah');
-
-
-Route::get('/editcampaign',function (){
-    return view('editcampaign');
-});
-
-Route::get('/hapuscampaign',function (){
-    return view('hapuscampaign');
-});
-
-Route::get('/detailcampaigncom',function (){
-    return view('detailcampaigncom');
-});
-
-Route::get('/detailcampaignvol',function (){
-    return view('detailcampaignvol');
-});
-
-Route::get('/detailcampaign',function (){
-    return view('detailcampaign');
-});
-
-Route::get('/pendaftaran',function (){
-    return view('pendaftaran-campaign');
-});
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard')
-    ->middleware('auth');
-
-Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
-
-Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
 
 Route::get('/error404',function (){
     return view('halamanerror');
