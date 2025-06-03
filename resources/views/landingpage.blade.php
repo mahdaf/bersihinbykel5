@@ -26,6 +26,24 @@
     </script>
 
     <style>
+                .hero-img-animate {
+            animation: heroZoomFloat 12s ease-in-out infinite;
+            will-change: transform;
+        }
+        @keyframes heroZoomFloat {
+            0%, 100% {
+                transform: scale(1) translateY(0px);
+            }
+            20% {
+                transform: scale(1.04) translateY(-6px);
+            }
+            50% {
+                transform: scale(1.07) translateY(8px);
+            }
+            80% {
+                transform: scale(1.04) translateY(-6px);
+            }
+        }
         /* Animated Gradient Background */
                     .animated-gradient-bg {
             position: fixed;
@@ -194,9 +212,9 @@
     <section class="relative">
         <div class="max-w-7xl mx-auto px-4 py-8">
             <div class="relative rounded-2xl overflow-hidden h-[500px] bg-gradient-to-r from-black/60 to-black/40">
-                <img src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=500&q=80" 
-                     alt="People cleaning beach" 
-                     class="absolute inset-0 w-full h-full object-cover -z-10">
+                <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                alt="People cleaning beach" 
+                class="absolute inset-0 w-full h-full object-cover -z-10 hero-img-animate">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-8 animate-fade-in">
                     <h1 class="text-4xl md:text-5xl font-bold mb-6 max-w-4xl">
@@ -469,6 +487,22 @@
         document.querySelector('.animated-gradient-bg').style.setProperty('--bg-x', `${x}%`);
         document.querySelector('.animated-gradient-bg').style.setProperty('--bg-y', `${y}%`);
     });
+     // Daftar foto untuk slideshow
+    const heroImages = [
+        "https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1625314563148-572c6af9e9d5?q=80&w=2046&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1643213379811-17f8c9ec7b66?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1650234856233-63058d00ba52?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1661335910388-1fb03c1d8700?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ];
+    let heroIndex = 0;
+    setInterval(() => {
+        heroIndex = (heroIndex + 1) % heroImages.length;
+        const heroImg = document.querySelector('.hero-img-animate');
+        if (heroImg) {
+            heroImg.src = heroImages[heroIndex];
+        }
+    }, 4000); // Ganti foto setiap 4 detik
     </script>
 </body>
 </html>
