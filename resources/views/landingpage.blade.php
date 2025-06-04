@@ -6,8 +6,6 @@
     <title>Bersih.in - Platform Aksi Lingkungan</title>
     @vite('resources/css/app.css')
     <script src="//unpkg.com/alpinejs" defer></script>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tailwind Config -->
     <script>
         tailwind.config = {
@@ -25,7 +23,11 @@
         }
     </script>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+            html, body {
+            font-family: 'Poppins', Arial, Helvetica, sans-serif;
+            }
               .hero-outer-shadow {
             width: 900px;
             height: 180px;
@@ -180,95 +182,67 @@
             left: 100%;
         }
 
-        /* Stagger animation for cards */
-        .stagger-animation:nth-child(1) {
-            animation-delay: 0.1s;
-        }
+        /* Shining Text Effect untuk card titles */
+    .group:hover .group-hover\:text-shine {
+        background: linear-gradient(
+            to right,
+            #810000 20%,
+            #ff1a1a 30%,
+            #810000 70%,
+            #660000 80%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 200% auto;
+        animation: textShine 3s ease-in-out infinite;
+    }
 
-        .stagger-animation:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .stagger-animation:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        /* Loading states */
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        /* Responsive animations */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #810000;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #660000;
-        }
+    @keyframes textShine {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+    }
     </style>
 </head>
-<body class="relative overflow-hidden bg-light animate-fade-in mb-20">
+<body class="relative bg-light animate-fade-in mb-20">
     <div class="animated-gradient-bg"></div>
     @include('components.navbar')
     <!-- ...konten lain... -->
 
     <!-- Hero Section -->
-    <section class="relative">
+    <section class="relative z-10"> <!-- Hapus padding atas yang berlebihan -->
           <!-- OUTER SHADOW -->
-        <div class="absolute left-1/2 top-[420px] -translate-x-1/2 -z-10 pointer-events-none">
+        <div class="absolute left-1/2 top-[220px] -translate-x-1/2 -z-10 pointer-events-none"> <!-- Sesuaikan top dari 420px ke 220px -->
             <div class="hero-outer-shadow"></div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 py-8">
-            <!-- ...hero container dan konten lain... -->
-        </div>
-        <div class="max-w-7xl mx-auto px-4 py-8">
-                <div class="relative rounded-2xl overflow-hidden h-[500px] bg-gradient-to-r from-black/60 to-black/40">
-                    <!-- Dynamic Shadow (z-0, di bawah gambar) -->
-                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-                        <div class="hero-shadow-animate"></div>
-                    </div>
-                    <!-- Hero Image (z-10) -->
-                    <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                        alt="People cleaning beach" 
-                        class="absolute inset-0 w-full h-full object-cover z-10 hero-img-animate">
-                    <!-- Overlay (z-20) -->
-                    <div class="absolute inset-0 bg-black/40 z-20"></div>
-                    <!-- Konten Hero (z-30) -->
-                    <div class="relative z-30 flex flex-col items-center justify-center h-full text-center text-white px-8 animate-fade-in">
-                        <!-- ...konten hero... -->
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6 max-w-4xl">
-                        Cara termudah untuk aksi lingkungan nyata.
-                    </h1>
-                    <p class="text-lg md:text-xl mb-8 max-w-2xl opacity-90">
-                        Temukan dan ikuti aksi bersih-bersih di area kamu. Kontribusi mudah untuk lingkungan yang lebih lestari
-                        dan komunitas yang lebih sehat.
-                    </p>
-                    <button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 hover:scale-110 hover:shadow-xl animate-pulse hover:animate-none btn-hover-effect">
-                        Mulai Sekarang!
-                    </button>
+        <div class="max-w-7xl mx-auto px-4 pt-12 pb-8"> <!-- Ubah py-8 menjadi pt-4 pb-8 -->
+            <div class="relative rounded-2xl overflow-hidden h-[500px] bg-gradient-to-r from-black/60 to-black/40">
+                <!-- Dynamic Shadow (z-0, di bawah gambar) -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                    <div class="hero-shadow-animate"></div>
                 </div>
+                <!-- Hero Image (z-10) -->
+                <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    alt="People cleaning beach" 
+                    class="absolute inset-0 w-full h-full object-cover z-10 hero-img-animate">
+                <!-- Overlay (z-20) -->
+                <div class="absolute inset-0 bg-black/40 z-20"></div>
+                <!-- Konten Hero (z-20) --> <!-- Turunkan dari z-30 ke z-20 -->
+                <div class="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-8 animate-fade-in">
+                    <!-- ...konten hero... -->
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 max-w-4xl">
+                    Cara termudah untuk aksi lingkungan nyata.
+                </h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl opacity-90">
+                    Temukan dan ikuti aksi bersih-bersih di area kamu. Kontribusi mudah untuk lingkungan yang lebih lestari
+                    dan komunitas yang lebih sehat.
+                </p>
+                <button class="bg-[#810000] hover:bg-[#a30000] text-white px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 hover:scale-110 hover:shadow-xl animate-pulse hover:animate-none btn-hover-effect">
+                    Mulai Sekarang!
+                </button>
             </div>
         </div>
+    </div>
     </section>
 
     <!-- Environmental Actions Section -->
@@ -287,7 +261,7 @@
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-dark mb-3 group-hover:text-primary transition-colors duration-300">
+                        <h3 class="text-xl font-bold text-dark mb-3 group-hover:text-shine transition-all duration-300">
                             Aksi Bersih Taman
                         </h3>
                         <p class="text-gray leading-relaxed">
@@ -305,7 +279,7 @@
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-dark mb-3 group-hover:text-primary transition-colors duration-300">
+                        <h3 class="text-xl font-bold text-dark mb-3 group-hover:text-shine transition-all duration-300">
                             Aksi Bersih Sungai
                         </h3>
                         <p class="text-gray leading-relaxed">
@@ -323,7 +297,7 @@
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-dark mb-3 group-hover:text-primary transition-colors duration-300">
+                        <h3 class="text-xl font-bold text-dark mb-3 group-hover:text-shine transition-all duration-300">
                             Aksi Bersih Hutan
                         </h3>
                         <p class="text-gray leading-relaxed">
@@ -345,7 +319,7 @@
                     <div class="w-16 h-16 bg-green rounded-full mx-auto mb-4 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
                          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Rina Puspita" class="w-12 h-12 rounded-full object-cover">
                     </div>
-                    <h4 class="font-bold text-dark mb-1 group-hover:text-primary transition-colors duration-300">
+                    <h4 class="font-bold text-dark mb-1 group-hover:text-shine transition-all duration-300">
                         Rina Puspita
                     </h4>
                     <p class="text-gray text-sm mb-4">Volunteer</p>
@@ -359,7 +333,7 @@
                     <div class="w-16 h-16 bg-green rounded-full mx-auto mb-4 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
                         <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Agus Salim" class="w-12 h-12 rounded-full object-cover">
                     </div>
-                    <h4 class="font-bold text-dark mb-1 group-hover:text-primary transition-colors duration-300">
+                    <h4 class="font-bold text-dark mb-1 group-hover:text-shine transition-all duration-300">
                         Agus Salim
                     </h4>
                     <p class="text-gray text-sm mb-4">Volunteer</p>
@@ -373,7 +347,7 @@
                     <div class="w-16 h-16 bg-green rounded-full mx-auto mb-4 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110">
                         <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dewi Lestari" class="w-12 h-12 rounded-full object-cover">
                     </div>
-                    <h4 class="font-bold text-dark mb-1 group-hover:text-primary transition-colors duration-300">
+                    <h4 class="font-bold text-dark mb-1 group-hover:text-shine transition-all duration-300">
                         Dewi Lestari
                     </h4>
                     <p class="text-gray text-sm mb-4">Volunteer</p>
