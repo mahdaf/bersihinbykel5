@@ -7,7 +7,7 @@ use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingpage');
 });
 
 // Route yang bebas diakses (misal register, login, dll)
@@ -135,7 +135,3 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/error404',function (){
     return view('halamanerror');
 });
-
-Route::get('/landingpage', function () {
-    return view('landingpage');
-})->name('landingpage');

@@ -222,8 +222,8 @@
                     <div class="hero-shadow-animate"></div>
                 </div>
                 <!-- Hero Image (z-10) -->
-                <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                    alt="People cleaning beach" 
+                <img src="https://images.unsplash.com/photo-1661405001746-264a95ad6fea?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="People cleaning beach"
                     class="absolute inset-0 w-full h-full object-cover z-10 hero-img-animate">
                 <!-- Overlay (z-20) -->
                 <div class="absolute inset-0 bg-black/40 z-20"></div>
@@ -237,9 +237,11 @@
                     Temukan dan ikuti aksi bersih-bersih di area kamu. Kontribusi mudah untuk lingkungan yang lebih lestari
                     dan komunitas yang lebih sehat.
                 </p>
-                <button class="bg-[#810000] hover:bg-[#a30000] text-white px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 hover:scale-110 hover:shadow-xl animate-pulse hover:animate-none btn-hover-effect">
-                    Mulai Sekarang!
-                </button>
+                <a href="{{ route('reg-role') }}">
+                    <button class="bg-[#810000] hover:bg-[#a30000] text-white px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 hover:scale-110 hover:shadow-xl animate-pulse hover:animate-none btn-hover-effect">
+                        Mulai Sekarang!
+                    </button>
+                </a>
             </div>
         </div>
     </div>
@@ -255,8 +257,8 @@
                 <!-- Action Card 1 -->
                 <div class="overflow-hidden border border-gray-200 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2 cursor-pointer group card-shimmer stagger-animation animate-fade-in bg-white">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" 
-                             alt="Beach cleaning action" 
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80"
+                             alt="Beach cleaning action"
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
                     </div>
@@ -273,8 +275,8 @@
                 <!-- Action Card 2 -->
                 <div class="overflow-hidden border border-gray-200 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2 cursor-pointer group card-shimmer stagger-animation animate-fade-in bg-white">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" 
-                             alt="River cleaning action" 
+                        <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80"
+                             alt="River cleaning action"
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
                     </div>
@@ -291,8 +293,8 @@
                 <!-- Action Card 3 -->
                 <div class="overflow-hidden border border-gray-200 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2 cursor-pointer group card-shimmer stagger-animation animate-fade-in bg-white">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80" 
-                             alt="Forest cleaning action" 
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=200&q=80"
+                             alt="Forest cleaning action"
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
                     </div>
@@ -430,20 +432,6 @@
                 })
             })
 
-            // Add click handlers for testimonial cards
-            document.querySelectorAll('.stagger-animation').forEach((testimonial) => {
-                if (testimonial.querySelector('h4')) {
-                    testimonial.addEventListener('click', function() {
-                        const name = this.querySelector('h4').textContent
-                        showNotification(`Terima kasih ${name} atas testimoninya!`, 'success')
-                    })
-                }
-            })
-
-            // Hero CTA button click handler
-            document.querySelector('.btn-hover-effect').addEventListener('click', function() {
-                showNotification('Selamat datang di Bersih.in! Mari mulai berkontribusi untuk lingkungan.', 'success')
-            })
         })
 
         // Utility functions
@@ -477,7 +465,7 @@
                 const rect = card.getBoundingClientRect()
                 const x = e.clientX - rect.left
                 const y = e.clientY - rect.top
-                
+
                 if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
                     card.style.transform = `perspective(1000px) rotateX(${(y - rect.height / 2) / 10}deg) rotateY(${(x - rect.width / 2) / 10}deg) scale3d(1.05, 1.05, 1.05)`
                 } else {
@@ -493,7 +481,7 @@
                 card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
             })
         })
-        
+
         document.addEventListener('mousemove', function(e) {
         const x = Math.round((e.clientX / window.innerWidth) * 100);
         const y = Math.round((e.clientY / window.innerHeight) * 100);
