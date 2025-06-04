@@ -1,98 +1,442 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Edit Campaign</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-white font-sans text-gray-800">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Campaign</title>
+    @vite('resources/css/app.css')
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-  {{-- NAVBAR --}}
-  @include('components.navbar')
-
-  <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col lg:flex-row gap-10 items-stretch">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.mySwiper', {
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        });
+    });
+    </script>
     
-    {{-- LEFT COLUMN --}}
-    <div class="flex-1 flex flex-col gap-6">
-      {{-- Header --}}
-      <div class="flex items-center gap-2">
-        <button class="text-gray-600 hover:text-gray-900 text-xl">
-          &larr;
-        </button>
-        <h2 class="text-2xl font-bold">Edit Campaign</h2>
-      </div>
+    <style>
+        /* Layout Styles */
+        .page-container {
+            background-color: #FAFAFA;
+            min-height: 100vh;
+        }
+        .main-grid {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            gap: 3rem;
+            margin: 0 auto;
+            padding-top: 2rem;
+        }
+        .left-column {
+            flex: 1;
+            max-width: 45%;
+        }
+        .right-column {
+            flex: 1.2;
+            max-width: 55%;
+        }
+        
+        /* Map Styles */
+        #map { 
+            height: 130px; 
+            border-radius: 0.75rem; 
+            margin-top: 0.5rem;
+        }
+        
+        /* Form Styles */
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .form-input {
+            background-color: #F5F5F5;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 100%;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #810000;
+        }
+        .form-textarea {
+            background-color: #F5F5F5;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 100%;
+            margin-bottom: 16px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 16px;
+        }
+        .form-date-container {
+            position: relative;
+        }
+        .form-date-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+        }
+        .form-submit-btn {
+            background-color: #810000;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 0;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        .form-submit-btn:hover {
+            background-color: #6a0000;
+        }
+        .syarat-list {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        .syarat-list li {
+            margin-bottom: 6px;
+            list-style-type: decimal;
+        }
+        
+        /* Upload Styles */
+        .upload-container {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #55A7AA;
+            border-radius: 12px;
+            background-color: #DDEDEE;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+        .upload-icon {
+            height: 2rem;
+            width: 2rem;
+            color: #55A7AA;
+            margin-bottom: 0.5rem;
+        }
+        .upload-text {
+            color: #55A7AA;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* Header Styles */
+        .page-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .back-button {
+            font-size: 1.5rem;
+            color: #225151;
+            margin-right: 1rem;
+        }
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: black;
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        /* Image Preview Styles */
+        .image-preview {
+            border-radius: 0.75rem;
+            width: 100%;
+            max-width: 28rem;
+            height: 20rem;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 9999px;
+            background-color: #D9D9D9;
+        }
+        .dot.active {
+            background-color: #C9A74A;
+        }
+        
+        /* Location Styles */
+        .location-container {
+            width: 100%;
+            max-width: 28rem;
+            margin-top: 0.5rem;
+        }
+        .location-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+        .location-text {
+            display: flex;
+            align-items: center;
+            color: #4B5563;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        .location-icon {
+            height: 1.25rem;
+            width: 1.25rem;
+            color: #225151;
+            margin-right: 0.25rem;
+        }
+        .mySwiper .swiper-pagination {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            width: 100%;
+            margin-top: 1rem; /* Jarak dari gambar ke dots */
+            text-align: center;
+        }
 
-      {{-- Gambar placeholder --}}
-      <div class="bg-[#E4F9F5] rounded-lg p-4 flex justify-center items-center h-48 w-full">
-        <div class="border-2 border-dashed border-[#B2EBF2] rounded-lg w-full h-full flex justify-center items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-[#50C7B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z" />
-          </svg>
+        /* NEW: Styling untuk dot pagination tidak aktif */
+        .mySwiper  .swiper-pagination-bullet {
+            background-color: #d8d2f0; /* ungu muda */
+            opacity: 1;
+        }
+
+        .mySwiper .swiper-pagination-bullet-active {
+            background-color: #e4b100; /* kuning emas */
+        }
+    </style>
+</head>
+<body class="page-container">
+    @include('components.navbar')
+
+    <div class="main-grid">
+        <!-- Left Column: Image & Location -->
+        <div class="left-column">
+            <!-- Header -->
+            <div class="page-header">
+                <a href="#" class="back-button">&#60;</a>
+                <h1 class="page-title">Edit Campaign</h1>
+            </div>
+            
+            <!-- Main Image -->
+           <div class="swiper mySwiper rounded-xl overflow-hidden">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full h-72 md:h-96 object-cover" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full h-72 md:h-96 object-cover" />
+                </div>
+              </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            
+            <!-- Location Section -->
+            <div class="location-container">
+                <h2 class="location-title">Lokasi Campaign</h2>
+                <div class="location-text">
+                    <svg class="location-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z"/>
+                    </svg>
+                    <span id="lokasi-text"></span>
+                </div>
+                <!-- Interactive Map -->
+                <div id="map"></div>
+            </div>
         </div>
-      </div>
 
-      {{-- Map placeholder --}}
-      <div class="bg-gray-100 rounded-lg flex-1"></div>
+        <!-- Right Column: Form -->
+        <div class="right-column">
+            <form class="form-container">
+                <!-- Image Upload -->
+                <label class="upload-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
+                    </svg>
+                    <span class="upload-text">Upload<br>Gambar Latar</span>
+                    <input type="file" class="hidden" />
+                </label>
+                
+                <!-- Campaign Name -->
+                <label class="form-label">Nama campaign</label>
+                <input type="text" class="form-input" placeholder="Nama campaign">
+                
+                <!-- Campaign Description -->
+                <label class="form-label">Deskripsi campaign</label>
+                <textarea class="form-textarea" placeholder="Deskripsi campaign"></textarea>
+                
+                <!-- Date Selection -->
+                <label class="form-label">Pilih tanggal</label>
+                <div class="form-date-container">
+                    <input type="date" class="form-input">
+                    <span class="form-date-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </span>
+                </div>
+                
+                <!-- Terms and Conditions -->
+                <label class="form-label">Syarat dan Ketentuan</label>
+                <textarea class="form-textarea" placeholder="Tambah syarat dan ketentuan..." rows="2"></textarea>
+                
+                <!-- Full Address -->
+                <label class="form-label">Alamat campaign lengkap</label>
+                <div class="relative">
+                    <input type="text" class="form-input" placeholder="Alamat campaign lengkap" id="alamat-campaign">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z"/>
+                        </svg>
+                    </span>
+                </div>
+                
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+
+                <!-- Portfolio Upload -->
+                <label class="upload-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="upload-text">Upload Portofolio (PDF)</span>
+                    <input type="file" name="portofolio" accept="application/pdf" class="hidden" required>
+                </label>
+
+                <button type="button" class="form-submit-btn">
+                    Simpan
+                </button>
+            </form>
+        </div>
     </div>
 
-    {{-- RIGHT FORM --}}
-    <div class="flex-1 flex flex-col space-y-4">
-      <form class="flex flex-col gap-4 h-full">
-
-        {{-- Nama Campaign --}}
-        <div class="bg-[#E4F9F5] rounded-xl p-4">
-          <label class="text-sm font-medium text-[#50C7B8] block mb-1">Nama campaign</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="Jalanan Bersih"
-            class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"
-          >
+    <!-- Modal Notification -->
+    <div id="modal-success" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
+        <div class="bg-white rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
+            <button id="close-modal" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-[#810000]">&times;</button>
+            <h2 class="text-2xl md:text-3xl font-bold text-[#225151] text-center mb-2">Perubahan<br>Disimpan!</h2>
+            <img src="{{ asset('berhasil.png') }}" alt="Pendaftaran Berhasil" class="w-56 md:w-72 mb-6" />
+            <a href="#" class="w-full">
+                <button class="w-full bg-[#810000] text-white rounded-full py-3 font-semibold text-base hover:bg-[#a30000] transition mb-3">
+                    Lihat Campaign
+                </button>
+            </a>
+            <a href="{{ url('/') }}" class="w-full">
+                <button class="w-full border-2 border-[#810000] text-[#810000] rounded-full py-3 font-semibold text-base hover:bg-[#f5eaea] transition">
+                    Kembali ke beranda
+                </button>
+            </a>
         </div>
-
-        {{-- Deskripsi --}}
-        <div class="bg-[#E4F9F5] rounded-xl p-4">
-          <label class="text-sm font-medium text-[#50C7B8] block mb-1">Deskripsi campaign</label>
-          <textarea
-            name="description"
-            rows="4"
-            placeholder="Jalanan bersih adalah campaign…"
-            class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"
-          ></textarea>
-        </div>
-
-        {{-- Pilih Tanggal --}}
-        <div class="bg-[#E4F9F5] rounded-xl p-4 flex items-center justify-between">
-          <label class="text-sm font-medium text-[#50C7B8]">Pilih tanggal</label>
-          <input
-            type="date"
-            name="date"
-            class="bg-white border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"
-          >
-        </div>
-
-        {{-- Syarat & Ketentuan --}}
-        <div class="bg-[#E4F9F5] rounded-xl p-4 flex-1">
-          <label class="text-sm font-medium text-[#50C7B8] block mb-2">Syarat dan Ketentuan</label>
-          <textarea
-            name="terms"
-            rows="6"
-            placeholder="Membawa sarung tangan karet, menggunakan boots, membawa kantung plastik minimal 2, dan menggunakan masker."
-            class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#50C7B8]"
-          ></textarea>
-        </div>
-
-        {{-- Submit --}}
-        <button
-          type="submit"
-          class="block w-full bg-[#BF1E2E] text-white py-3 rounded-full font-semibold hover:bg-red-700 transition"
-        >
-          Simpan
-        </button>
-      </form>
     </div>
-  </div>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Default Surabaya coordinates
+        var defaultLat = -7.2819;
+        var defaultLng = 112.7953;
+
+        var map = L.map('map').setView([defaultLat, defaultLng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([defaultLat, defaultLng], {draggable:true}).addTo(map);
+
+        // Set initial hidden input values
+        document.getElementById('latitude').value = defaultLat;
+        document.getElementById('longitude').value = defaultLng;
+
+        function updateAddress(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('alamat-campaign').value = data.display_name;
+                    }
+                });
+        }
+
+        // Update marker and inputs when map is clicked
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            document.getElementById('latitude').value = e.latlng.lat;
+            document.getElementById('longitude').value = e.latlng.lng;
+            document.getElementById('lokasi-text').innerText = `Lat: ${e.latlng.lat.toFixed(5)}, Lng: ${e.latlng.lng.toFixed(5)}`;
+            updateAddress(e.latlng.lat, e.latlng.lng);
+        });
+
+        // Update inputs when marker is moved
+        marker.on('move', function(e) {
+            document.getElementById('latitude').value = e.latlng.lat;
+            document.getElementById('longitude').value = e.latlng.lng;
+            document.getElementById('lokasi-text').innerText = `Lat: ${e.latlng.lat.toFixed(5)}, Lng: ${e.latlng.lng.toFixed(5)}`;
+            updateAddress(e.latlng.lat, e.latlng.lng);
+        });
+
+        // Call once on initial load
+        updateAddress(defaultLat, defaultLng);
+
+        // Modal logic
+        const btnSimpan = document.querySelector('.form-submit-btn');
+        const modal = document.getElementById('modal-success');
+        const closeModal = document.getElementById('close-modal');
+
+        btnSimpan.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.classList.remove('hidden');
+        });
+
+        closeModal.addEventListener('click', function() {
+            modal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
