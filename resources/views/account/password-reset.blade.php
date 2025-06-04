@@ -7,8 +7,8 @@
         @vite('resources/css/app.css')
     </head>
     <body>
-    @include('components.navbar')
-    <div class="flex items-center justify-center">
+
+    <div class="flex items-center justify-center min-h-screen">
         <main class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
             <div class="flex justify-center mb-6">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-12"/>

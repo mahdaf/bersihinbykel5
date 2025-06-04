@@ -8,15 +8,21 @@
 </head>
 <body class="bg-white min-h-screen">
 
+    @if(session('success'))
+        <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="flex flex-col items-center justify-center min-h-screen">
         <div class="flex flex-col items-center">
-            <h1 class="text-2xl md:text-3xl font-bold text-[#225151] text-center mb-4 mt-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-center mb-4 mt-8">
                 Pendaftaran<br>Berhasil!
             </h1>
-            <img src="{{ asset('berhasil.png') }}" alt="Pendaftaran Berhasil" class="w-72 md:w-96 mb-8" />
-            <a href="{{ route('login') }}">
+            <img src="{{ 'gambar icon.png' }}" alt="Pendaftaran Berhasil" class="w-72 md:w-96 mb-8" />
+            <a href="{{ route('dashboard') }}">
                 <button class="bg-[#810000] text-white rounded-full px-10 py-3 font-semibold text-base hover:bg-[#a30000] transition">
-                    Masuk
+                    Masuk ke Dashboard
                 </button>
             </a>
         </div>

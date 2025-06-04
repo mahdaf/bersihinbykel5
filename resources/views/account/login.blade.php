@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <div class="flex items-center justify-center mt-10">
+    <div class="flex items-center justify-center min-h-screen mt-10">
         <main class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
             <div class="flex justify-center mb-6">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-12"/>
@@ -47,7 +47,7 @@
             <div class="text-center mt-6">
                 <p class="text-sm font-semibold text-black">
                     Belum memiliki akun?
-                    <a href="{{ route('register') }}" class="text-[#810000] cursor-pointer">Daftar</a>
+                    <a href="{{ route('reg-role') }}" class="text-[#810000] cursor-pointer">Daftar</a>
                 </p>
                 <a href="{{ route('password.request') }}" class="text-sm text-gray-500 mt-2 block">Lupa Password</a>
             </div>

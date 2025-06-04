@@ -34,6 +34,17 @@
                         PROFIL
                     </a>
                 </li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="relative px-1 pb-3 text-[#810000] hover:border-b-2 hover:border-[#810000] flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+
+                        </button>
+                    </form>
+                </li>
             </ul>
         @else
             <ul id="navbar-menu" class="hidden lg:flex space-x-8 font-light">
@@ -62,11 +73,22 @@
                     HOME
                 </a>
             </li>
-            <li class="pb-2">
+            <li class="border-b border-gray-200">
                 <a href="/profil"
                     class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('profil') ? 'bg-gray-100 font-bold' : '' }}">
                     PROFIL
                 </a>
+            </li>
+            <li class="pb-2">
+                <form method="POST" action="{{ route('logout') }}" class="block">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+
+                    </button>
+                </form>
             </li>
         </ul>
     @else
