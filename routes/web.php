@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+    Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 });
 
 Route::get('password-reset', function () {
@@ -73,6 +74,9 @@ Route::get('change-password', function () {
     return view('account/change-password');
 })->name('password.reset');
 
+Route::get('/profil', function () {
+        return view('profilvolunteer');
+    });
 
 Route::get('/check-email', function () {
   return view('account/check-email');
@@ -89,46 +93,33 @@ Route::get('/login', function () {
 Route::post('/login', function () {
 })->name('login');
 
-Route::get('/profil',function (){
-    return view('profilvolunteer');
-});
+// Route::get('/profil',function (){
+//     return view('profilvolunteer');
+// });
 
-Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
+// Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 
-Route::get('/campaign/tambah', function () {
-    return view('components.TambahCampaign');
-})->name('campaign.tambah');
+// Route::get('/detailcampaigncom',function (){
+//     return view('detailcampaigncom');
+// });
 
+// Route::get('/detailcampaignvol',function (){
+//     return view('detailcampaignvol');
+// });
 
-Route::get('/editcampaign',function (){
-    return view('editcampaign');
-});
-
-Route::get('/hapuscampaign',function (){
-    return view('hapuscampaign');
-});
-
-Route::get('/detailcampaigncom',function (){
-    return view('detailcampaigncom');
-});
-
-Route::get('/detailcampaignvol',function (){
-    return view('detailcampaignvol');
-});
-
-Route::get('/detailcampaign',function (){
-    return view('detailcampaign');
-});
+// Route::get('/detailcampaign',function (){
+//     return view('detailcampaign');
+// });
 
 Route::get('/pendaftaran',function (){
     return view('pendaftaran-campaign');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
+// Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
 
-Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+// Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
