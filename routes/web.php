@@ -135,3 +135,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/error404',function (){
     return view('halamanerror');
 });
+
+Route::get('/landingpage', function () {
+    return view('landingpage');
+})->name('landingpage');

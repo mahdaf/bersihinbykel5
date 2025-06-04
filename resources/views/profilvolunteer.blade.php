@@ -11,32 +11,62 @@
 <body class="mb-20">
     @include('components.navbar')
 
-    <div class="min-h-screen bg-[#fcfcfc]">
-        <div class="max-w-4xl mx-auto px-6 py-8">
-            {{-- Profile Section --}}
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-16 h-16 rounded-full overflow-hidden">
-                    <img src="{{ asset('images/placeholder.svg') }}" alt="Fulan" class="w-full h-full object-cover" />
-                </div>
-                <div class="flex-1">
-                    <h1 class="text-2xl font-semibold text-[#171717] mb-1">Fulan</h1>
-                    <p class="text-[#171717] mb-1">fulan12345@gmail.com</p>
-                    <p class="text-[#171717]">081234567890</p>
-                </div>
-                <button class="bg-[#ddedee] border border-[#ddedee] text-[#171717] hover:bg-[#cdcdcd] px-4 py-2 rounded-md flex items-center">
-                    {{-- Ganti icon edit dengan SVG langsung atau gunakan komponen jika pakai Blade Icons --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13h3l9-9a1.5 1.5 0 00-2.121-2.121l-9 9v3z" />
+    {{-- Profile Section --}}
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <div class="flex items-center gap-6 mb-12 justify-center">
+            <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200">
+                <img src="{{ asset('communityprofile.jpeg') }}" alt="Profile" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex flex-col items-start text-left">
+                <h1 class="text-2xl font-bold text-gray-900 mb-1">Fulan</h1>
+                <p class="mb-1">fulan12345@gmail.com</p>
+                <p class="mb-4">081234567890</p>
+                <a href="#"
+                    class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transform transition-transform duration-200 hover:scale-105"
+                    style="background-color: #DDEDEE; border: 1px solid #DDEDEE; color: #333;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                        stroke="black" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.232 5.232l3.536 3.536M16.5 9.75l-9.75 9.75H5.25v-1.5l9.75-9.75z" />
                     </svg>
                     edit profile
-                </button>
-            </div>
+                </a>
 
+            </div>
+        </div>
+        {{-- Tabs + Content --}}
+        <div x-data="{ tab: 'all' }">
             {{-- Tabs --}}
-            <div class="flex gap-8 mb-8 border-b border-[#ddedee]">
-                <button class="pb-3 text-[#171717] font-medium">Campaign</button>
-                <button class="pb-3 text-[#171717] font-medium">Ditandai</button>
-                <button class="pb-3 text-[#171717] font-medium border-b-2 border-[#ce1212]">Komentar</button>
+            <div class="flex gap-16 mb-8 justify-center">
+                <button @click="tab = 'all'"
+                    class="relative pb-3 font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                    :class="tab === 'all' ? 'text-gray-900' : ''">
+                    Campaign
+                    <div x-show="tab === 'all'" x-transition
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-24"
+                        style="background-color: #CE1212; border-radius: 9999px;">
+                    </div>
+                </button>
+
+                <button @click="tab = 'berlangsung'"
+                    class="relative pb-3 font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                    :class="tab === 'berlangsung' ? 'text-gray-900' : ''">
+                    Ditandai
+                    <div x-show="tab === 'berlangsung'" x-transition
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-36"
+                        style="background-color: #CE1212; border-radius: 9999px;">
+                    </div>
+                </button>
+
+                <button @click="tab = 'selesai'"
+                    class="relative pb-3 font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                    :class="tab === 'selesai' ? 'text-gray-900' : ''">
+                    Komentar
+                    <div x-show="tab === 'selesai'" x-transition
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-24"
+                        style="background-color: #CE1212; border-radius: 9999px;">
+                    </div>
+                </button>
             </div>
 
 {{-- Summary Section --}}

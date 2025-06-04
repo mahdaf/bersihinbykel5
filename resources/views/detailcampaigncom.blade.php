@@ -104,20 +104,126 @@
                 </button>
 
                 <div class="mt-8 border-t pt-4">
-                    <div class="flex items-center mb-2">
-                        <img src="https://randomuser.me/api/portraits/men/10.jpg" class="w-10 h-10 rounded-full mr-3">
-                        <div>
-                            <p class="font-semibold text-sm">landakberduri <span class="text-xs text-gray-500">• 1d</span></p>
-                            <p class="text-sm text-gray-700">Baru sadar, ternyata kegiatan campaign itu penting banget untuk ngejadiin lingkungan sekitar lebih aware terhadap kebersihan lingkungan</p>
-                            <p class="text-xs text-gray-500 mt-1">❤️ 530</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="commentsList">
+
     </div>
+    <!-- Form Komentar Baru -->
+    <form id="commentForm" class="flex items-start gap-2 mt-4">
+        <img src="https://randomuser.me/api/portraits/men/11.jpg" class="w-10 h-10 rounded-full mt-1">
+        <div class="flex-1">
+            <input
+                id="commentInput"
+                type="text"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-200"
+                placeholder="Isi komentar kamu..."
+                autocomplete="off"
+                required
+            >
+        </div>
+        <button type="submit" class="bg-red-700 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-800 transition">
+            Kirim
+        </button>
+    </form>
+</div>
 
     <!-- Font Awesome CDN buat icon kalender & jam -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script>
+function timeAgo(date) {
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+    if (seconds < 60) return "baru saja";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} menit`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} jam`;
+    const days = Math.floor(hours / 24);
+    return `${days} hari`;
+}
+
+const comments = [
+    {
+        user: "landakberduri",
+        avatar: "https://randomuser.me/api/portraits/men/10.jpg",
+        text: "Baru sadar, ternyata kegiatan campaign itu penting banget untuk ngejadiin lingkungan sekitar lebih aware terhadap kebersihan lingkungan",
+        time: new Date(Date.now() - 86400000).toISOString(), // 1 hari lalu
+        likes: 530,
+        liked: false
+    },
+    {
+        user: "sukamakancoklat",
+        avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+        text: "Keren banget acaranya! Semoga makin banyak yang peduli lingkungan.",
+        time: new Date(Date.now() - 2*86400000).toISOString(), // 2 hari lalu
+        likes: 120,
+        liked: false
+    }
+];
+
+function renderComments() {
+    const list = document.getElementById('commentsList');
+    let html = "";
+    comments.forEach((c, i) => {
+        html += `
+        <div class="flex items-center mb-2 mt-2">
+            <img src="${c.avatar}" class="w-10 h-10 rounded-full mr-3">
+            <div>
+                <p class="font-semibold text-sm">${c.user} <span class="text-xs text-gray-500">• <span class="comment-time" data-time="${c.time}">${timeAgo(new Date(c.time))}</span></span></p>
+                <p class="text-sm text-gray-700">${c.text}</p>
+                <button type="button" class="like-btn mt-1 text-xs flex items-center gap-1" data-index="${i}">
+                    <span class="heart-icon ${c.liked ? 'text-red-600' : 'text-gray-400'} transition-colors">&#10084;</span>
+                    <span class="like-count">${c.likes}</span>
+                </button>
+            </div>
+        </div>
+        `;
+    });
+    list.innerHTML = html;
+
+    // Event listener untuk like
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.onclick = function() {
+            const idx = +btn.getAttribute('data-index');
+            if (!comments[idx].liked) {
+                comments[idx].likes += 1;
+                comments[idx].liked = true;
+            } else {
+                comments[idx].likes -= 1;
+                comments[idx].liked = false;
+            }
+            renderComments();
+        }
+    });
+}
+
+renderComments();
+
+// Update waktu setiap 30 detik
+setInterval(() => {
+    document.querySelectorAll('.comment-time').forEach(span => {
+        const t = span.getAttribute('data-time');
+        span.textContent = timeAgo(new Date(t));
+    });
+}, 30000);
+
+document.getElementById('commentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text) return;
+    comments.unshift({
+        user: "kamu",
+        avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+        text,
+        time: new Date().toISOString(),
+        likes: 0,
+        liked: false
+    });
+    renderComments();
+    input.value = '';
+});
+
+// Tandai komentar dummy agar tidak hilang saat render
+document.querySelectorAll('#commentsList > div').forEach(el => el.classList.add('dummy-comment'));
+</script>
 </body>
 </html>
