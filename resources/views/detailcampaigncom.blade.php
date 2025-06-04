@@ -86,27 +86,43 @@
         }
 
         .bookmark-btn {
-            color: #6b7280; /* gray-500 */
-            transition: all 0.2s;
-            margin-right: 8px;
+            color: #4a5565; /* abu-abu gelap */
             background: none;
             border: none;
             cursor: pointer;
             padding: 4px;
+            transition: color 0.2s;
         }
-        
+
         .bookmark-btn:hover {
             color: #e4b100; /* yellow-500 */
         }
-        
+
         .bookmark-btn.active {
             color: #e4b100; /* yellow-500 */
         }
-        
-        .bookmark-btn.active svg {
-            fill: #e4b100; /* Fill the icon when active */
+
+        .bookmark-btn svg {
+            transition: fill 0.2s, stroke 0.2s;
+            fill: none;
+            stroke: #4a5565;
         }
-        
+
+        .bookmark-btn:hover svg {
+            fill: none; /* Tidak ada fill saat hover */
+            stroke: #4a5565; /* Outline kuning saat hover */
+        }
+
+        .bookmark-btn.active svg {
+            fill: #4a5565;   /* Fill abu-abu saat aktif */
+            stroke: #4a5565;
+        }
+
+        .bookmark-btn.active:hover svg {
+            fill: #4a5565;   /* Tetap fill abu-abu saat aktif+hover */
+            stroke: #4a5565; /* Outline kuning saat aktif+hover */
+        }
+
         .action-buttons {
             display: flex;
             align-items: center;
@@ -124,34 +140,24 @@
     </script>
 
     <script>
-        const bookmarkBtn = document.getElementById('bookmarkBtn');
-        let isBookmarked = false;
-        
-        bookmarkBtn.addEventListener('click', function() {
-            isBookmarked = !isBookmarked;
-            
-            if (isBookmarked) {
-                this.classList.add('active');
-                // Change to filled bookmark icon
-                this.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#e4b100" stroke="#e4b100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                `;
-                console.log('Campaign bookmarked');
-            } else {
-                this.classList.remove('active');
-                // Change back to outlined bookmark icon
-                this.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                `;
-                console.log('Bookmark removed');
-            }
-            
-            // Here you would typically make an API call to save/remove the bookmark
-            // For example: toggleBookmark(campaignId);
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookmarkBtn = document.getElementById('bookmarkBtn');
+            const bookmarkIcon = document.getElementById('bookmarkIcon');
+
+            bookmarkBtn.addEventListener('click', function () {
+                bookmarkBtn.classList.toggle('active');
+                const isActive = bookmarkBtn.classList.contains('active');
+                bookmarkBtn.setAttribute('aria-pressed', isActive);
+
+                // Ubah SVG fill dan stroke sesuai status
+                if (isActive) {
+                    bookmarkIcon.setAttribute('fill', '#e4b100');
+                    bookmarkIcon.setAttribute('stroke', '#e4b100');
+                } else {
+                    bookmarkIcon.setAttribute('fill', 'none');
+                    bookmarkIcon.setAttribute('stroke', 'currentColor');
+                }
+            });
         });
     </script>
 </head>
@@ -186,10 +192,10 @@
             <div>
                 <div class="flex items-center justify-between mb-1">
                     <p class="text-sm text-gray-500 font-medium">Bebersih Surabaya</p>
-                    
+
                     <!-- Delete dropdown button -->
                     <div class="delete-dropdown">
-                       
+
                         <button class="text-gray-500 hover:text-red-600 transition" title="Delete Campaign">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 6h18"></path>
@@ -204,15 +210,16 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Daur Sampah Yuk
-                <button id="bookmarkBtn" class="bookmark-btn" title="Bookmark Campaign">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </button>
+                <button id="bookmarkBtn" class="bookmark-btn" title="Bookmark Campaign" aria-pressed="false">
+                    <svg id="bookmarkIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="#4a5565" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
                 </h1>
-                
+
                 <div class="flex items-center text-sm text-gray-600 mb-4">
                     <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> 20/04/2024</span>
                     <span class="flex items-center"><i class="far fa-clock mr-1"></i> 09.30 – 18.00</span>
@@ -244,7 +251,7 @@
                 </div>
 
                 <button class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">
-                    <a href="/editcampaign"> 
+                    <a href="/editcampaign">
                         EDIT CAMPAIGN
                     </a>
                 </button>
