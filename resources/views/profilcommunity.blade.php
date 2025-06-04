@@ -14,24 +14,43 @@
     {{-- Profile Section --}}
     <main class="max-w-4xl mx-auto px-6 py-12">
         <div class="flex items-center gap-6 mb-12 justify-center">
-            <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200">
-                <img src="{{ asset('communityprofile.jpeg') }}" alt="Profile" class="w-full h-full object-cover" />
-            </div>
-            <div class="flex flex-col items-start text-left">
-                <h1 class="text-2xl font-bold text-gray-900 mb-1">Bebersih Surabaya</h1>
-                <p class="mb-4">bebersih.sby@gmail.com</p>
-                <a href="#"
-                    class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transform transition-transform duration-200 hover:scale-105"
-                    style="background-color: #DDEDEE; border: 1px solid #DDEDEE; color: #333;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="black" stroke-width="3">
+            @guest
+                <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <!-- Heroicon: User -->
+                    <svg class="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.232 5.232l3.536 3.536M16.5 9.75l-9.75 9.75H5.25v-1.5l9.75-9.75z" />
+                            d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.25a7.25 7.25 0 0115 0v.25a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75v-.25z" />
                     </svg>
-                    edit profile
-                </a>
-
-            </div>
+                </div>
+                <div class="flex flex-col items-start text-left">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-1">Guest</h1>
+                    <p class="mb-4">-</p>
+                    <a href="{{ route('login') }}"
+                        class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transform transition-transform duration-200 hover:scale-105"
+                        style="background-color: #DDEDEE; border: 1px solid #DDEDEE; color: #333;">
+                        Login
+                    </a>
+                </div>
+            @else
+                <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200">
+                    <img src="{{ $user->fotoProfil }}" alt="Profile" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex flex-col items-start text-left">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ $user->namaPengguna }}</h1>
+                    <p class="mb-4">{{ $user->email }}</p>
+                    <a href="#"
+                        class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transform transition-transform duration-200 hover:scale-105"
+                        style="background-color: #DDEDEE; border: 1px solid #DDEDEE; color: #333;">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                            stroke="black" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.232 5.232l3.536 3.536M16.5 9.75l-9.75 9.75H5.25v-1.5l9.75-9.75z" />
+                        </svg>
+                        edit profile
+                    </a>
+                </div>
+            @endguest
         </div>
         {{-- Tabs + Content --}}
         <div x-data="{ tab: 'all' }">
@@ -71,24 +90,64 @@
             {{-- All Campaigns --}}
             <div x-show="tab === 'all'" x-transition>
                 <div class="space-y-4">
-                    @foreach ($campaigns as $campaign)
-                        @include('components.campaignprofile-item', ['campaign' => $campaign])
-                    @endforeach
+                    @guest
+                        <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
+                    @else
+                        @forelse ($campaigns as $campaign)
+                            @include('components.campaignprofile-item', ['campaign' => $campaign])
+                        @empty
+                            <div class="text-center text-gray-400 py-10">Belum ada campaign yang Anda buat.</div>
+                        @endforelse
+                    @endguest
                 </div>
             </div>
 
             {{-- Campaign Berlangsung --}}
             <div x-show="tab === 'berlangsung'" x-transition>
                 <div class="space-y-4">
-                    @include('components.campaignprofile-item')
-                    @include('components.campaignprofile-item')
+                    @guest
+                        <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
+                    @else
+                        @php $ada = false; @endphp
+                        @foreach ($campaigns as $campaign)
+                            @php
+                                $now = now();
+                                $waktuDiperbarui = \Carbon\Carbon::parse($campaign->waktu_diperbarui);
+                                $waktu = \Carbon\Carbon::parse($campaign->waktu);
+                            @endphp
+                            @if ($now->gte($waktuDiperbarui->copy()->addSeconds(60)) && $now->lt($waktu))
+                                @php $ada = true; @endphp
+                                @include('components.campaignprofile-item', ['campaign' => $campaign])
+                            @endif
+                        @endforeach
+                        @unless($ada)
+                            <div class="text-center text-gray-400 py-10">Tidak ada campaign yang sedang berlangsung.</div>
+                        @endunless
+                    @endguest
                 </div>
             </div>
 
             {{-- Campaign Selesai --}}
             <div x-show="tab === 'selesai'" x-transition>
                 <div class="space-y-4">
-                    @include('components.campaignprofile-item')
+                    @guest
+                        <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
+                    @else
+                        @php $ada = false; @endphp
+                        @foreach ($campaigns as $campaign)
+                            @php
+                                $now = now();
+                                $waktu = \Carbon\Carbon::parse($campaign->waktu);
+                            @endphp
+                            @if ($now->gte($waktu))
+                                @php $ada = true; @endphp
+                                @include('components.campaignprofile-item', ['campaign' => $campaign])
+                            @endif
+                        @endforeach
+                        @unless($ada)
+                            <div class="text-center text-gray-400 py-10">Tidak ada campaign yang sudah selesai.</div>
+                        @endunless
+                    @endguest
                 </div>
             </div>
         </div>
