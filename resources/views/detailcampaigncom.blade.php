@@ -111,7 +111,17 @@
             display: flex;
             align-items: center;
         }
+        .clicked {
+            background-color: green;
+        }
     </style>
+
+    <script>
+        const button = document.getElementById("myButton");
+        button.addEventListener("click", function () {
+            button.classList.toggle("clicked");
+        });
+    </script>
 
     <script>
         const bookmarkBtn = document.getElementById('bookmarkBtn');
@@ -196,7 +206,7 @@
                 </div>
                 
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Daur Sampah Yuk
-                    <button id="bookmarkBtn" class="bookmark-btn" title="Bookmark Campaign">
+                <button id="bookmarkBtn" class="bookmark-btn" title="Bookmark Campaign">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                         </svg>
