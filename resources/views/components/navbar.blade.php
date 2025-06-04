@@ -17,41 +17,96 @@
             </svg>
         </button>
 
-        <!-- Menu kanan -->
-        <ul id="navbar-menu" class="hidden lg:flex space-x-8 font-light" style="color: #810000;">
-            <li>
-                <a href="/dashboard"
-                    class="relative px-1 pb-3
-       {{ request()->is('dashboard') ? 'text-[#810000] border-b-2 border-[#810000]' : 'text-[#810000] hover:border-b-2 hover:border-[#810000]' }}">
-                    HOME
-                </a>
-            </li>
-            <li>
-                <a href="/profil"
-                    class="relative px-1 pb-3
-       {{ request()->is('profil') ? 'text-[#810000] border-b-2 border-[#810000]' : 'text-[#810000] hover:border-b-2 hover:border-[#810000]' }}">
-                    PROFIL
-                </a>
-            </li>
-        </ul>
+        <!-- Menu kanan (desktop) -->
+        @auth
+            <ul id="navbar-menu" class="hidden lg:flex space-x-8 font-light" style="color: #810000;">
+                <li>
+                    <a href="/dashboard"
+                        class="relative px-1 pb-3
+        {{ request()->is('dashboard') ? 'text-[#810000] border-b-2 border-[#810000]' : 'text-[#810000] hover:border-b-2 hover:border-[#810000]' }}">
+                        HOME
+                    </a>
+                </li>
+                <li>
+                    <a href="/profil"
+                        class="relative px-1 pb-3
+        {{ request()->is('profil') ? 'text-[#810000] border-b-2 border-[#810000]' : 'text-[#810000] hover:border-b-2 hover:border-[#810000]' }}">
+                        PROFIL
+                    </a>
+                </li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="relative px-1 pb-3 text-[#810000] hover:border-b-2 hover:border-[#810000] flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
 
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        @else
+            <ul id="navbar-menu" class="hidden lg:flex space-x-8 font-light">
+                <li>
+                    <a href="/login"
+                        class="relative inline-block px-10 py-2 text-white bg-[#E7424B] border-2 border-[#E7424B] rounded-md hover:bg-[#c7323a] hover:border-[#c7323a] focus:outline-none focus:ring-2 focus:ring-[#E7424B] focus:ring-opacity-50">
+                        Masuk
+                    </a>
+                </li>
+                <li>
+                    <a href="/register"
+                        class="relative inline-block px-10 py-2 text-[#E7424B] border-2 border-[#E7424B] rounded-md hover:bg-[#E7424B] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E7424B] focus:ring-opacity-50">
+                        Daftar
+                    </a>
+                </li>
+            </ul>
+        @endauth
     </div>
 
     <!-- Mobile menu (hidden by default) -->
-    <ul id="mobile-menu" class="lg:hidden hidden flex-col bg-white border-t border-gray-200">
-        <li class="border-b border-gray-200">
-            <a href="/dashboard"
-                class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('dashboard') ? 'bg-gray-100 font-bold' : '' }}">
-                HOME
-            </a>
-        </li>
-        <li class="pb-2">
-            <a href="/profil"
-                class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('profil') ? 'bg-gray-100 font-bold' : '' }}">
-                PROFIL
-            </a>
-        </li>
-    </ul>
+    @auth
+        <ul id="mobile-menu" class="lg:hidden hidden flex-col bg-white border-t border-gray-200">
+            <li class="border-b border-gray-200">
+                <a href="/dashboard"
+                    class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('dashboard') ? 'bg-gray-100 font-bold' : '' }}">
+                    HOME
+                </a>
+            </li>
+            <li class="border-b border-gray-200">
+                <a href="/profil"
+                    class="block px-4 py-2 hover:bg-gray-100 {{ request()->is('profil') ? 'bg-gray-100 font-bold' : '' }}">
+                    PROFIL
+                </a>
+            </li>
+            <li class="pb-2">
+                <form method="POST" action="{{ route('logout') }}" class="block">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+
+                    </button>
+                </form>
+            </li>
+        </ul>
+    @else
+        <ul id="mobile-menu" class="lg:hidden hidden flex-col bg-white border-t border-gray-200 px-4 py-4 space-y-2">
+            <li>
+                <a href="/login"
+                    class="block w-full px-4 py-2 text-white bg-[#E7424B] border-2 border-[#E7424B] rounded-md text-center hover:bg-[#c7323a] hover:border-[#c7323a] transition">
+                    Masuk
+                </a>
+            </li>
+            <li>
+                <a href="/register"
+                    class="block w-full px-4 py-2 text-[#E7424B] border-2 border-[#E7424B] rounded-md text-center hover:bg-[#E7424B] hover:text-white hover:border-[#c7323a] transition">
+                    Daftar
+                </a>
+            </li>
+        </ul>
+    @endauth
 
     <script>
         // Toggle mobile menu

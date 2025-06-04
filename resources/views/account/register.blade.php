@@ -6,10 +6,9 @@
     <title>Buat Akun Baru</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-white min-h-screen">
-    @include('components.navbar')
+<body class="bg-white min-h-screen flex items-center justify-center">
 
-    <div class="flex flex-col items-center justify-center min-h-screen pt-4">
+    <div class="flex items-center justify-center min-h-screen pt-4">
         <div class="flex flex-col items-center w-full">
             <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-14 mb-4" />
             <h1 class="text-2xl md:text-3xl font-bold text-black text-center mb-2 mt-2">Buat Akun Baru</h1>
@@ -51,6 +50,12 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.657.336-3.234.938-4.675m2.062 2.675A9.956 9.956 0 0112 3c5.523 0 10 4.477 10 10 0 1.657-.336 3.234-.938 4.675m-2.062-2.675A9.956 9.956 0 0112 21c-5.523 0-10-4.477-10-10 0-1.657.336-3.234.938-4.675" /></svg>
                     </span>
                 </div>
+                @if(($role ?? request('role')) === 'komunitas')
+                <div class="relative">
+                    <textarea name="portofolio" placeholder="Portofolio komunitas"
+                        class="rounded-xl py-3 px-5 w-full bg-[#DDEDEE] text-[#55A7AA] placeholder-[#55A7AA] focus:outline-none focus:ring-2 focus:ring-[#810000] text-base min-h-[100px]" required></textarea>
+                </div>
+                @endif
                 <div class="flex items-center mt-2 mb-2">
                     <input type="checkbox" id="terms" name="terms" class="mr-2 w-5 h-5 rounded border-gray-300 focus:ring-[#810000]">
                     <label for="terms" class="text-gray-700 text-sm">Saya setuju dengan syarat dan ketentuan yang berlaku</label>

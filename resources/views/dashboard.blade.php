@@ -8,7 +8,7 @@
     </head>
 
     <body class="mb-20">
-        @include('components.navbar2')
+        @include('components.navbar')
         <div class="mx-20 pt-20 flex items-center gap-4 ">
             @include('components.searchbar')
             @include('components.filterbutton')

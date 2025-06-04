@@ -15,6 +15,7 @@ class RegisterController extends Controller
             'email'    => 'required|email|max:100|unique:akun,email',
             'password' => 'required|min:6|confirmed',
             'role'     => 'required|in:komunitas,volunteer',
+            'portofolio' => 'required_if:role,komunitas|string',
         ]);
 
         try {
@@ -35,7 +36,7 @@ class RegisterController extends Controller
             if ($request->role === 'komunitas') {
                 \DB::table('akun_komunitas')->insert([
                     'akun_id'   => $akunId,
-                    'portofolio'=> '',
+                    'portofolio'=> $request->portofolio,
                 ]);
             }
 
