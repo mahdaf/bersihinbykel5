@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -7,7 +7,7 @@
         @vite('resources/css/app.css')
     </head>
     <body>
-    <div class="flex items-center justify-center mt-10">
+    <div class="flex items-center justify-center min-h-screen">
         <main class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
             <div class="flex justify-center mb-6">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-12"/>
@@ -17,11 +17,12 @@
                 Kata sandi minimal 6 karakter yang menyertakan angka, huruf, simbol
             </p>
 
-            <form method="POST" action="{{ route('login') }}" class="w-full space-y-4">
+            <form method="POST" action="{{ route('password.update') }}" class="w-full space-y-4">
                 @csrf
-                  <div class="mb-4 relative">
+                <input type="hidden" name="email" value="{{ session('reset_email') }}">
+                <div class="mb-4 relative">
                     <input type="password" name="password" placeholder="Kata sandi"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') border-red-500 @enderror"
                         required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     <i aria-hidden="true" class="fas fa-eye-slash absolute right-3 top-1/2 -translate-y-1/2 text-[#6b9a9a] cursor-pointer"></i>
@@ -29,9 +30,9 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                  <div class="mb-4 relative">
-                    <input type="password" name="password" placeholder="Konfirmasi Kata sandi"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') @enderror"
+                <div class="mb-4 relative">
+                    <input type="password" name="password_confirmation" placeholder="Konfirmasi Kata sandi"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') border-red-500 @enderror"
                         required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     <i aria-hidden="true" class="fas fa-eye-slash absolute right-3 top-1/2 -translate-y-1/2 text-[#6b9a9a] cursor-pointer"></i>
@@ -45,9 +46,9 @@
             </form>
 
             <div class="text-center mt-6">
-                <p class="text-sm font-semibold text-black">
-                    Belum menerima email?
-                    <a href="{{ route('login') }}" class="text-[#810000] cursor-pointer">Kirim ulang</a>
+                <p class="text-sm text-black">
+                    Sudah ingat password? Kembali ke
+                    <a href="{{ route('login') }}" class="text-[#810000] cursor-pointer">Login</a>
                 </p>
 
             </div>

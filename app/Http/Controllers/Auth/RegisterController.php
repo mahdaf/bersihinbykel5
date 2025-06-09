@@ -16,6 +16,7 @@ class RegisterController extends Controller
             'password' => 'required|min:6|confirmed',
             'role'     => 'required|in:komunitas,volunteer',
             'portofolio' => 'required_if:role,komunitas|string',
+            'terms'    => 'accepted',
         ]);
 
         try {

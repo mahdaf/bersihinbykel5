@@ -1,7 +1,7 @@
 <nav class="sticky top-0 bg-white shadow-sm px-12 z-30">
     <div class="container mx-auto px-4 flex items-center justify-between h-28">
         <!-- Logo kiri -->
-        <a href="#" class="flex items-center">
+        <a href="/" class="flex items-center">
             <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-22 w-auto" />
         </a>
 
