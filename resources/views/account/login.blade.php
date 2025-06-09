@@ -7,8 +7,8 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-
-    <div class="flex items-center justify-center min-h-screen mt-10">
+    @include('components.navbar')
+    <div class="flex items-center justify-center min-h-screen">
         <main class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
             <div class="flex justify-center mb-6">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-12"/>
@@ -17,6 +17,12 @@
             <p class="text-center text-gray-500 text-sm leading-relaxed mb-6">
                 Kamu perlu mengisi email dan kata sandi untuk masuk.
             </p>
+
+            @if (session('success'))
+                <div class="mb-4 p-3 rounded bg-green-100 text-green-800 text-sm text-center">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             <form method="POST" action="{{ route('login') }}" class="w-full space-y-4">
                 @csrf
@@ -45,7 +51,7 @@
             </form>
 
             <div class="text-center mt-6">
-                <p class="text-sm font-semibold text-black">
+                <p class="text-sm text-black">
                     Belum memiliki akun?
                     <a href="{{ route('register') }}" class="text-[#810000] cursor-pointer">Daftar</a>
                 </p>

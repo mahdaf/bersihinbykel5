@@ -5,13 +5,13 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Route::get('/', function () {
     return view('landingpage');
 });
 
-// Route yang bebas diakses (misal register, login, dll)
-
+// Route yang bebas diakses
 Route::get('/register', function (\Illuminate\Http\Request $request) {
     $role = $request->query('role');
     if (!in_array($role, ['komunitas', 'volunteer'])) {
@@ -25,6 +25,20 @@ Route::post('/register', [RegisterController::class, 'register'])->name('account
 Route::get('/reg-success', function () {
     return view('account.reg-success');
 })->name('reg-success');
+
+Route::get('/login', function () {
+    return view('account/login');
+})->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('password-reset', function () {
+    return view('account/password-reset');
+})->name('password.request');
+
+Route::post('password-reset', [ForgotPasswordController::class, 'checkEmail'])->name('password.reset.check');
+Route::get('change-password', [ForgotPasswordController::class, 'showChangePasswordForm'])->name('password.reset.form');
+Route::post('change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'updatePassword'])->name('password.update');
 
 // Route yang hanya bisa diakses jika sudah login
 Route::middleware(['auth'])->group(function () {
@@ -59,37 +73,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 });
 
-Route::get('password-reset', function () {
-    return view('account/password-reset');
-})->name('password.request');
-
-Route::get('/check-email', function () {
-    return view('account/check-email');
-});
-
-Route::get('change-password', function () {
-    return view('account/change-password');
-})->name('password.reset');
-
-Route::get('/profil', function () {
-        return view('profilvolunteer');
-    });
-
-Route::get('/check-email', function () {
-  return view('account/check-email');
-});
-
-Route::get('change-password', function () {
-    return view('account/change-password');
-})->name('password.reset');
-
-Route::get('/login', function () {
-    return view('account/login');
-})->name('login');
-
-Route::post('/login', function () {
-})->name('login');
-
 // Route::get('/profil',function (){
 //     return view('profilvolunteer');
 // });
@@ -108,17 +91,11 @@ Route::post('/login', function () {
 //     return view('detailcampaign');
 // });
 
-Route::get('/pendaftaran',function (){
-    return view('pendaftaran-campaign');
-});
-
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
 
 // Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/error404',function (){
     return view('halamanerror');
