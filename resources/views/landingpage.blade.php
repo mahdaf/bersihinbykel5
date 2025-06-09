@@ -237,7 +237,7 @@
                     Temukan dan ikuti aksi bersih-bersih di area kamu. Kontribusi mudah untuk lingkungan yang lebih lestari
                     dan komunitas yang lebih sehat.
                 </p>
-                <a href="{{ route('reg-role') }}">
+                <a href="{{ route('register') }}">
                     <button class="bg-[#810000] hover:bg-[#a30000] text-white px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 hover:scale-110 hover:shadow-xl animate-pulse hover:animate-none btn-hover-effect">
                         Mulai Sekarang!
                     </button>
@@ -364,7 +364,7 @@
     <!-- Footer -->
     <footer class="py-8 px-4 bg-light border-t border-gray-200">
         <div class="max-w-7xl mx-auto text-center">
-            <p class="text-gray text-sm">@2024 Bersih.in. Hak cipta dilindungi.</p>
+            <p class="text-gray text-sm">@2025 Bersih.in. Hak cipta dilindungi.</p>
         </div>
     </footer>
 

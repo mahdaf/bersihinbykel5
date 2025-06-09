@@ -55,7 +55,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/reg-role"
+                    <a href="/register"
                         class="relative inline-block px-10 py-2 text-[#E7424B] border-2 border-[#E7424B] rounded-md hover:bg-[#E7424B] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E7424B] focus:ring-opacity-50">
                         Daftar
                     </a>
@@ -100,7 +100,7 @@
                 </a>
             </li>
             <li>
-                <a href="/reg-role"
+                <a href="/register"
                     class="block w-full px-4 py-2 text-[#E7424B] border-2 border-[#E7424B] rounded-md text-center hover:bg-[#E7424B] hover:text-white hover:border-[#c7323a] transition">
                     Daftar
                 </a>

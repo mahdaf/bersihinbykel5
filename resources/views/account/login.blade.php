@@ -22,7 +22,7 @@
                 @csrf
                 <div class="mb-4">
                     <input type="email" name="email" placeholder="Email"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 @error('email') border-red-500 @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('email') border-red-500 @enderror"
                         value="{{ old('email') }}" required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     @error('email')
@@ -31,7 +31,7 @@
                 </div>
                 <div class="mb-4 relative">
                     <input type="password" name="password" placeholder="Kata sandi"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 @error('password') border-red-500 @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') border-red-500 @enderror"
                         required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     <i aria-hidden="true" class="fas fa-eye-slash absolute right-3 top-1/2 -translate-y-1/2 text-[#6b9a9a] cursor-pointer"></i>
@@ -47,7 +47,7 @@
             <div class="text-center mt-6">
                 <p class="text-sm font-semibold text-black">
                     Belum memiliki akun?
-                    <a href="{{ route('reg-role') }}" class="text-[#810000] cursor-pointer">Daftar</a>
+                    <a href="{{ route('register') }}" class="text-[#810000] cursor-pointer">Daftar</a>
                 </p>
                 <a href="{{ route('password.request') }}" class="text-sm text-gray-500 mt-2 block">Lupa Password</a>
             </div>

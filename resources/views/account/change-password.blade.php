@@ -21,7 +21,7 @@
                 @csrf
                   <div class="mb-4 relative">
                     <input type="password" name="password" placeholder="Kata sandi"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 @error('password') border-red-500 @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') @enderror"
                         required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     <i aria-hidden="true" class="fas fa-eye-slash absolute right-3 top-1/2 -translate-y-1/2 text-[#6b9a9a] cursor-pointer"></i>
@@ -31,7 +31,7 @@
                 </div>
                   <div class="mb-4 relative">
                     <input type="password" name="password" placeholder="Konfirmasi Kata sandi"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 @error('password') border-red-500 @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') @enderror"
                         required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     <i aria-hidden="true" class="fas fa-eye-slash absolute right-3 top-1/2 -translate-y-1/2 text-[#6b9a9a] cursor-pointer"></i>

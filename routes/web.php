@@ -11,14 +11,11 @@ Route::get('/', function () {
 });
 
 // Route yang bebas diakses (misal register, login, dll)
-Route::get('/reg-role', function () {
-    return view('account.reg-role');
-})->name('reg-role');
 
 Route::get('/register', function (\Illuminate\Http\Request $request) {
     $role = $request->query('role');
     if (!in_array($role, ['komunitas', 'volunteer'])) {
-        abort(404);
+        return view('account.reg-role');
     }
     return view('account.register', compact('role'));
 })->name('register');
