@@ -79,30 +79,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
 });
-
-// Route::get('/profil',function (){
-//     return view('profilvolunteer');
-// });
-
-// Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
-
-// Route::get('/detailcampaigncom',function (){
-//     return view('detailcampaigncom');
-// });
-
-// Route::get('/detailcampaignvol',function (){
-//     return view('detailcampaignvol');
-// });
-
-// Route::get('/detailcampaign',function (){
-//     return view('detailcampaign');
-// });
-
-// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-// Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
-
-// Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+Route::get('/profilvolunteer', function () {
+        return view('profilvolunteer');
+    });
 
 Route::get('/error404',function (){
     return view('halamanerror');

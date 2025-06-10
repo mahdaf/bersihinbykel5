@@ -71,61 +71,35 @@
             </div>
 
 {{-- Summary Section --}}
-<div x-data="{ tab: 'diunggah' }" class="flex flex-col gap-6 mb-8">
-    <div class="flex flex-row gap-4">
-        <button
-            :class="tab === 'diunggah' ? 'bg-[#ddedee] text-[#171717]' : 'bg-white border border-[#ddedee] text-[#171717]'"
-            class="flex-1 rounded-lg p-4 text-center font-medium transition"
-            @click="tab = 'diunggah'">
-            Diunggah
-        </button>
-        <button
-            :class="tab === 'disukai' ? 'bg-[#ddedee] text-[#171717]' : 'bg-white border border-[#ddedee] text-[#171717]'"
-            class="flex-1 rounded-lg p-4 text-center font-medium transition"
-            @click="tab = 'disukai'">
-            Disukai
-        </button>
+<div x-data="{ tab: 'diunggah' }" class="flex flex-col gap-2">
+    <div class="flex">
+        <div class="inline-flex border border-[#e5e7eb] rounded-lg overflow-hidden">
+            <button
+                :class="tab === 'diunggah'
+                    ? 'bg-[#DDEDEE] text-black'
+                    : 'bg-white text-[#b0b0b0] hover:bg-[#f5f5f5]'"
+                class="px-6 py-2 text-sm font-medium transition focus:outline-none rounded-l-lg"
+                @click="tab = 'diunggah'">
+                Diunggah
+            </button>
+            <button
+                :class="tab === 'disukai'
+                    ? 'bg-[#DDEDEE] text-black'
+                    : 'bg-white text-[#b0b0b0] hover:bg-[#f5f5f5]'"
+                class="px-6 py-2 text-sm font-medium transition focus:outline-none rounded-r-lg"
+                @click="tab = 'disukai'">
+                Disukai
+            </button>
+        </div>
     </div>
 
     {{-- Posts --}}
-    <div class="space-y-6" x-show="tab === 'diunggah'">
-        @foreach ([
-            'Senang banget bisa ikut kegiatan bersih-bersih hari ini. Awalnya ragu karena capek setelah kuliah, tapi ternyata suasananya seru dan rame, jadi semangat lagi. Bisa kenalan sama orang baru juga, ngobrol-ngobrol sambil mungutin sampah tuh ada vibes healing-nya.',
-            'Hore bisa ikut bersih2, sangat mantap',
-            'Aku suka dengan campaign hari ini, karena membuat saya bisa kenal lebih banyak orang baru.'
-        ] as $content)
-            <div class="bg-white rounded-lg border border-[#ddedee] p-6">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="inline-flex items-center bg-[#810000] text-white text-sm px-2 py-1 rounded">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Daur Sampah Yuk
-                    </span>
-                </div>
-                <p class="text-sm text-[#b0b0b0] mb-3">Senin, 12 Maret 2025</p>
-                <p class="text-[#171717] leading-relaxed">{{ $content }}</p>
-            </div>
-        @endforeach
+    <div class="space-y-3" x-show="tab === 'diunggah'">
+        @include('components.komentarprofilitem')
+        @include('components.komentarprofilitem')
     </div>
     <div class="space-y-6" x-show="tab === 'disukai'">
-        @foreach ([
-            'Postingan yang saya sukai 1',
-            'Postingan yang saya sukai 2'
-        ] as $content)
-            <div class="bg-white rounded-lg border border-[#ddedee] p-6">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="inline-flex items-center bg-[#810000] text-white text-sm px-2 py-1 rounded">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Daur Sampah Yuk
-                    </span>
-                </div>
-                <p class="text-sm text-[#b0b0b0] mb-3">Senin, 12 Maret 2025</p>
-                <p class="text-[#171717] leading-relaxed">{{ $content }}</p>
-            </div>
-        @endforeach
+        @include('components.komentarprofilitem')
     </div>
 </div>
 </body>
