@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\SearchController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -43,6 +44,7 @@ Route::post('change-password', [App\Http\Controllers\Auth\ForgotPasswordControll
 // Route yang hanya bisa diakses jika sudah login
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
     Route::get('/profil', function () {
         return view('profilvolunteer');
     });
