@@ -3,93 +3,101 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfilCommunityController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\SearchController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingpage');
 });
 
-Route::get('register', function () {
-    return view('account/register');
+// Route yang bebas diakses
+Route::get('/register', function (\Illuminate\Http\Request $request) {
+    $role = $request->query('role');
+    if (!in_array($role, ['komunitas', 'volunteer'])) {
+        return view('account.reg-role');
+    }
+    return view('account.register', compact('role'));
 })->name('register');
 
-Route::post('register', function () {
-    return redirect()->route('register3');
-})->name('account/register');
+Route::post('/register', [RegisterController::class, 'register'])->name('account.register');
 
-Route::get('register2', function () {
-    return view('account.register2');
-})->name('register2');
+Route::get('/reg-success', function () {
+    return view('account.reg-success');
+})->name('reg-success');
 
-Route::get('register3', function () {
-    return view('account.register3');
-})->name('register3');
+Route::get('/login', function () {
+    return view('account/login');
+})->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('password-reset', function () {
     return view('account/password-reset');
 })->name('password.request');
 
-Route::get('/check-email', function () {
-    return view('account/check-email');
+Route::post('password-reset', [ForgotPasswordController::class, 'checkEmail'])->name('password.reset.check');
+Route::get('change-password', [ForgotPasswordController::class, 'showChangePasswordForm'])->name('password.reset.form');
+Route::post('change-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'updatePassword'])->name('password.update');
+
+// Route yang hanya bisa diakses jika sudah login
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
+    Route::get('/profil', function () {
+        return view('profilvolunteer');
+    });
+    Route::get('/campaign/tambah', function () {
+        return view('components.TambahCampaign');
+    })->name('campaign.tambah');
+    // ...tambahkan semua route lain yang ingin dibatasi login di sini...
+    Route::get('/editcampaign', function () {
+        return view('editcampaign');
+    });
+    Route::get('/hapuscampaign', function () {
+        return view('hapuscampaign');
+    });
+    Route::get('/detailcampaigncom', function () {
+        return view('detailcampaigncom');
+    });
+    Route::get('/detailcampaignvol', function () {
+        return view('detailcampaignvol');
+    });
+    Route::get('/detailcampaign', function () {
+        return view('detailcampaign');
+    });
+    Route::get('/pendaftaran', function () {
+        return view('pendaftaran-campaign');
+    });
+    Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
+    Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+    Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 });
 
-Route::get('change-password', function () {
-    return view('account/change-password');
-})->name('password.reset');
+// Route::get('/profil',function (){
+//     return view('profilvolunteer');
+// });
 
+// Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 
-Route::get('/check-email', function () {
-  return view('account/check-email');
-});
+// Route::get('/detailcampaigncom',function (){
+//     return view('detailcampaigncom');
+// });
 
-Route::get('change-password', function () {
-    return view('account/change-password');
-})->name('password.reset');
+// Route::get('/detailcampaignvol',function (){
+//     return view('detailcampaignvol');
+// });
 
-Route::get('/login', function () {
-    return view('account/login');
-})->name('login');
+// Route::get('/detailcampaign',function (){
+//     return view('detailcampaign');
+// });
 
-Route::post('/login', function () {
-})->name('login');
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/profil',function (){
-    return view('profilvolunteer');
-});
+// Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
 
-Route::get('/campaign/tambah', function () {
-    return view('components.TambahCampaign');
-})->name('campaign.tambah');
-
-
-Route::get('/editcampaign',function (){
-    return view('editcampaign');
-});
-
-Route::get('/hapuscampaign',function (){
-    return view('hapuscampaign');
-});
-
-Route::get('/detailcampaigncom',function (){
-    return view('detailcampaigncom');
-});
-
-Route::get('/detailcampaignvol',function (){
-    return view('detailcampaignvol');
-});
-
-Route::get('/detailcampaign',function (){
-    return view('detailcampaign');
-});
-
-Route::get('/pendaftaran',function (){
-    return view('pendaftaran-campaign');
-});
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
-
-Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+// Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
 
 Route::get('/error404',function (){
     return view('halamanerror');
