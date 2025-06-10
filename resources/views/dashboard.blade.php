@@ -3,15 +3,15 @@
 
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard</title>
         @vite('resources/css/app.css')
     </head>
 
     <body class="mb-20">
-        @include('components.navbar2')
+        @include('components.navbar')
         <div class="mx-20 pt-20 flex items-center gap-4 ">
-            @include('components.searchbar')
-            @include('components.filterbutton')
+            @include('components.search-filter')
         </div>
         <main class="mx-20 pt-10">
             <div class="mb-4 pr-8 flex items-center justify-between">

@@ -7,9 +7,8 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-    @include('components.navbar2')
-
-    <div class="flex items-center justify-center">
+    @include('components.navbar')
+    <div class="flex items-center justify-center min-h-screen">
         <main class="flex flex-col items-center bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
             <div class="flex justify-center mb-6">
                 <img src="{{ asset('Logo.png') }}" alt="Logo" class="h-12"/>
@@ -19,11 +18,17 @@
                 Kamu perlu mengisi email dan kata sandi untuk masuk.
             </p>
 
+            @if (session('success'))
+                <div class="mb-4 p-3 rounded bg-green-100 text-green-800 text-sm text-center">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('login') }}" class="w-full space-y-4">
                 @csrf
                 <div class="mb-4">
                     <input type="email" name="email" placeholder="Email"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 @error('email') border-red-500 @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('email') border-red-500 @enderror"
                         value="{{ old('email') }}" required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     @error('email')
@@ -32,7 +37,7 @@
                 </div>
                 <div class="mb-4 relative">
                     <input type="password" name="password" placeholder="Kata sandi"
-                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 @error('password') border-red-500 @enderror"
+                        class="w-full text-sm rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#810000] @error('password') border-red-500 @enderror"
                         required
                         style="background-color: #DDEDEE; color: #6b9a9a; ::placeholder { color: #55A7AA; }">
                     <i aria-hidden="true" class="fas fa-eye-slash absolute right-3 top-1/2 -translate-y-1/2 text-[#6b9a9a] cursor-pointer"></i>
@@ -46,7 +51,7 @@
             </form>
 
             <div class="text-center mt-6">
-                <p class="text-sm font-semibold text-black">
+                <p class="text-sm text-black">
                     Belum memiliki akun?
                     <a href="{{ route('register') }}" class="text-[#810000] cursor-pointer">Daftar</a>
                 </p>
