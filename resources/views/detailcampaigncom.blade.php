@@ -235,9 +235,9 @@
                     <div>
                         <p class="font-semibold text-sm mb-1">Aktivitas</p>
                         <div class="flex items-center">
-                            <img src="https://source.unsplash.com/30x30/?recycle" class="w-8 h-8 rounded-md" />
-                            <img src="https://source.unsplash.com/30x30/?volunteer" class="w-8 h-8 rounded-md ml-1" />
-                            <img src="https://source.unsplash.com/30x30/?clean" class="w-8 h-8 rounded-md ml-1" />
+                            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
+                            <img src="https://randomuser.me/api/portraits/men/2.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
+                            <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <span class="ml-2 text-sm text-gray-500">+2</span>
                         </div>
                     </div>
