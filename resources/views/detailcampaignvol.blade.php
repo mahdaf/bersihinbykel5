@@ -113,29 +113,58 @@
 
                         <!-- Form -->
                         <h2 class="text-xl font-bold text-[#55a7aa] mb-6 text-center">Form Pendaftaran Campaign</h2>
-                        <form>
-                            <input type="text" placeholder="Nama Lengkap"
-                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+                        <form id="registrationForm" class="mt-6" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
+                            
+                            <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" 
+                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" required />
 
-                            <input type="email" placeholder="Email"
-                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+                            <input type="email" name="email" placeholder="Email"
+                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" required />
 
                             <div class="flex gap-2 mb-3">
-                                <button type="button" class="bg-[#55a7aa] text-white px-4 rounded-2xl text-lg">+62</button>
-                                <input type="text" placeholder="Nomor Ponsel"
-                                    class="w-full p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+                                <span class="bg-[#55a7aa] text-white px-4 rounded-2xl text-lg">+62</span>
+                                <input type="text" name="nomor_ponsel" placeholder="Nomor Ponsel"
+                                    class="w-full p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" required />
                             </div>
 
                             <div class="mb-4">
                                 <label class="text-[#55a7aa] text-lg font-medium block mb-2">Upload KTP</label>
-                                <input type="file" class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3" />
+                                <input type="file" name="ktp" accept="image/*" 
+                                    class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3" required />
                             </div>
 
-                            <button type="submit"
-                                    class="w-full bg-[#810000] hover:bg-[#810000]/90 text-white py-3 rounded-2xl text-lg font-medium">
+                            <button type="submit" 
+                                class="w-full bg-[#810000] hover:bg-[#810000]/90 text-white py-3 rounded-2xl text-lg font-medium">
                                 Daftar
                             </button>
                         </form>
+
+                        <script>
+                        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            const formData = new FormData(e.target);
+
+                            try {
+                                const response = await fetch('/daftar-campaign', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+
+                                const data = await response.json();
+
+                                if (data.success) {
+                                    alert('Pendaftaran berhasil!');
+                                    toggleModal(); // Tutup modal
+                                    location.reload(); // Refresh halaman
+                                }
+                            } catch (error) {
+                                alert('Terjadi kesalahan, silakan coba lagi');
+                            }
+                        });
+                        </script>
                     </div>
                 </div>
 

@@ -157,21 +157,30 @@
                             </svg>
                         </button>
                         <h2 class="text-xl font-bold text-[#55a7aa] mb-6 text-center">Form Pendaftaran Campaign</h2>
-                        <form>
-                            <input type="text" placeholder="Nama Lengkap"
+                            <form id="registrationForm" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="campaign_id" value="{{ $campaign->id ?? '' }}">
+                            
+                            <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" required
                                 class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
-                            <input type="email" placeholder="Email"
+
+                            <input type="email" name="email" placeholder="Email" required
                                 class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
+
                             <div class="flex gap-2 mb-3">
-                                <button type="button" class="bg-[#55a7aa] text-white px-4 rounded-2xl text-lg shrink-0">+62</button>
-                                <input type="text" placeholder="Nomor Ponsel"
+                                <button type="button" class="bg-[#55a7aa] text-white px-4 rounded-2xl text-lg">+62</button>
+                                <input type="text" name="nomor_ponsel" placeholder="Nomor Ponsel" required
                                     class="w-full p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
                             </div>
+
                             <div class="mb-4">
-                                <label class="text-[#55a7aa] text-lg font-medium block mb-2">Upload KTP</label>
-                                <input type="file" class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#55a7aa] file:text-white hover:file:bg-[#4a9194]" />
+                                <label class="text-[#55a7aa] text-lg font-medium mb-2">Upload KTP</label>
+                                <input type="file" name="ktp" accept="image/*" required 
+                                    class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3" />
                             </div>
-                            <button type="submit" class="w-full bg-[#810000] hover:bg-[#810000]/90 text-white py-3 rounded-2xl text-lg font-medium">
+
+                            <button type="submit"
+                                class="w-full bg-[#810000] hover:bg-[#810000]/90 text-white py-3 rounded-2xl text-lg font-medium">
                                 Daftar
                             </button>
                         </form>
@@ -218,7 +227,10 @@
 
                         <!-- Form -->
                         <h2 class="text-xl font-bold text-[#55a7aa] mb-6 text-center">Form Pendaftaran Campaign</h2>
-                        <form>
+                        <form id="registrationForm" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="campaign_id" value="{{ $campaign->id ?? '' }}">
+
                             <input type="text" placeholder="Nama Lengkap"
                                 class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
 
@@ -232,8 +244,8 @@
                             </div>
 
                             <div class="mb-4">
-                                <label class="text-[#55a7aa] text-lg font-medium block mb-2">Upload KTP</label>
-                                <input type="file" class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3" />
+                                <label class="text-[#55a7aa] text-lg font-medium mb-2">Upload KTP</label>
+                                <input type="file" name="ktp" accept="image/*" required />
                             </div>
 
                             <button type="submit"
@@ -287,6 +299,35 @@
                 modal.classList.toggle('hidden');
             }
         }
+
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+
+            try {
+                const response = await fetch('/daftar-campaign', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Pendaftaran berhasil!');
+                    toggleModal();
+                    location.reload();
+                } else {
+                    alert(data.message || 'Terjadi kesalahan');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan, silakan coba lagi');
+            }
+        });
     </script>
 </body>
 </html>

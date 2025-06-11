@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\PartisipanCampaign;
+use Illuminate\Http\Request;
+
+class PartisipanCampaignController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'campaign_id' => 'required|exists:campaign,id',
+            'nama_lengkap' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'nomor_ponsel' => 'required|string|max:20',
+            'ktp' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        // Upload KTP
+        $ktpPath = $request->file('ktp')->store('public/ktp');
+
+        // Simpan data pendaftaran
+        $partisipan = PartisipanCampaign::create([
+            'campaign_id' => $request->campaign_id,
+            'akun_id' => auth()->id(),
+            'nama_lengkap' => $request->nama_lengkap,
+            'email' => $request->email, 
+            'nomor_ponsel' => $request->nomor_ponsel,
+            'ktp' => str_replace('public/', '', $ktpPath)
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pendaftaran berhasil'
+        ]);
+    }
+}

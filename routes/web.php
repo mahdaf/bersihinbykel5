@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PartisipanCampaignController;
+use App\Http\Controllers\CampaignController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -51,15 +53,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detailcampaignvol', function () {
         return view('detailcampaignvol');
     });
-    Route::get('/detailcampaign', function () {
-        return view('detailcampaign');
-    });
+    Route::get('/detailcampaign/{id}', [CampaignController::class, 'show'])->name('campaign.detail');
     Route::get('/pendaftaran', function () {
         return view('pendaftaran-campaign');
     });
     Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
+    Route::post('/daftar-campaign', [PartisipanCampaignController::class, 'store'])->middleware('auth');
 });
 
 Route::get('password-reset', function () {
@@ -103,13 +104,13 @@ Route::post('/login', function () {
 //     return view('detailcampaigncom');
 // });
 
-// Route::get('/detailcampaignvol',function (){
-//     return view('detailcampaignvol');
-// });
+Route::get('/detailcampaignvol',function (){
+    return view('detailcampaignvol');
+});
 
-// Route::get('/detailcampaign',function (){
-//     return view('detailcampaign');
-// });
+Route::get('/detailcampaign',function (){
+    return view('detailcampaign');
+});
 
 Route::get('/pendaftaran',function (){
     return view('pendaftaran-campaign');
