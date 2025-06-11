@@ -6,13 +6,9 @@
     $isUrl = $cover && (Str::startsWith($cover, ['http://', 'https://']));
 
     $now = now();
-    $waktuDiperbarui = Carbon::parse($campaign->waktu_diperbarui);
     $waktu = Carbon::parse($campaign->waktu);
 
-    if ($now->lt($waktuDiperbarui->copy()->addSeconds(60))) {
-        $status = 'Menunggu Verifikasi Sistem';
-        $bg = '#a68f5c';
-    } elseif ($now->lt($waktu)) {
+    if ($now->lt($waktu)) {
         $status = 'Berlangsung';
         $bg = '#44709e';
     } else {
