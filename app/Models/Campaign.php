@@ -16,4 +16,8 @@ class Campaign extends Model
     {
         return $this->hasMany(\App\Models\PartisipanCampaign::class, 'campaign_id');
     }
+    public function gambar_campaign()
+    {
+        return $this->hasMany(\App\Models\GambarCampaign::class, 'campaign_id');
+    }
 }

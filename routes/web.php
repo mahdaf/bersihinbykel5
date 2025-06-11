@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\CampaignController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -73,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
+    Route::get('/campaign/{id}', [CampaignController::class, 'show']);
 });
 
 // Route::get('/profil',function (){

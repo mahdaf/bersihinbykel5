@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Daur Sampah Yuk - Bersih.in</title>
+    <title>Bersih.in</title>
     @vite(['resources/css/app.css', 'resources/js/app.js']) {{-- Pastikan app.js tidak mengimpor Swiper jika Anda menggunakan CDN di bawah --}}
 
     {{-- Swiper via CDN --}}
@@ -44,20 +44,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <!-- Gambar Campaign -->
             <div>
-                 <div class="w-full max-w-md mx-auto">
+                 <div class="w-full max-w-2xl mx-auto">
                 <!-- Slider container -->
-                    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" /> {{-- Sedikit menambah tinggi gambar agar lebih proporsional jika lebar --}}
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full h-72 md:h-96 object-cover" />
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full h-72 md:h-96 object-cover" />
-                                </div>
+                    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg h-80 md:h-[32rem]">
+                        <div class="swiper-wrapper">
+                            @foreach($campaign->gambar_campaign as $gambar)
+                            <div class="swiper-slide">
+                                <img src="{{ $gambar->gambar }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
                             </div>
+                            @endforeach
+                        </div>
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
@@ -65,15 +61,15 @@
 
             <!-- Detail Campaign -->
             <div>
-                <p class="text-sm text-gray-500 font-medium">Bebersih Surabaya</p>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Daur Sampah Yuk</h1>
+                <p class="text-sm text-gray-500 font-medium">{{ $campaign->lokasi }}</p>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $campaign->nama }}</h1>
                 <div class="flex items-center text-sm text-gray-600 mb-4">
-                    <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> 20/04/2024</span>
-                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> 09.30 – 18.00</span>
+                    <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('d/m/Y') }}</span>
+                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('H.i') }} – {{ \Carbon\Carbon::parse($campaign->waktu)->addHours(8)->format('H.i') }}</span>
                 </div>
 
                 <h2 class="text-base font-semibold text-blue-900">Tentang Campaign</h2>
-                <p class="text-sm mt-2 mb-4">Daur sampah yuk adalah campaign tahunan departemen Sistem Informasi ITS untuk membersihkan lingkungan dan limbah yang ada di sekitar kampus.</p>
+                <p class="text-sm mt-2 mb-4">{{ $campaign->deskripsi }}</p>
 
                 <div class="flex mb-4">
                     <div class="mr-8">
@@ -268,6 +264,16 @@
             span.textContent = timeAgo(new Date(t));
         });
     }, 30000);
+
+    var swiper = new Swiper('.mySwiper', {
+        loop: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: false
+        },
+        watchOverflow: false,
+    });
 </script>
 
 </body>
