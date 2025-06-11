@@ -86,6 +86,7 @@
                         style="background-color: #CE1212; border-radius: 9999px;">
                     </div>
                 </button>
+                <div class="absolute left-0 w-full h-px bg-[#e5e7eb]" style="bottom: 0; z-index: 0;"></div>
             </div>
 
             {{-- All Campaigns --}}

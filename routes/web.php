@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ProfilController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -45,9 +46,7 @@ Route::post('change-password', [App\Http\Controllers\Auth\ForgotPasswordControll
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/search', [SearchController::class, 'search'])->name('search');
-    Route::get('/profil', function () {
-        return view('profilvolunteer');
-    });
+    Route::get('/profil', [ProfilController::class, 'show'])->name('profil');
     Route::get('/campaign/tambah', function () {
         return view('components.TambahCampaign');
     })->name('campaign.tambah');
@@ -72,11 +71,8 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
-    Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
+
 });
-Route::get('/profilvolunteer', function () {
-        return view('profilvolunteer');
-    });
 
 Route::get('/error404',function (){
     return view('halamanerror');
