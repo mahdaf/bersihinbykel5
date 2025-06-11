@@ -47,9 +47,7 @@ Route::post('change-password', [App\Http\Controllers\Auth\ForgotPasswordControll
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/search', [SearchController::class, 'search'])->name('search');
-    Route::get('/profil', function () {
-        return view('profilvolunteer');
-    });
+    Route::get('/profil', [ProfilController::class, 'show'])->name('profil');
     Route::get('/campaign/tambah', function () {
         return view('components.TambahCampaign');
     })->name('campaign.tambah');

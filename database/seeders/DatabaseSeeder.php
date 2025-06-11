@@ -23,5 +23,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GambarCampaignSeeder::class,
         ]);
+        $this->call([
+            SeederKomentar::class,
+        ]);
+        $this->call([
+            SeederKomentarDisukai::class,
+        ]);
+        $this->call([
+            SeederPartisipanCampaign::class,
+        ]);
+        $this->call([
+            SeederCampaignDitandai::class,
+        ]);
     }
 }
