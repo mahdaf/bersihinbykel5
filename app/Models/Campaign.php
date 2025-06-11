@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Campaign extends Model
@@ -15,5 +16,15 @@ class Campaign extends Model
     public function partisipanCampaigns()
     {
         return $this->hasMany(\App\Models\PartisipanCampaign::class, 'campaign_id');
+    }
+    
+    use HasFactory;
+    
+    protected $fillable = [
+        'akun_id', 'nama', 'waktu', 'waktu_diperbarui', 'deskripsi', 'lokasi', 'kontak', 'kuota_partisipan'
+    ];
+
+    public function akun() {
+        return $this->belongsTo(Akun::class, 'akun_id');
     }
 }

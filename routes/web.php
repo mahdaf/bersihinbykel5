@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfilCommunityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\CampaignController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -61,9 +62,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detailcampaigncom', function () {
         return view('detailcampaigncom');
     });
-    Route::get('/detailcampaignvol', function () {
-        return view('detailcampaignvol');
-    });
+    
+    Route::get('/detailcampaignvol/{id}', [App\Http\Controllers\CampaignController::class, 'show']);
+
     Route::get('/detailcampaign', function () {
         return view('detailcampaign');
     });
@@ -74,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
 });
+
 
 // Route::get('/profil',function (){
 //     return view('profilvolunteer');
