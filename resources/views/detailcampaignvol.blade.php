@@ -139,18 +139,18 @@
                     <div id="commentsList">
                     @foreach($komentar as $k)
                         <div class="flex items-center mb-2 mt-2">
-                            <img src="{{ $k->akun->fotoProfil }}" class="w-10 h-10 rounded-full mr-3">
-                            <div>
-                                <p class="font-semibold text-sm">{{ $k->akun->namaPengguna }} <span class="text-xs text-gray-500">• {{ $k->created_at->diffForHumans() }}</span></p>
-                                <p class="text-sm text-gray-700">{{ $k->komentar }}</p>
-                            </div>
-                        </div>
+        <img src="{{ $k->akun->fotoProfil }}" class="w-10 h-10 rounded-full mr-3">
+        <div>
+            <p class="font-semibold text-sm">{{ $k->akun->namaPengguna }} <span class="text-xs text-gray-500">• {{ $k->created_at->diffForHumans() }}</span></p>
+            <p class="text-sm text-gray-700">{{ $k->komentar }}</p>
+        </div>
+    </div>
                     @endforeach
                     </div>
                     
                     <!-- Form Komentar Baru -->
                     <form id="commentForm" class="flex items-start gap-2 mt-4">
-                        <img src="https://randomuser.me/api/portraits/men/11.jpg" class="w-10 h-10 rounded-full mt-1">
+                        <img src="{{ $user->fotoProfil }}" class="w-10 h-10 rounded-full mt-1">
                         <div class="flex-1">
                             <input
                                 id="commentInput"
@@ -183,10 +183,20 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            // Tambahkan komentar ke tampilan (atau reload)
-            // Misal: renderComments() atau append ke list
+            // Tambahkan komentar baru ke atas daftar komentar
+            const list = document.getElementById('commentsList');
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div class="flex items-center mb-2 mt-2">
+                    <img src="${data.komentar.avatar}" class="w-10 h-10 rounded-full mr-3">
+                    <div>
+                        <p class="font-semibold text-sm">${data.komentar.user} <span class="text-xs text-gray-500">• ${data.komentar.created_at}</span></p>
+                        <p class="text-sm text-gray-700">${data.komentar.komentar}</p>
+                    </div>
+                </div>
+            `;
+            list.prepend(div);
             input.value = '';
-            // Bisa juga reload komentar dari server
         } else {
             alert('Gagal menambah komentar');
         }
@@ -219,24 +229,7 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
         return `${days} hari`;
     }
 
-    const comments = [
-        {
-            user: "landakberduri",
-            avatar: "https://randomuser.me/api/portraits/men/10.jpg",
-            text: "Baru sadar, ternyata kegiatan campaign itu penting banget untuk ngejadiin lingkungan sekitar lebih aware terhadap kebersihan lingkungan",
-            time: new Date(Date.now() - 86400000).toISOString(),
-            likes: 530,
-            liked: false
-        },
-        {
-            user: "sukamakancoklat",
-            avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-            text: "Keren banget acaranya! Semoga makin banyak yang peduli lingkungan.",
-            time: new Date(Date.now() - 2*86400000).toISOString(), // 2 hari lalu
-            likes: 120,
-            liked: false
-        }
-    ];
+
 
     function renderComments() {
         const list = document.getElementById('commentsList');

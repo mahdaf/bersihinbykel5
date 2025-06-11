@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Komentar;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Komentar;
 
 class KomentarController extends Controller
 {
@@ -20,7 +20,9 @@ class KomentarController extends Controller
             'komentar' => $request->komentar,
         ]);
 
-        // Untuk AJAX, bisa return JSON
+        // Ambil ulang komentar beserta relasi user
+        $komentar = Komentar::with('akun')->find($komentar->id);
+
         return response()->json([
             'success' => true,
             'komentar' => [
@@ -29,8 +31,8 @@ class KomentarController extends Controller
                 'campaign_id' => $komentar->campaign_id,
                 'komentar' => $komentar->komentar,
                 'created_at' => $komentar->created_at->diffForHumans(),
-                'user' => Auth::user()->namaPengguna,
-                'avatar' => Auth::user()->fotoProfil,
+                'user' => $komentar->akun->namaPengguna ?? '',
+                'avatar' => $komentar->akun->fotoProfil ?? '',
             ]
         ]);
     }

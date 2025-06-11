@@ -21,7 +21,7 @@ class Komentar extends Model
 
     public function akun()
     {
-        return $this->belongsTo(Akun::class, 'akun_id');
+        return $this->belongsTo(\App\Models\User::class, 'akun_id');
     }
 
     public function up()
