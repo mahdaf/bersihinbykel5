@@ -137,6 +137,15 @@
 
                 <div class="mt-8 border-t pt-4">
                     <div id="commentsList">
+                    @foreach($komentar as $k)
+                        <div class="flex items-center mb-2 mt-2">
+                            <img src="{{ $k->akun->fotoProfil }}" class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <p class="font-semibold text-sm">{{ $k->akun->namaPengguna }} <span class="text-xs text-gray-500">• {{ $k->created_at->diffForHumans() }}</span></p>
+                                <p class="text-sm text-gray-700">{{ $k->komentar }}</p>
+                            </div>
+                        </div>
+                    @endforeach
                     </div>
                     
                     <!-- Form Komentar Baru -->
@@ -156,6 +165,34 @@
                             Kirim
                         </button>
                     </form>
+                    <script>
+document.getElementById('commentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    fetch('{{ route('komentar.store', $campaign->id) }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ komentar: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // Tambahkan komentar ke tampilan (atau reload)
+            // Misal: renderComments() atau append ke list
+            input.value = '';
+            // Bisa juga reload komentar dari server
+        } else {
+            alert('Gagal menambah komentar');
+        }
+    });
+});
+</script>
                 </div>
                 </div>
             </div>

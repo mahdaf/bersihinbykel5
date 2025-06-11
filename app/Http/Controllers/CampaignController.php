@@ -9,11 +9,9 @@ class CampaignController extends Controller
 {
     public function show($id)
     {
-        // Ambil data campaign beserta gambar-gambarnya
-        $campaign = \App\Models\Campaign::with(['gambar_campaign' => function($q) {
-            $q->orderBy('id');
-        }])->findOrFail($id);
+        $campaign = Campaign::with('gambar_campaign')->findOrFail($id);
+        $komentar = \App\Models\Komentar::with('akun')->where('campaign_id', $id)->orderBy('created_at', 'desc')->get();
 
-        return view('detailcampaignvol', compact('campaign'));
+        return view('detailcampaignvol', compact('campaign', 'komentar'));
     }
 }

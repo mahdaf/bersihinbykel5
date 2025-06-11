@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
+    Route::post('/campaign/{id}/komentar', [\App\Http\Controllers\KomentarController::class, 'store'])->name('komentar.store');
 });
 
 // Route::get('/profil',function (){

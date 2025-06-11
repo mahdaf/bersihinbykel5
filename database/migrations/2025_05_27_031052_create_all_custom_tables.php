@@ -56,6 +56,7 @@ return new class extends Migration {
             $table->foreignId('akun_id')->constrained('akun');
             $table->foreignId('campaign_id')->constrained('campaign');
             $table->string('komentar', 280);
+            $table->timestamps();
         });
 
         Schema::create('komentar_disukai', function (Blueprint $table) {
