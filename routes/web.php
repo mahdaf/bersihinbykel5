@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\PartisipanCampaignController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -75,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
+    Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
+    Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
 });
 
 // Route::get('/profil',function (){

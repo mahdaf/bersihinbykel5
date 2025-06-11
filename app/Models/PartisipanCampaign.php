@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class PartisipanCampaign extends Model
 {
     protected $table = 'partisipan_campaign';
+    protected $fillable = [
+        'akun_id', 'campaign_id', 'nama', 'email', 'nomorTelepon', 'ktp'
+    ];
+
+    public $timestamps = false; // Tambahkan baris ini
 
     public function campaign()
     {
