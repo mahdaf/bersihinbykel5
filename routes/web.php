@@ -76,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
+    Route::post('/campaign/{id}/bookmark', [CampaignController::class, 'bookmark'])->name('campaign.bookmark');
+    Route::delete('/campaign/{id}/bookmark', [CampaignController::class, 'unbookmark'])->name('campaign.unbookmark');
 });
 Route::get('/profilvolunteer', function () {
         return view('profilvolunteer');

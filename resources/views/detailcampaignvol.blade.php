@@ -45,6 +45,9 @@
             background-color: #F97316; /* Tailwind orange-600 (sesuaikan dengan preferensi oranye Anda) */
         }
     </style>
+
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body class="bg-white text-gray-800 font-sans">
 
@@ -79,7 +82,38 @@
                     <span class="flex items-center"><i class="far fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('H.i') }} – {{ \Carbon\Carbon::parse($campaign->waktu)->addHours(8)->format('H.i') }}</span>
                 </div>
 
-                <h2 class="text-base font-semibold text-blue-900">Tentang Campaign</h2>
+                @php
+                    // Cek apakah campaign sudah di-bookmark user
+                    $sudahBookmark = \DB::table('campaign_ditandai')
+                        ->where('akun_id', auth()->id())
+                        ->where('campaign_id', $campaign->id)
+                        ->exists();
+                @endphp
+
+                <div class="row align-items-center mb-3">
+                    <div class="col">
+                        <h5 class="mb-0">Tentang Campaign</h5>
+                    </div>
+                    <div class="col-auto">
+                        @if($sudahBookmark)
+                            <form action="{{ route('campaign.unbookmark', $campaign->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-dark" title="Hapus Bookmark">
+                                    <i class="bi bi-bookmark-fill"></i>
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('campaign.bookmark', $campaign->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary" title="Bookmark">
+                                    <i class="bi bi-bookmark"></i>
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+
                 <p class="text-sm mt-2 mb-4">{{ $campaign->deskripsi }}</p>
 
                 <div class="flex mb-4">
@@ -93,7 +127,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <p class="font-semibold text-sm mb-1">Aktivitas</p>
                         <div class="flex items-center">
                             <img src="https://source.unsplash.com/30x30/?recycle" class="w-8 h-8 rounded-md" />
@@ -101,7 +135,7 @@
                             <img src="https://source.unsplash.com/30x30/?clean" class="w-8 h-8 rounded-md ml-1" />
                             <span class="ml-2 text-sm text-gray-500">+2</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <a href="{{ route('partisipan.create', $campaign->id) }}"
