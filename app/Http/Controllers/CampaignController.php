@@ -11,12 +11,23 @@ class CampaignController extends Controller
 {
     public function show($id)
     {
-        // Ambil data campaign beserta gambar-gambarnya
-        $campaign = \App\Models\Campaign::with(['gambar_campaign' => function($q) {
-            $q->orderBy('id');
-        }])->findOrFail($id);
+        $user = auth()->user();
 
-        return view('detailcampaignvol', compact('campaign'));
+        // Ambil campaign beserta gambar
+        $campaign = \App\Models\Campaign::with('gambar_campaign')->findOrFail($id);
+
+        // Cek role berdasarkan jenis_akun_id
+        if ($user->jenis_akun_id == 1) {
+            return view('detailcampaignvol', compact('campaign'));
+        } elseif ($user->jenis_akun_id == 2) {
+            if ($campaign->akun_id == $user->id) {
+                return view('detailcampaigncom', compact('campaign'));
+            } else {
+                return view('detailcampaignvol', compact('campaign'));
+            }
+        } else {
+            abort(403, 'Role tidak dikenali');
+        }
     }
 
     public function showCom($id)
