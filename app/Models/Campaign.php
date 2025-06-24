@@ -18,6 +18,6 @@ class Campaign extends Model
     }
     public function gambar_campaign()
     {
-        return $this->hasMany(\App\Models\GambarCampaign::class, 'campaign_id');
+        return $this->hasMany(GambarCampaign::class, 'campaign_id');
     }
 }

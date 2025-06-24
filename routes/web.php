@@ -52,9 +52,7 @@ Route::middleware(['auth'])->group(function () {
         return view('components.TambahCampaign');
     })->name('campaign.tambah');
     // ...tambahkan semua route lain yang ingin dibatasi login di sini...
-    Route::get('/editcampaign', function () {
-        return view('editcampaign');
-    });
+    Route::get('/editcampaign/{id}', [CampaignController::class, 'edit'])->name('editcampaign');
     Route::get('/hapuscampaign', function () {
         return view('hapuscampaign');
     });
@@ -74,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
+    Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
     Route::post('/campaign/{id}/bookmark', [CampaignController::class, 'bookmark'])->name('campaign.bookmark');

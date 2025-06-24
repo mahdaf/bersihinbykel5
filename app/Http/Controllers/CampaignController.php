@@ -19,6 +19,12 @@ class CampaignController extends Controller
         return view('detailcampaignvol', compact('campaign'));
     }
 
+    public function showCom($id)
+    {
+        $campaign = \App\Models\Campaign::with('gambar_campaign')->findOrFail($id);
+        return view('detailcampaigncom', compact('campaign'));
+    }
+
     public function bookmark($id, Request $request)
     {
         $akunId = Auth::id();
@@ -47,5 +53,12 @@ class CampaignController extends Controller
             ->delete();
 
         return back()->with('success', 'Bookmark dihapus!');
+    }
+
+    public function edit($id)
+    {
+        $campaign = Campaign::findOrFail($id);
+        // return view edit campaign, misal:
+        return view('editcampaign', compact('campaign'));
     }
 }
