@@ -29,14 +29,17 @@ return new class extends Migration {
 
         Schema::create('campaign', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('akun_id')->constrained('akun');
-            $table->string('nama', 100);
-            $table->dateTime('waktu');
-            $table->dateTime('waktu_diperbarui');
-            $table->text('deskripsi');
-            $table->string('lokasi', 100);
-            $table->string('kontak', 100);
-            $table->integer('kuota_partisipan');
+            $table->foreignId('akun_id')
+                ->nullable() // Boleh null
+                ->constrained('akun')
+                ->nullOnDelete(); // Jika akun dihapus, akun_id jadi null
+            $table->string('nama', 100)->nullable();
+            $table->dateTime('waktu')->nullable();
+            $table->dateTime('waktu_diperbarui')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('lokasi', 100)->nullable();
+            $table->string('kontak', 100)->nullable();
+            $table->integer('kuota_partisipan')->nullable();
         });
 
         Schema::create('campaign_ditandai', function (Blueprint $table) {
