@@ -68,8 +68,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pendaftaran', function () {
         return view('pendaftaran-campaign');
     });
-    Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
-    Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+
+    Route::get('/profil/campaign-followed', [DashboardController::class, 'campaignFollowed'])->name('campaign.followed');
+    Route::get('/profil/campaign-created', [DashboardController::class, 'campaignCreated'])->name('campaign.created');
+
+    Route::get('/campaign-recommendations', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
     Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
