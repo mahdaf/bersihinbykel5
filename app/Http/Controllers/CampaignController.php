@@ -34,7 +34,13 @@ class CampaignController extends Controller
 
     public function showCom($id)
     {
-        $campaign = \App\Models\Campaign::with('gambar_campaign')->findOrFail($id);
+        // Ambil campaign beserta gambar dan partisipan+usernya sekaligus (eager loading)
+        $campaign = \App\Models\Campaign::with([
+            'gambar_campaign',
+            'partisipanCampaigns.akun'
+        ])->findOrFail($id);
+
+        // Kirim ke blade
         return view('detailcampaigncom', compact('campaign'));
     }
 
@@ -80,10 +86,8 @@ class CampaignController extends Controller
         $request->validate([
             'nama_campaign' => 'required|string|max:100',
             'deskripsi_campaign' => 'required|string',
-            'tanggal' => 'required|date',
+            'tanggal' => 'required',
             'alamat_campaign' => 'required|string|max:100',
-            'kontak' => 'required|string|max:100',
-            'kuota_partisipan' => 'required|integer',
             'portofolio' => 'nullable|file|mimes:pdf,doc,docx',
             'gambar_latar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -94,8 +98,6 @@ class CampaignController extends Controller
         $campaign->deskripsi = $request->deskripsi_campaign;
         $campaign->waktu_diperbarui = $request->tanggal;
         $campaign->lokasi = $request->alamat_campaign;
-        $campaign->kontak = $request->kontak;
-        $campaign->kuota_partisipan = $request->kuota_partisipan;
         $campaign->save();
 
         // Update portofolio akun komunitas
@@ -118,4 +120,27 @@ class CampaignController extends Controller
 
         return redirect()->back()->with('success', 'Campaign berhasil diperbarui!');
     }
+
+    public function akun()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'akun_id');
+    }
+
+    public function nullify($id)
+    {
+        $campaign = \App\Models\Campaign::findOrFail($id);
+
+        // Set semua kolom selain id menjadi NULL
+        $campaign->nama = null;
+        $campaign->waktu = null;
+        $campaign->waktu_diperbarui = null;
+        $campaign->deskripsi = null;
+        $campaign->lokasi = null;
+        $campaign->kontak = null;
+        $campaign->kuota_partisipan = null;
+        $campaign->save();
+
+        return back()->with('success', 'Data campaign telah dinull-kan!');
+    }
+
 }

@@ -32,4 +32,9 @@ class PartisipanCampaignController extends Controller
         // Tampilkan halaman berhasil daftar
         return view('berhasil-daftar', ['campaign_id' => $id]);
     }
+
+    public function akun()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'akun_id');
+    }
 }

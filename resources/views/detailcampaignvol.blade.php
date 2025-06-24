@@ -64,7 +64,7 @@
                         <div class="swiper-wrapper">
                             @foreach($campaign->gambar_campaign as $gambar)
                             <div class="swiper-slide">
-                                <img src="{{ $gambar->gambar }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
+                                <img src="{{ asset('storage/' . $gambar->gambar) }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
                             </div>
                             @endforeach
                         </div>
@@ -91,42 +91,70 @@
                 @endphp
 
                 <div class="row align-items-center mb-3">
-                    <div class="col">
-                        <h5 class="mb-0">Tentang Campaign</h5>
-                    </div>
-                    <div class="col-auto">
+                    <div class="col-auto flex gap-2">
                         @if($sudahBookmark)
                             <form action="{{ route('campaign.unbookmark', $campaign->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-dark" title="Hapus Bookmark">
+                                <button type="submit" class="btn btn-dark cursor-pointer" title="Hapus Bookmark">
                                     <i class="bi bi-bookmark-fill"></i>
                                 </button>
                             </form>
                         @else
                             <form action="{{ route('campaign.bookmark', $campaign->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-outline-primary" title="Bookmark">
+                                <button type="submit" class="btn btn-outline-primary cursor-pointer" title="Bookmark">
                                     <i class="bi bi-bookmark"></i>
                                 </button>
                             </form>
                         @endif
+
+                        <form action="{{ route('campaign.nullify', $campaign->id) }}" method="POST" onsubmit="return confirm('Yakin ingin mengosongkan semua data campaign ini?');">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger cursor-pointer" title="Null-kan Data Campaign">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <h5 class="mb-0">Tentang Campaign</h5>
                     </div>
                 </div>
 
                 <p class="text-sm mt-2 mb-4">{{ $campaign->deskripsi }}</p>
 
                 <div class="flex mb-4">
+                    
                     <div class="mr-8">
                         <p class="font-semibold text-sm mb-1">Partisipan</p>
                         <div class="flex items-center">
-                            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
+                            <!-- Static -->
+                            <!-- <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <img src="https://randomuser.me/api/portraits/men/2.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
-                            <span class="ml-2 text-sm text-gray-500">+6</span>
+                            <span class="ml-2 text-sm text-gray-500">+6</span> -->
+
+                            <!-- Dynamic -->
+                            @foreach($campaign->partisipanCampaigns as $partisipan)
+                                @break($loop->index >= 3)
+                                @if($partisipan->akun && $partisipan->akun->fotoProfil)
+                                    <img
+                                        src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
+                                            ? $partisipan->akun->fotoProfil
+                                            : asset('storage/' . $partisipan->akun->fotoProfil) }}"
+                                        class="w-8 h-8 rounded-full border-2 border-white -ml-2"
+                                        title="{{ $partisipan->nama }}"
+                                    />
+                                @endif
+                            @endforeach
+                            @if($campaign->partisipanCampaigns->count() > 3)
+                                <span class="ml-2 text-sm text-gray-500">
+                                    +{{ $campaign->partisipanCampaigns->count() - 3 }}
+                                </span>
+                            @endif
                         </div>
                     </div>
-
+                    
                     <!-- <div>
                         <p class="font-semibold text-sm mb-1">Aktivitas</p>
                         <div class="flex items-center">

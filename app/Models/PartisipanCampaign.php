@@ -17,4 +17,9 @@ class PartisipanCampaign extends Model
     {
         return $this->belongsTo(\App\Models\Campaign::class, 'campaign_id');
     }
+
+    public function akun()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'akun_id');
+    }
 }

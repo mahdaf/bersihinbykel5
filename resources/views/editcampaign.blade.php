@@ -258,7 +258,7 @@
     <div class="swiper-wrapper">
         @foreach($campaign->gambar_campaign as $gambar)
             <div class="swiper-slide">
-                <img src="{{ $gambar->gambar }}" alt="Gambar Campaign" class="w-full h-72 md:h-96 object-cover" />
+                <img src="{{ asset('storage/' . $gambar->gambar) }}" alt="Gambar Campaign" class="w-full h-72 md:h-96 object-cover" />
             </div>
         @endforeach
     </div>
@@ -267,7 +267,7 @@
             
             <!-- Location Section -->
             <div class="location-container">
-                <h2 class="location-title">Lokasi Campaign</h2>
+                <!-- <h2 class="location-title">Lokasi Campaign</h2>
                 <div class="location-text">
                     <svg class="location-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
@@ -276,13 +276,22 @@
                     <span id="lokasi-text"></span>
                 </div>
                 <!-- Interactive Map -->
-                <div id="map"></div>
+                <!-- <div id="map"></div> -->
             </div>
         </div>
 
         <!-- Right Column: Form -->
         <div class="right-column">
-            <form class="form-container" action="{{ route('campaign.update', $campaign->id) }}" method="POST" enctype="multipart/form-data">
+        @if($errors->any())
+            <div class="bg-red-100 text-red-800 p-4 rounded mb-4">
+                <ul>
+                    @foreach($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif    
+        <form class="form-container" action="{{ route('campaign.update', $campaign->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <!-- Upload Gambar Latar -->
@@ -297,16 +306,16 @@
     
     <!-- Nama Campaign -->
     <label class="form-label">Nama campaign</label>
-    <input type="text" class="form-input" name="nama_campaign" placeholder="Nama campaign">
+    <input type="text" class="form-input" name="nama_campaign" placeholder="Masukkan nama campaign">
     
     <!-- Deskripsi Campaign -->
     <label class="form-label">Deskripsi campaign</label>
-    <textarea class="form-textarea" name="deskripsi_campaign" placeholder="Deskripsi campaign"></textarea>
+    <textarea class="form-textarea" name="deskripsi_campaign" placeholder="Masukkan deskripsi campaign"></textarea>
     
     <!-- Pilih Tanggal -->
     <label class="form-label">Pilih tanggal</label>
     <div class="form-date-container">
-        <input type="text" class="form-input" name="tanggal" id="tanggal" placeholder="Pilih tanggal">
+        <input type="text" class="form-input" name="tanggal" id="tanggal" placeholder="Pilih tanggal" required>
         <span class="form-date-icon">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -314,21 +323,34 @@
         </span>
     </div>
     
-    <!-- Syarat dan Ketentuan (boleh diabaikan, tidak perlu name jika tidak diproses) -->
-    <label class="form-label">Syarat dan Ketentuan</label>
-    <textarea class="form-textarea" placeholder="Tambah syarat dan ketentuan..." rows="2"></textarea>
-    
     <!-- Alamat Campaign Lengkap -->
-    <label class="form-label">Alamat campaign lengkap</label>
+    <!-- <label class="form-label">Alamat campaign lengkap</label>
     <div class="relative">
-        <input type="text" class="form-input" name="alamat_campaign" placeholder="Alamat campaign lengkap" id="alamat-campaign">
+        <input type="text" class="form-input" name="alamat_campaign" value="{{ old('alamat_campaign', $campaign->lokasi) }}" id="alamat-campaign">
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z"/>
             </svg>
         </span>
-    </div>
+    </div> -->
+
+    <!-- Lokasi -->
+    <label class="form-label">Lokasi Campaign</label>
+    <select class="form-input" name="alamat_campaign" required>
+        <option value="">Pilih Lokasi</option>
+        @php
+        $cities = [
+            'Jakarta', 'Surabaya', 'Bandung', 'Medan', 'Semarang', 'Palembang', 'Makassar',
+            'Bekasi', 'Depok', 'Tangerang', 'Denpasar', 'Yogyakarta', 'Malang', 'Padang',
+            'Samarinda', 'Batam', 'Pekanbaru', 'Balikpapan', 'Pontianak', 'Banjarmasin',
+            'Manado', 'Ambon', 'Jayapura', 'Cirebon', 'Tasikmalaya', 'Solo', 'Magelang', 'Cimahi'
+            ];
+        @endphp
+        @foreach($cities as $city)
+            <option value="{{ $city }}">{{ $city }}</option>
+        @endforeach
+    </select>
     
     <!-- Hidden input latitude & longitude jika ingin dikirim -->
     <input type="hidden" name="latitude" id="latitude">
@@ -357,7 +379,7 @@
             <button id="close-modal" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-[#810000]">&times;</button>
             <h2 class="text-2xl md:text-3xl font-bold text-[#225151] text-center mb-2">Perubahan<br>Disimpan!</h2>
             <img src="{{ asset('berhasil.png') }}" alt="Pendaftaran Berhasil" class="w-56 md:w-72 mb-6" />
-            <a href="#" class="w-full">
+            <a href="{{ url('campaign/' . $campaign->id) }}" class="w-full">
                 <button class="w-full bg-[#810000] text-white rounded-full py-3 font-semibold text-base hover:bg-[#a30000] transition mb-3">
                     Lihat Campaign
                 </button>
@@ -369,6 +391,14 @@
             </a>
         </div>
     </div>
+
+    @if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('modal-success').classList.remove('hidden');
+        });
+    </script>
+    @endif
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
