@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Campaign;
+use App\Models\AkunKomunitas;
+use App\Models\GambarCampaign;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
 {
@@ -71,5 +73,49 @@ class CampaignController extends Controller
         $campaign = Campaign::findOrFail($id);
         // return view edit campaign, misal:
         return view('editcampaign', compact('campaign'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_campaign' => 'required|string|max:100',
+            'deskripsi_campaign' => 'required|string',
+            'tanggal' => 'required|date',
+            'alamat_campaign' => 'required|string|max:100',
+            'kontak' => 'required|string|max:100',
+            'kuota_partisipan' => 'required|integer',
+            'portofolio' => 'nullable|file|mimes:pdf,doc,docx',
+            'gambar_latar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Update campaign
+        $campaign = Campaign::findOrFail($id);
+        $campaign->nama = $request->nama_campaign;
+        $campaign->deskripsi = $request->deskripsi_campaign;
+        $campaign->waktu_diperbarui = $request->tanggal;
+        $campaign->lokasi = $request->alamat_campaign;
+        $campaign->kontak = $request->kontak;
+        $campaign->kuota_partisipan = $request->kuota_partisipan;
+        $campaign->save();
+
+        // Update portofolio akun komunitas
+        if ($request->hasFile('portofolio')) {
+            $path = $request->file('portofolio')->store('portofolio', 'public');
+            AkunKomunitas::updateOrCreate(
+                ['akun_id' => Auth::id()],
+                ['portofolio' => $path]
+            );
+        }
+
+        // Update gambar latar campaign
+        if ($request->hasFile('gambar_latar')) {
+            $path = $request->file('gambar_latar')->store('gambar_campaign', 'public');
+            GambarCampaign::updateOrCreate(
+                ['campaign_id' => $campaign->id, 'isCover' => true],
+                ['gambar' => $path]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Campaign berhasil diperbarui!');
     }
 }

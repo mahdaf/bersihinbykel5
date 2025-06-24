@@ -253,20 +253,17 @@
             </div>
             
             <!-- Main Image -->
-           <div class="swiper mySwiper rounded-xl overflow-hidden">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full h-72 md:h-96 object-cover" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full h-72 md:h-96 object-cover" />
-                </div>
-              </div>
-                <div class="swiper-pagination"></div>
+           <!-- Swiper dinamis -->
+<div class="swiper mySwiper rounded-xl overflow-hidden">
+    <div class="swiper-wrapper">
+        @foreach($campaign->gambar_campaign as $gambar)
+            <div class="swiper-slide">
+                <img src="{{ $gambar->gambar }}" alt="Gambar Campaign" class="w-full h-72 md:h-96 object-cover" />
             </div>
+        @endforeach
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
             
             <!-- Location Section -->
             <div class="location-container">
@@ -285,67 +282,72 @@
 
         <!-- Right Column: Form -->
         <div class="right-column">
-            <form class="form-container">
-                <!-- Image Upload -->
-                <label class="upload-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
-                    </svg>
-                    <span class="upload-text">Upload<br>Gambar Latar</span>
-                    <input type="file" class="hidden" />
-                </label>
-                
-                <!-- Campaign Name -->
-                <label class="form-label">Nama campaign</label>
-                <input type="text" class="form-input" placeholder="Nama campaign">
-                
-                <!-- Campaign Description -->
-                <label class="form-label">Deskripsi campaign</label>
-                <textarea class="form-textarea" placeholder="Deskripsi campaign"></textarea>
-                
-                <!-- Date Selection -->
-                <label class="form-label">Pilih tanggal</label>
-                <div class="form-date-container">
-                    <input type="date" class="form-input">
-                    <span class="form-date-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                    </span>
-                </div>
-                
-                <!-- Terms and Conditions -->
-                <label class="form-label">Syarat dan Ketentuan</label>
-                <textarea class="form-textarea" placeholder="Tambah syarat dan ketentuan..." rows="2"></textarea>
-                
-                <!-- Full Address -->
-                <label class="form-label">Alamat campaign lengkap</label>
-                <div class="relative">
-                    <input type="text" class="form-input" placeholder="Alamat campaign lengkap" id="alamat-campaign">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z"/>
-                        </svg>
-                    </span>
-                </div>
-                
-                <input type="hidden" name="latitude" id="latitude">
-                <input type="hidden" name="longitude" id="longitude">
+            <form class="form-container" action="{{ route('campaign.update', $campaign->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+    <!-- Upload Gambar Latar -->
+    <label class="upload-container" id="gambar-latar-label">
+        <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12" />
+        </svg>
+        <span class="upload-text">Upload<br>Gambar Latar</span>
+        <input type="file" name="gambar_latar" accept="image/*" class="hidden" id="gambar-latar-input" />
+        <span id="gambar-latar-filename" style="margin-top:8px; color:#225151; font-size:14px;"></span>
+    </label>
+    
+    <!-- Nama Campaign -->
+    <label class="form-label">Nama campaign</label>
+    <input type="text" class="form-input" name="nama_campaign" placeholder="Nama campaign">
+    
+    <!-- Deskripsi Campaign -->
+    <label class="form-label">Deskripsi campaign</label>
+    <textarea class="form-textarea" name="deskripsi_campaign" placeholder="Deskripsi campaign"></textarea>
+    
+    <!-- Pilih Tanggal -->
+    <label class="form-label">Pilih tanggal</label>
+    <div class="form-date-container">
+        <input type="text" class="form-input" name="tanggal" id="tanggal" placeholder="Pilih tanggal">
+        <span class="form-date-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+        </span>
+    </div>
+    
+    <!-- Syarat dan Ketentuan (boleh diabaikan, tidak perlu name jika tidak diproses) -->
+    <label class="form-label">Syarat dan Ketentuan</label>
+    <textarea class="form-textarea" placeholder="Tambah syarat dan ketentuan..." rows="2"></textarea>
+    
+    <!-- Alamat Campaign Lengkap -->
+    <label class="form-label">Alamat campaign lengkap</label>
+    <div class="relative">
+        <input type="text" class="form-input" name="alamat_campaign" placeholder="Alamat campaign lengkap" id="alamat-campaign">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z"/>
+            </svg>
+        </span>
+    </div>
+    
+    <!-- Hidden input latitude & longitude jika ingin dikirim -->
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
 
-                <!-- Portfolio Upload -->
-                <label class="upload-container">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="upload-text">Upload Portofolio (PDF)</span>
-                    <input type="file" name="portofolio" accept="application/pdf" class="hidden" required>
-                </label>
+    <!-- Upload Portofolio -->
+    <label class="upload-container" id="portofolio-label">
+        <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span class="upload-text">Upload Portofolio (PDF)</span>
+        <input type="file" name="portofolio" accept="application/pdf" class="hidden" id="portofolio-input">
+        <span id="portofolio-filename" style="margin-top:8px; color:#225151; font-size:14px;"></span>
+    </label>
 
-                <button type="button" class="form-submit-btn">
-                    Simpan
-                </button>
-            </form>
+    <button type="submit" class="form-submit-btn">
+        Simpan
+    </button>
+</form>
         </div>
     </div>
 
@@ -423,8 +425,8 @@
         const closeModal = document.getElementById('close-modal');
 
         btnSimpan.addEventListener('click', function(e) {
-            e.preventDefault();
-            modal.classList.remove('hidden');
+            // e.preventDefault(); // HAPUS BARIS INI!
+            // modal.classList.remove('hidden'); // Hapus juga jika tidak ingin modal muncul sebelum submit
         });
 
         closeModal.addEventListener('click', function() {
@@ -437,6 +439,46 @@
                 modal.classList.add('hidden');
             }
         });
+
+        // Preview gambar latar
+        const gambarInput = document.getElementById('gambar-latar-input');
+        const gambarFilename = document.getElementById('gambar-latar-filename');
+        const gambarLabel = document.getElementById('gambar-latar-label');
+
+        gambarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                gambarFilename.textContent = file.name;
+            } else {
+                gambarFilename.textContent = '';
+            }
+        });
+
+        const portofolioInput = document.getElementById('portofolio-input');
+const portofolioFilename = document.getElementById('portofolio-filename');
+const portofolioLabel = document.getElementById('portofolio-label');
+
+portofolioInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        portofolioFilename.textContent = file.name;
+    } else {
+        portofolioFilename.textContent = '';
+    }
+});
+
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+    flatpickr("#tanggal", {
+    dateFormat: "d-m-Y",      // Format yang dikirim ke server (dd-mm-yyyy)
+    altInput: true,           // Tampilkan input alternatif yang lebih user-friendly
+    altFormat: "d-m-Y",       // Format tampilan di input (dd-mm-yyyy)
+    allowInput: true,
+    locale: "id"              // Opsional: gunakan bahasa Indonesia
+});
+</script>
 </body>
 </html>
