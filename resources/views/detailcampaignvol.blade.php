@@ -65,7 +65,11 @@
                         <div class="swiper-wrapper">
                             @foreach($campaign->gambar_campaign as $gambar)
                             <div class="swiper-slide">
-                                <img src="{{ asset('storage/' . $gambar->gambar) }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
+                                @php
+                                    $isUrl = filter_var($gambar->gambar, FILTER_VALIDATE_URL);
+                                    $src = $isUrl ? $gambar->gambar : asset('storage/' . $gambar->gambar);
+                                @endphp
+                                <img src="{{ $src }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
                             </div>
                             @endforeach
                         </div>
