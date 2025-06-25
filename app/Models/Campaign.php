@@ -8,6 +8,10 @@ class Campaign extends Model
 {
     protected $table = 'campaign';
 
+    // Mapping kolom timestamp ke nama kolom yang kamu gunakan di tabel
+    const CREATED_AT = 'waktu';
+    const UPDATED_AT = 'waktu_diperbarui';
+
     public function coverImage()
     {
         return $this->hasOne(GambarCampaign::class, 'campaign_id')->where('isCover', true);
@@ -15,5 +19,9 @@ class Campaign extends Model
     public function partisipanCampaigns()
     {
         return $this->hasMany(\App\Models\PartisipanCampaign::class, 'campaign_id');
+    }
+    public function gambar_campaign()
+    {
+        return $this->hasMany(GambarCampaign::class, 'campaign_id');
     }
 }

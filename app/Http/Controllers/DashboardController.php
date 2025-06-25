@@ -16,19 +16,30 @@ class DashboardController extends Controller
 
         $userCampaigns = collect();
         if ($user) {
-            $userCampaigns = PartisipanCampaign::with('campaign.coverImage')
-                ->where('akun_id', $user->id)
-                ->whereHas('campaign', function($q) {
-                    $q->where('waktu', '>=', now());
-                })
-                ->get()
-                ->map(function($partisipan) {
-                    return $partisipan->campaign;
-                })
-                ->filter()
-                ->sortByDesc('waktu') // urutkan berdasarkan waktu DESC (terdekat dulu)
-                ->take(3) // ambil 3 terdekat
-                ->values(); // reset index agar urut
+            // campaign
+            if ($user->jenis_akun_id == 2) { // Community
+                $userCampaigns = Campaign::with('coverImage')
+                    ->where('akun_id', $user->id)
+                    ->orderBy('waktu', 'desc')
+                    ->take(3)
+                    ->get();
+            }
+            // volunteer
+            elseif ($user->jenis_akun_id == 1) { // Volunteer
+                $userCampaigns = PartisipanCampaign::with('campaign.coverImage')
+                    ->where('akun_id', $user->id)
+                    ->whereHas('campaign', function($q) {
+                        $q->where('waktu', '>=', now());
+                    })
+                    ->get()
+                    ->map(function($partisipan) {
+                        return $partisipan->campaign;
+                    })
+                    ->filter()
+                    ->sortByDesc('waktu')
+                    ->take(3)
+                    ->values();
+            }
         }
 
         $recommendedCampaigns = Campaign::with('coverImage')
@@ -67,13 +78,46 @@ class DashboardController extends Controller
 
     public function allRekomendasi()
     {
-        $recommendedCampaigns = Campaign::with('coverImage')
+        $campaigns = Campaign::with('coverImage')
             ->withCount('partisipanCampaigns')
             ->where('waktu', '>', now())
             ->orderByDesc('partisipan_campaigns_count')
             ->orderBy('id')
-            ->get();
+            ->paginate(9);
 
-        return view('allrekomendasi', compact('recommendedCampaigns'));
+        return view('allrekomendasi', compact('campaigns'));
+    }
+
+    public function campaignFollowed()
+    {
+        $user = Auth::user();
+
+        $campaignIds = PartisipanCampaign::where('akun_id', $user->id)
+            ->whereHas('campaign', function ($q) {
+                $q->where('waktu', '>=', now());
+            })
+            ->pluck('campaign_id');
+
+        $campaigns = Campaign::with('coverImage')
+            ->whereIn('id', $campaignIds)
+            ->orderByDesc('waktu')
+            ->paginate(9);
+
+        $title = "Campaign Yang Terdaftar";
+        $emptyMessage = "Belum ada campaign yang kamu ikuti";
+        return view('sectioncamp1', compact('campaigns', 'title', 'emptyMessage'));
+    }
+
+    public function campaignCreated()
+    {
+        $user = Auth::user();
+        $campaigns = Campaign::with('coverImage')
+            ->where('akun_id', $user->id)
+            ->orderBy('waktu', 'desc')
+            ->paginate(9);
+
+        $title = "Campaign Yang Dibuat";
+        $emptyMessage = "Belum ada campaign yang kamu buat";
+        return view('sectioncamp1', compact('campaigns', 'title', 'emptyMessage'));
     }
 }

@@ -132,34 +132,8 @@
         }
     </style>
 
-    <script>
-        const button = document.getElementById("myButton");
-        button.addEventListener("click", function () {
-            button.classList.toggle("clicked");
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const bookmarkBtn = document.getElementById('bookmarkBtn');
-            const bookmarkIcon = document.getElementById('bookmarkIcon');
-
-            bookmarkBtn.addEventListener('click', function () {
-                bookmarkBtn.classList.toggle('active');
-                const isActive = bookmarkBtn.classList.contains('active');
-                bookmarkBtn.setAttribute('aria-pressed', isActive);
-
-                // Ubah SVG fill dan stroke sesuai status
-                if (isActive) {
-                    bookmarkIcon.setAttribute('fill', '#e4b100');
-                    bookmarkIcon.setAttribute('stroke', '#e4b100');
-                } else {
-                    bookmarkIcon.setAttribute('fill', 'none');
-                    bookmarkIcon.setAttribute('stroke', 'currentColor');
-                }
-            });
-        });
-    </script>
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body class="bg-white text-gray-800 font-sans">
 
@@ -167,21 +141,18 @@
     @include('components.navbar')
 
     <div class="max-w-7xl mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="grid lg:grid-cols-2 gap-8">
             <!-- Gambar Campaign -->
             <div>
-                <div class="w-full max-w-md mx-auto">
-                    <div class="swiper mySwiper rounded-xl overflow-hidden">
+                 <div class="w-full max-w-2xl mx-auto">
+                <!-- Slider container -->
+                    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg h-80 md:h-[32rem]">
                         <div class="swiper-wrapper">
+                            @foreach($campaign->gambar_campaign as $gambar)
                             <div class="swiper-slide">
-                                <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" />
+                                <img src="{{ asset('storage/' . $gambar->gambar) }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
                             </div>
-                            <div class="swiper-slide">
-                                <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full h-72 md:h-96 object-cover" />
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full h-72 md:h-96 object-cover" />
-                            </div>
+                            @endforeach
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
@@ -190,56 +161,87 @@
 
             <!-- Detail Campaign -->
             <div>
-                <div class="flex items-center justify-between mb-1">
-                    <p class="text-sm text-gray-500 font-medium">Bebersih Surabaya</p>
+                <p class="text-sm text-gray-500 font-medium">{{ $campaign->lokasi }}</p>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $campaign->nama }}</h1>
+                <div class="flex items-center text-sm text-gray-600 mb-4">
+                    <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('d/m/Y') }}</span>
+                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('H.i') }} – {{ \Carbon\Carbon::parse($campaign->waktu)->addHours(8)->format('H.i') }}</span>
+                </div>
 
-                    <!-- Delete dropdown button -->
-                    <div class="delete-dropdown">
+                @php
+                    // Cek apakah campaign sudah di-bookmark user
+                    $sudahBookmark = \DB::table('campaign_ditandai')
+                        ->where('akun_id', auth()->id())
+                        ->where('campaign_id', $campaign->id)
+                        ->exists();
+                @endphp
 
-                        <button class="text-gray-500 hover:text-red-600 transition" title="Delete Campaign">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
-                        <div class="delete-dropdown-content">
-                            <a href="/hapuscampaign" class="delete-option">Hapus Campaign</a>
-                            <a href="#" onclick="event.preventDefault(); document.querySelector('.delete-dropdown-content').style.display='none';">Batal</a>
-                        </div>
+                <div class="row align-items-center mb-3">
+                    <div class="col-auto flex gap-2">
+                        @if($sudahBookmark)
+                            <form action="{{ route('campaign.unbookmark', $campaign->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-dark cursor-pointer" title="Hapus Bookmark">
+                                    <i class="bi bi-bookmark-fill"></i>
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('campaign.bookmark', $campaign->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary cursor-pointer" title="Bookmark">
+                                    <i class="bi bi-bookmark"></i>
+                                </button>
+                            </form>
+                        @endif
+
+                        <form action="{{ route('campaign.nullify', $campaign->id) }}" method="POST" onsubmit="return confirm('Yakin ingin mengosongkan semua data campaign ini?');">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger cursor-pointer" title="Hapus Campaign">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <h5 class="mb-0">Tentang Campaign</h5>
                     </div>
                 </div>
 
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Daur Sampah Yuk
-                <button id="bookmarkBtn" class="bookmark-btn" title="Bookmark Campaign" aria-pressed="false">
-                    <svg id="bookmarkIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="#4a5565" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </button>
-                </h1>
-
-                <div class="flex items-center text-sm text-gray-600 mb-4">
-                    <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> 20/04/2024</span>
-                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> 09.30 – 18.00</span>
-                </div>
-
-                <h2 class="text-base font-semibold text-blue-900">Tentang Campaign</h2>
-                <p class="text-sm mt-2 mb-4">Daur sampah yuk adalah campaign tahunan departemen Sistem Informasi ITS untuk membersihkan lingkungan dan limbah yang ada di sekitar kampus.</p>
+                <p class="text-sm mt-2 mb-4">{{ $campaign->deskripsi }}</p>
 
                 <div class="flex mb-4">
+
                     <div class="mr-8">
                         <p class="font-semibold text-sm mb-1">Partisipan</p>
                         <div class="flex items-center">
-                            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
+                            <!-- Static -->
+                            <!-- <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <img src="https://randomuser.me/api/portraits/men/2.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
-                            <span class="ml-2 text-sm text-gray-500">+6</span>
+                            <span class="ml-2 text-sm text-gray-500">+6</span> -->
+
+                            <!-- Dynamic -->
+                            @foreach($campaign->partisipanCampaigns as $partisipan)
+                                @break($loop->index >= 3)
+                                @if($partisipan->akun && $partisipan->akun->fotoProfil)
+                                    <img
+                                        src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
+                                            ? $partisipan->akun->fotoProfil
+                                            : asset('storage/' . $partisipan->akun->fotoProfil) }}"
+                                        class="w-8 h-8 rounded-full border-2 border-white -ml-2"
+                                        title="{{ $partisipan->nama }}"
+                                    />
+                                @endif
+                            @endforeach
+                            @if($campaign->partisipanCampaigns->count() > 3)
+                                <span class="ml-2 text-sm text-gray-500">
+                                    +{{ $campaign->partisipanCampaigns->count() - 3 }}
+                                </span>
+                            @endif
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <p class="font-semibold text-sm mb-1">Aktivitas</p>
                         <div class="flex items-center">
                             <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
@@ -247,136 +249,154 @@
                             <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <span class="ml-2 text-sm text-gray-500">+2</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
-                <button class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">
-                    <a href="/editcampaign">
-                        EDIT CAMPAIGN
-                    </a>
-                </button>
+                <a href="{{ route('editcampaign', $campaign->id) }}"
+                   class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition block text-center w-full md:w-auto">
+                    EDIT CAMPAIGN
+                </a>
 
                 <div class="mt-8 border-t pt-4">
-    <div id="commentsList">
+                    <div id="commentsList">
+                    </div>
 
-    </div>
-    <!-- Form Komentar Baru -->
-    <form id="commentForm" class="flex items-start gap-2 mt-4">
-        <img src="https://randomuser.me/api/portraits/men/11.jpg" class="w-10 h-10 rounded-full mt-1">
-        <div class="flex-1">
-            <input
-                id="commentInput"
-                type="text"
-                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-200"
-                placeholder="Isi komentar kamu..."
-                autocomplete="off"
-                required
-            >
-        </div>
-        <button type="submit" class="bg-red-700 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-800 transition">
-            Kirim
-        </button>
-    </form>
-</div>
-
-    <!-- Font Awesome CDN buat icon kalender & jam -->
-<script>
-function timeAgo(date) {
-    const now = new Date();
-    const seconds = Math.floor((now - date) / 1000);
-    if (seconds < 60) return "baru saja";
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes} menit`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} jam`;
-    const days = Math.floor(hours / 24);
-    return `${days} hari`;
-}
-
-const comments = [
-    {
-        user: "landakberduri",
-        avatar: "https://randomuser.me/api/portraits/men/10.jpg",
-        text: "Baru sadar, ternyata kegiatan campaign itu penting banget untuk ngejadiin lingkungan sekitar lebih aware terhadap kebersihan lingkungan",
-        time: new Date(Date.now() - 86400000).toISOString(), // 1 hari lalu
-        likes: 530,
-        liked: false
-    },
-    {
-        user: "sukamakancoklat",
-        avatar: "https://randomuser.me/api/portraits/women/12.jpg",
-        text: "Keren banget acaranya! Semoga makin banyak yang peduli lingkungan.",
-        time: new Date(Date.now() - 2*86400000).toISOString(), // 2 hari lalu
-        likes: 120,
-        liked: false
-    }
-];
-
-function renderComments() {
-    const list = document.getElementById('commentsList');
-    let html = "";
-    comments.forEach((c, i) => {
-        html += `
-        <div class="flex items-center mb-2 mt-2">
-            <img src="${c.avatar}" class="w-10 h-10 rounded-full mr-3">
-            <div>
-                <p class="font-semibold text-sm">${c.user} <span class="text-xs text-gray-500">• <span class="comment-time" data-time="${c.time}">${timeAgo(new Date(c.time))}</span></span></p>
-                <p class="text-sm text-gray-700">${c.text}</p>
-                <button type="button" class="like-btn mt-1 text-xs flex items-center gap-1" data-index="${i}">
-                    <span class="heart-icon ${c.liked ? 'text-red-600' : 'text-gray-400'} transition-colors">&#10084;</span>
-                    <span class="like-count">${c.likes}</span>
-                </button>
+                    <!-- Form Komentar Baru -->
+                    <form id="commentForm" class="flex items-start gap-2 mt-4">
+                        <img src="https://randomuser.me/api/portraits/men/11.jpg" class="w-10 h-10 rounded-full mt-1">
+                        <div class="flex-1">
+                            <input
+                                id="commentInput"
+                                type="text"
+                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-200"
+                                placeholder="Isi komentar kamu..."
+                                autocomplete="off"
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="bg-red-700 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-800 transition">
+                            Kirim
+                        </button>
+                    </form>
+                </div>
+                </div>
             </div>
         </div>
-        `;
-    });
-    list.innerHTML = html;
+    </div>
 
-    // Event listener untuk like
-    document.querySelectorAll('.like-btn').forEach(btn => {
-        btn.onclick = function() {
-            const idx = +btn.getAttribute('data-index');
-            if (!comments[idx].liked) {
-                comments[idx].likes += 1;
-                comments[idx].liked = true;
-            } else {
-                comments[idx].likes -= 1;
-                comments[idx].liked = false;
-            }
-            renderComments();
+    <!-- Font Awesome CDN buat icon kalender & jam -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+    function toggleModal() {
+        const modal = document.getElementById("popupModal");
+        modal.classList.toggle("hidden");
+    }
+
+    function timeAgo(date) {
+        const now = new Date();
+        const seconds = Math.floor((now - date) / 1000);
+        if (seconds < 60) return "baru saja";
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} menit`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} jam`;
+        const days = Math.floor(hours / 24);
+        return `${days} hari`;
+    }
+
+    const comments = [
+        {
+            user: "landakberduri",
+            avatar: "https://randomuser.me/api/portraits/men/10.jpg",
+            text: "Baru sadar, ternyata kegiatan campaign itu penting banget untuk ngejadiin lingkungan sekitar lebih aware terhadap kebersihan lingkungan",
+            time: new Date(Date.now() - 86400000).toISOString(),
+            likes: 530,
+            liked: false
+        },
+        {
+            user: "sukamakancoklat",
+            avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+            text: "Keren banget acaranya! Semoga makin banyak yang peduli lingkungan.",
+            time: new Date(Date.now() - 2*86400000).toISOString(), // 2 hari lalu
+            likes: 120,
+            liked: false
         }
-    });
-}
+    ];
 
-renderComments();
+    function renderComments() {
+        const list = document.getElementById('commentsList');
+        let html = "";
+        comments.forEach((c, i) => {
+            html += `
+            <div class="flex items-center mb-2 mt-2">
+                <img src="${c.avatar}" class="w-10 h-10 rounded-full mr-3">
+                <div>
+                    <p class="font-semibold text-sm">${c.user} <span class="text-xs text-gray-500">• <span class="comment-time" data-time="${c.time}">${timeAgo(new Date(c.time))}</span></span></p>
+                    <p class="text-sm text-gray-700">${c.text}</p>
+                    <button type="button" class="like-btn mt-1 text-xs flex items-center gap-1" data-index="${i}">
+                        <span class="heart-icon ${c.liked ? 'text-red-600' : 'text-gray-400'} transition-colors">&#10084;</span>
+                        <span class="like-count">${c.likes}</span>
+                    </button>
+                </div>
+            </div>
+            `;
+        });
+        list.innerHTML = html;
 
-// Update waktu setiap 30 detik
-setInterval(() => {
-    document.querySelectorAll('.comment-time').forEach(span => {
-        const t = span.getAttribute('data-time');
-        span.textContent = timeAgo(new Date(t));
-    });
-}, 30000);
+        // Event listener untuk like
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            btn.onclick = function() {
+                const idx = +btn.getAttribute('data-index');
+                if (!comments[idx].liked) {
+                    comments[idx].likes += 1;
+                    comments[idx].liked = true;
+                } else {
+                    comments[idx].likes -= 1;
+                    comments[idx].liked = false;
+                }
+                renderComments();
+            }
+        });
+    }
 
-document.getElementById('commentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const input = document.getElementById('commentInput');
-    const text = input.value.trim();
-    if (!text) return;
-    comments.unshift({
-        user: "kamu",
-        avatar: "https://randomuser.me/api/portraits/men/11.jpg",
-        text,
-        time: new Date().toISOString(),
-        likes: 0,
-        liked: false
+    // Submit handler untuk form komentar
+    document.getElementById('commentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('commentInput');
+        const text = input.value.trim();
+        if (!text) return;
+        comments.unshift({
+            user: "kamu",
+            avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+            text,
+            time: new Date().toISOString(),
+            likes: 0,
+            liked: false
+        });
+        renderComments();
+        input.value = '';
     });
+
     renderComments();
-    input.value = '';
-});
 
-// Tandai komentar dummy agar tidak hilang saat render
-document.querySelectorAll('#commentsList > div').forEach(el => el.classList.add('dummy-comment'));
+    // Update waktu setiap 30 detik
+    setInterval(() => {
+        document.querySelectorAll('.comment-time').forEach(span => {
+            const t = span.getAttribute('data-time');
+            span.textContent = timeAgo(new Date(t));
+        });
+    }, 30000);
+
+    var swiper = new Swiper('.mySwiper', {
+        loop: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: false
+        },
+        watchOverflow: false,
+    });
 </script>
+
 </body>
 </html>

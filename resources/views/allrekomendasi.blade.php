@@ -18,11 +18,15 @@
             </h1>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-7">
-            @forelse($recommendedCampaigns as $campaign)
+            @forelse($campaigns as $campaign)
                 @include('components.campaign-item', ['campaign' => $campaign])
             @empty
                 <div class="col-span-3 text-center text-gray-500 py-10">Belum ada campaign rekomendasi</div>
             @endforelse
+        </div>
+
+        <div class="mt-8">
+            <x-pagination :paginator="$campaigns" />
         </div>
     </main>
 </body>
