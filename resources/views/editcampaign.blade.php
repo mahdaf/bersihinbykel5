@@ -15,11 +15,11 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         new Swiper('.mySwiper', {
-        loop: true,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
         });
     });
     </script>
@@ -287,7 +287,7 @@
                     Lihat Campaign
                 </button>
             </a>
-            <a href="{{ url('/') }}" class="w-full">
+            <a href="{{ url('/dashboard') }}" class="w-full">
                 <button class="w-full border-2 border-[#810000] text-[#810000] rounded-full py-3 font-semibold text-base hover:bg-[#f5eaea] transition">
                     Kembali ke beranda
                 </button>

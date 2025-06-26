@@ -6,7 +6,7 @@
     <title>Daur Sampah Yuk - Bersih.in</title>
     @vite(['resources/css/app.css']) {{-- Pastikan app.js tidak mengimpor Swiper jika Anda menggunakan CDN di bawah --}}
 
-    {{-- Swiper via CDN --}}
+ {{-- Swiper via CDN --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script>
@@ -21,7 +21,6 @@
     });
     </script>
 
-    {{-- Lucide Icons --}}
     <style>
         /* MODIFIED: Penyesuaian pagination Swiper */
         .mySwiper .swiper-pagination {
@@ -29,21 +28,132 @@
             bottom: auto;
             left: auto;
             width: 100%;
-            margin-top: 1rem; /* Jarak dari gambar ke dots */
+            margin-top: 1rem;
             text-align: center;
         }
 
         /* NEW: Styling untuk dot pagination tidak aktif */
-        .mySwiper .swiper-pagination-bullet {
-            background-color: #FDBA74; /* Tailwind orange-300 (sesuaikan dengan preferensi kuning/oranye muda Anda) */
-            opacity: 1; /* Pastikan terlihat jelas */
-            width: 8px; /* Ukuran default, bisa disesuaikan */
-            height: 8px; /* Ukuran default, bisa disesuaikan */
+        .mySwiper  .swiper-pagination-bullet {
+            background-color: #d8d2f0;
+            opacity: 1;
         }
 
-        /* MODIFIED: Styling untuk dot pagination aktif */
         .mySwiper .swiper-pagination-bullet-active {
-            background-color: #F97316; /* Tailwind orange-600 (sesuaikan dengan preferensi oranye Anda) */
+            background-color: #e4b100;
+        }
+
+        /* Style untuk dropdown delete */
+        .delete-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .delete-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .delete-dropdown-content a {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .delete-dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .delete-dropdown:hover .delete-dropdown-content {
+            display: block;
+        }
+
+        .delete-option {
+            color: #e53e3e;
+        }
+
+        .delete-option:hover {
+            background-color: #fee2e2 !important;
+        }
+
+        .bookmark-btn {
+            color: #4a5565; /* abu-abu gelap */
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .bookmark-btn:hover {
+            color: #e4b100; /* yellow-500 */
+        }
+
+        .bookmark-btn.active {
+            color: #e4b100; /* yellow-500 */
+        }
+
+        .bookmark-btn svg {
+            transition: fill 0.2s, stroke 0.2s;
+            fill: none;
+            stroke: #4a5565;
+        }
+
+        .bookmark-btn:hover svg {
+            fill: none; /* Tidak ada fill saat hover */
+            stroke: #4a5565; /* Outline kuning saat hover */
+        }
+
+        .bookmark-btn.active svg {
+            fill: #4a5565;   /* Fill abu-abu saat aktif */
+            stroke: #4a5565;
+        }
+
+        .bookmark-btn.active:hover svg {
+            fill: #4a5565;   /* Tetap fill abu-abu saat aktif+hover */
+            stroke: #4a5565; /* Outline kuning saat aktif+hover */
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .clicked {
+            background-color: green;
+        }
+        /* Swiper pagination bullets style */
+        .swiper-pagination {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 12px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .swiper-pagination-bullet {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d8d2f0;
+            opacity: 1;
+            margin: 0 4px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        .swiper-pagination-bullet-active {
+            background: #e4b100;
         }
     </style>
 
@@ -64,15 +174,16 @@
                     <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg h-80 md:h-[32rem]">
                         <div class="swiper-wrapper">
                             @foreach($campaign->gambar_campaign as $gambar)
-                            <div class="swiper-slide">
-                                @php
-                                    $isUrl = filter_var($gambar->gambar, FILTER_VALIDATE_URL);
-                                    $src = $isUrl ? $gambar->gambar : asset('storage/' . $gambar->gambar);
-                                @endphp
-                                <img src="{{ $src }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
-                            </div>
+                                <div class="swiper-slide">
+                                    @php
+                                        $isUrl = filter_var($gambar->gambar, FILTER_VALIDATE_URL);
+                                        $src = $isUrl ? $gambar->gambar : asset('storage/' . $gambar->gambar);
+                                    @endphp
+                                    <img src="{{ $src }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
+                                </div>
                             @endforeach
                         </div>
+                        <!-- Pagination -->
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
@@ -306,12 +417,17 @@
         });
     }, 30000);
 
+    // Swiper pagination
     var swiper = new Swiper('.mySwiper', {
-        loop: false,
+        loop: true,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
             dynamicBullets: false
+        },
+        autoplay: {
+            delay: 20000,
+            disableOnInteraction: true,
         },
         watchOverflow: false,
     });

@@ -130,6 +130,31 @@
         .clicked {
             background-color: green;
         }
+        /* Swiper pagination bullets style */
+        .swiper-pagination {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 12px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .swiper-pagination-bullet {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d8d2f0;
+            opacity: 1;
+            margin: 0 4px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        .swiper-pagination-bullet-active {
+            background: #e4b100;
+        }
     </style>
 
     <!-- Bootstrap Icons CDN -->
@@ -158,6 +183,7 @@
                                 </div>
                             @endforeach
                         </div>
+                        <!-- Pagination -->
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
@@ -391,12 +417,17 @@
         });
     }, 30000);
 
+    // Swiper Pagin
     var swiper = new Swiper('.mySwiper', {
-        loop: false,
+        loop: true,
         pagination: {
             el: '.swiper-pagination',
             clickable: true,
             dynamicBullets: false
+        },
+        autoplay: {
+            delay: 20000,
+            disableOnInteraction:true,
         },
         watchOverflow: false,
     });
