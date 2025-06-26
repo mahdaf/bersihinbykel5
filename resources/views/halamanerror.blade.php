@@ -18,7 +18,7 @@
 
             {{-- Illustration --}}
             <div class="flex justify-center mb-8">
-                <img src="{{ asset('gambar icon.png') }}" alt="404 Error Illustration" class="max-w-full h-auto" width="400" height="300">
+                <img src="{{ asset('ilustration.png') }}" alt="404 Error Illustration" class="max-w-full h-auto" width="400" height="300">
             </div>
 
             {{-- Back to Homepage Button --}}

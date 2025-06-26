@@ -41,7 +41,7 @@ return new class extends Migration {
             $table->string('kontak', 100)->nullable();
             $table->integer('kuota_partisipan')->nullable();
         });
-
+        
         Schema::create('campaign_ditandai', function (Blueprint $table) {
             $table->foreignId('akun_id')->constrained('akun');
             $table->foreignId('campaign_id')->constrained('campaign');

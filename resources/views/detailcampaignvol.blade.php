@@ -6,7 +6,7 @@
     <title>Daur Sampah Yuk - Bersih.in</title>
     @vite(['resources/css/app.css']) {{-- Pastikan app.js tidak mengimpor Swiper jika Anda menggunakan CDN di bawah --}}
 
-    {{-- Swiper via CDN --}}
+ {{-- Swiper via CDN --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script>
@@ -21,7 +21,6 @@
     });
     </script>
 
-    {{-- Lucide Icons --}}
     <style>
         /* MODIFIED: Penyesuaian pagination Swiper */
         .mySwiper .swiper-pagination {
@@ -29,23 +28,137 @@
             bottom: auto;
             left: auto;
             width: 100%;
-            margin-top: 1rem; /* Jarak dari gambar ke dots */
+            margin-top: 1rem;
             text-align: center;
         }
 
         /* NEW: Styling untuk dot pagination tidak aktif */
-        .mySwiper .swiper-pagination-bullet {
-            background-color: #FDBA74; /* Tailwind orange-300 (sesuaikan dengan preferensi kuning/oranye muda Anda) */
-            opacity: 1; /* Pastikan terlihat jelas */
-            width: 8px; /* Ukuran default, bisa disesuaikan */
-            height: 8px; /* Ukuran default, bisa disesuaikan */
+        .mySwiper  .swiper-pagination-bullet {
+            background-color: #d8d2f0;
+            opacity: 1;
         }
 
-        /* MODIFIED: Styling untuk dot pagination aktif */
         .mySwiper .swiper-pagination-bullet-active {
-            background-color: #F97316; /* Tailwind orange-600 (sesuaikan dengan preferensi oranye Anda) */
+            background-color: #e4b100;
+        }
+
+        /* Style untuk dropdown delete */
+        .delete-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .delete-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .delete-dropdown-content a {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .delete-dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .delete-dropdown:hover .delete-dropdown-content {
+            display: block;
+        }
+
+        .delete-option {
+            color: #e53e3e;
+        }
+
+        .delete-option:hover {
+            background-color: #fee2e2 !important;
+        }
+
+        .bookmark-btn {
+            color: #4a5565; /* abu-abu gelap */
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .bookmark-btn:hover {
+            color: #e4b100; /* yellow-500 */
+        }
+
+        .bookmark-btn.active {
+            color: #e4b100; /* yellow-500 */
+        }
+
+        .bookmark-btn svg {
+            transition: fill 0.2s, stroke 0.2s;
+            fill: none;
+            stroke: #4a5565;
+        }
+
+        .bookmark-btn:hover svg {
+            fill: none; /* Tidak ada fill saat hover */
+            stroke: #4a5565; /* Outline kuning saat hover */
+        }
+
+        .bookmark-btn.active svg {
+            fill: #4a5565;   /* Fill abu-abu saat aktif */
+            stroke: #4a5565;
+        }
+
+        .bookmark-btn.active:hover svg {
+            fill: #4a5565;   /* Tetap fill abu-abu saat aktif+hover */
+            stroke: #4a5565; /* Outline kuning saat aktif+hover */
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .clicked {
+            background-color: green;
+        }
+        /* Swiper pagination bullets style */
+        .swiper-pagination {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 12px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .swiper-pagination-bullet {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d8d2f0;
+            opacity: 1;
+            margin: 0 4px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        .swiper-pagination-bullet-active {
+            background: #e4b100;
         }
     </style>
+
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body class="bg-white text-gray-800 font-sans">
 
@@ -56,20 +169,21 @@
         <div class="grid lg:grid-cols-2 gap-8">
             <!-- Gambar Campaign -->
             <div>
-                 <div class="w-full max-w-md mx-auto">
+                 <div class="w-full max-w-2xl mx-auto">
                 <!-- Slider container -->
-                    <div class="swiper mySwiper rounded-xl overflow-hidden">
-                            <div class="swiper-wrapper">
+                    <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg h-80 md:h-[32rem]">
+                        <div class="swiper-wrapper">
+                            @foreach($campaign->gambar_campaign as $gambar)
                                 <div class="swiper-slide">
-                                    <img src="{{ asset('foto sampah 1.jpg') }}" alt="Slide 1" class="w-full h-72 md:h-96 object-cover" /> {{-- Sedikit menambah tinggi gambar agar lebih proporsional jika lebar --}}
+                                    @php
+                                        $isUrl = filter_var($gambar->gambar, FILTER_VALIDATE_URL);
+                                        $src = $isUrl ? $gambar->gambar : asset('storage/' . $gambar->gambar);
+                                    @endphp
+                                    <img src="{{ $src }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
                                 </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ asset('foto sampah 2.jpg') }}" alt="Slide 2" class="w-full h-72 md:h-96 object-cover" />
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="{{ asset('foto sampah 3.jpg') }}" alt="Slide 3" class="w-full h-72 md:h-96 object-cover" />
-                                </div>
-                            </div>
+                            @endforeach
+                        </div>
+                        <!-- Pagination -->
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
@@ -77,28 +191,87 @@
 
             <!-- Detail Campaign -->
             <div>
-                <p class="text-sm text-gray-500 font-medium">Bebersih Surabaya</p>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Daur Sampah Yuk</h1>
+                <p class="text-sm text-gray-500 font-medium">{{ $campaign->lokasi }}</p>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $campaign->nama }}</h1>
                 <div class="flex items-center text-sm text-gray-600 mb-4">
-                    <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> 20/04/2024</span>
-                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> 09.30 – 18.00</span>
+                    <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('d/m/Y') }}</span>
+                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('H.i') }} – Selesai</span>
                 </div>
 
-                <h2 class="text-base font-semibold text-blue-900">Tentang Campaign</h2>
-                <p class="text-sm mt-2 mb-4">Daur sampah yuk adalah campaign tahunan departemen Sistem Informasi ITS untuk membersihkan lingkungan dan limbah yang ada di sekitar kampus.</p>
+                @php
+                    // Cek apakah campaign sudah di-bookmark user
+                    $sudahBookmark = \DB::table('campaign_ditandai')
+                        ->where('akun_id', auth()->id())
+                        ->where('campaign_id', $campaign->id)
+                        ->exists();
+                @endphp
+
+                <div class="row align-items-center mb-3">
+                    <div class="col-auto flex gap-2">
+                        @if($sudahBookmark)
+                            <form action="{{ route('campaign.unbookmark', $campaign->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-dark cursor-pointer" title="Hapus Bookmark">
+                                    <i class="bi bi-bookmark-fill"></i>
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('campaign.bookmark', $campaign->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary cursor-pointer" title="Bookmark">
+                                    <i class="bi bi-bookmark"></i>
+                                </button>
+                            </form>
+                        @endif
+
+                        <form action="{{ route('campaign.nullify', $campaign->id) }}" method="POST" onsubmit="return confirm('Yakin ingin mengosongkan semua data campaign ini?');">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger cursor-pointer" title="Null-kan Data Campaign">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <h5 class="mb-0">Tentang Campaign</h5>
+                    </div>
+                </div>
+
+                <p class="text-sm mt-2 mb-4">{{ $campaign->deskripsi }}</p>
 
                 <div class="flex mb-4">
+
                     <div class="mr-8">
                         <p class="font-semibold text-sm mb-1">Partisipan</p>
                         <div class="flex items-center">
-                            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
+                            <!-- Static -->
+                            <!-- <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <img src="https://randomuser.me/api/portraits/men/2.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
                             <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-8 h-8 rounded-full border-2 border-white -ml-2" />
-                            <span class="ml-2 text-sm text-gray-500">+6</span>
+                            <span class="ml-2 text-sm text-gray-500">+6</span> -->
+
+                            <!-- Dynamic -->
+                            @foreach($campaign->partisipanCampaigns as $partisipan)
+                                @break($loop->index >= 3)
+                                @if($partisipan->akun && $partisipan->akun->fotoProfil)
+                                    <img
+                                        src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
+                                            ? $partisipan->akun->fotoProfil
+                                            : asset('storage/' . $partisipan->akun->fotoProfil) }}"
+                                        class="w-8 h-8 rounded-full border-2 border-white -ml-2"
+                                        title="{{ $partisipan->nama }}"
+                                    />
+                                @endif
+                            @endforeach
+                            @if($campaign->partisipanCampaigns->count() > 3)
+                                <span class="ml-2 text-sm text-gray-500">
+                                    +{{ $campaign->partisipanCampaigns->count() - 3 }}
+                                </span>
+                            @endif
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <p class="font-semibold text-sm mb-1">Aktivitas</p>
                         <div class="flex items-center">
                             <img src="https://source.unsplash.com/30x30/?recycle" class="w-8 h-8 rounded-md" />
@@ -106,55 +279,18 @@
                             <img src="https://source.unsplash.com/30x30/?clean" class="w-8 h-8 rounded-md ml-1" />
                             <span class="ml-2 text-sm text-gray-500">+2</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
-                <button onclick="toggleModal()" class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition">
-                IKUTI CAMPAIGN
-                </button>
-
-                                <!-- Modal Pendaftaran Campaign -->
-                <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-                    <div class="bg-white rounded-3xl p-8 w-full max-w-md relative shadow-2xl">
-                        <!-- Tombol Close -->
-                        <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
-
-                        <!-- Form -->
-                        <h2 class="text-xl font-bold text-[#55a7aa] mb-6 text-center">Form Pendaftaran Campaign</h2>
-                        <form>
-                            <input type="text" placeholder="Nama Lengkap"
-                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
-
-                            <input type="email" placeholder="Email"
-                                class="w-full mb-3 p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
-
-                            <div class="flex gap-2 mb-3">
-                                <button type="button" class="bg-[#55a7aa] text-white px-4 rounded-2xl text-lg">+62</button>
-                                <input type="text" placeholder="Nomor Ponsel"
-                                    class="w-full p-3 bg-[#ddedee] text-[#55a7aa] rounded-2xl placeholder:text-[#55a7aa] text-lg" />
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="text-[#55a7aa] text-lg font-medium block mb-2">Upload KTP</label>
-                                <input type="file" class="w-full text-[#55a7aa] bg-[#ddedee] rounded-2xl p-3" />
-                            </div>
-
-                            <button type="submit"
-                                    class="w-full bg-[#810000] hover:bg-[#810000]/90 text-white py-3 rounded-2xl text-lg font-medium">
-                                Daftar
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <a href="{{ route('partisipan.create', $campaign->id) }}"
+                   class="bg-red-700 text-white px-5 py-2 rounded-md font-semibold hover:bg-red-800 transition block text-center w-full md:w-auto">
+                    IKUTI CAMPAIGN
+                </a>
 
                 <div class="mt-8 border-t pt-4">
                     <div id="commentsList">
                     </div>
-                    
+
                     <!-- Form Komentar Baru -->
                     <form id="commentForm" class="flex items-start gap-2 mt-4">
                         <img src="https://randomuser.me/api/portraits/men/11.jpg" class="w-10 h-10 rounded-full mt-1">
@@ -280,6 +416,21 @@
             span.textContent = timeAgo(new Date(t));
         });
     }, 30000);
+
+    // Swiper pagination
+    var swiper = new Swiper('.mySwiper', {
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: false
+        },
+        autoplay: {
+            delay: 20000,
+            disableOnInteraction: true,
+        },
+        watchOverflow: false,
+    });
 </script>
 
 </body>

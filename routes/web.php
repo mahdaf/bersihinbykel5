@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\PartisipanCampaignController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -51,9 +53,7 @@ Route::middleware(['auth'])->group(function () {
         return view('components.TambahCampaign');
     })->name('campaign.tambah');
     // ...tambahkan semua route lain yang ingin dibatasi login di sini...
-    Route::get('/editcampaign', function () {
-        return view('editcampaign');
-    });
+    Route::get('/editcampaign/{id}', [CampaignController::class, 'edit'])->name('editcampaign');
     Route::get('/hapuscampaign', function () {
         return view('hapuscampaign');
     });
@@ -69,10 +69,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pendaftaran', function () {
         return view('pendaftaran-campaign');
     });
-    Route::get('/allterdaftar', [DashboardController::class, 'allTerdaftar'])->name('allterdaftar');
-    Route::get('/allrekomendasi', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
 
+    Route::get('/profil/campaign-followed', [DashboardController::class, 'campaignFollowed'])->name('campaign.followed');
+    Route::get('/profil/campaign-created', [DashboardController::class, 'campaignCreated'])->name('campaign.created');
+    Route::get('/campaign-recommendations', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
+
+    Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
+    Route::get('/campaign/{id}', [CampaignController::class, 'show']);
+    Route::put('/campaign/{id}', [CampaignController::class, 'update'])->name('campaign.update');
+    Route::post('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
+    Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
+    Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
+    Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
+    Route::post('/campaign/{id}/bookmark', [CampaignController::class, 'bookmark'])->name('campaign.bookmark');
+    Route::delete('/campaign/{id}/bookmark', [CampaignController::class, 'unbookmark'])->name('campaign.unbookmark');
+    Route::delete('campaign/gambar/hapus/{id}', [CampaignController::class, 'hapusGambar']);
 });
+Route::get('/profilvolunteer', function () {
+        return view('profilvolunteer');
+    });
 
 Route::get('/error404',function (){
     return view('halamanerror');

@@ -1,6 +1,6 @@
 @php use Illuminate\Support\Str; @endphp
 
-<a href="#" class="block max-w-sm bg-white rounded-2xl overflow-hidden border transition-transform hover:scale-[1.03]"
+<a href="{{ url('/campaign/'.$campaign->id) }}" class="block max-w-sm bg-white rounded-2xl overflow-hidden border transition-transform hover:scale-[1.03]"
     style="border-color: rgba(0, 0, 0, 0.15);">
     @if($campaign->coverImage && $campaign->coverImage->gambar)
         @php
@@ -29,7 +29,7 @@
                 <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden mr-4">
                     <div class="h-full" style="width: {{ $persen }}%; background-color: #3B9E51;"></div>
                 </div>
-                <button
+                <button onclick="{{ url('/campaign/'.$campaign->id) }}"
                     class="text-xs px-3 py-2 text-white bg-[#810000] border border-[#810000] rounded-lg hover:bg-transparent hover:text-[#810000] hover:border whitespace-nowrap">
                     LIHAT DETAIL
                 </button>
