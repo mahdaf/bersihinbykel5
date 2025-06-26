@@ -87,7 +87,7 @@ class CampaignController extends Controller
             'nama_campaign' => 'required|string|max:100',
             'deskripsi_campaign' => 'required|string',
             'tanggal' => 'required',
-            'alamat_campaign' => 'required|string|max:100',
+            'alamat_singkat' => 'required|string|max:100',
             'portofolio' => 'nullable|file|mimes:pdf,doc,docx',
             'gambar_latar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -97,7 +97,7 @@ class CampaignController extends Controller
         $campaign->nama = $request->nama_campaign;
         $campaign->deskripsi = $request->deskripsi_campaign;
         $campaign->waktu_diperbarui = $request->tanggal;
-        $campaign->lokasi = $request->alamat_campaign;
+        $campaign->lokasi = $request->alamat_singkat;
         $campaign->save();
 
         // Update portofolio akun komunitas

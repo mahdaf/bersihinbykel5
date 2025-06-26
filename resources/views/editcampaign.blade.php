@@ -237,6 +237,26 @@
         .mySwiper .swiper-pagination-bullet-active {
             background-color: #e4b100; /* kuning emas */
         }
+
+        /* Tambahan untuk autocomplete suggestion */
+        .suggestion-box {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0 0 8px 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .suggestion-item {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background: #f5f5f5;
+        }
     </style>
 </head>
 <body class="page-container">
@@ -256,9 +276,13 @@
             <div class="swiper mySwiper rounded-xl overflow-hidden">
                 <div class="swiper-wrapper">
                     @foreach($campaign->gambar_campaign as $gambar)
-                        <div class="swiper-slide">
-                            <img src="{{ asset('storage/' . $gambar->gambar) }}" alt="Gambar Campaign" class="w-full h-72 md:h-96 object-cover" />
-                        </div>
+                    <div class="swiper-slide">
+                        @php
+                            $isUrl = filter_var($gambar->gambar, FILTER_VALIDATE_URL);
+                            $src = $isUrl ? $gambar->gambar : asset('storage/' . $gambar->gambar);
+                        @endphp
+                        <img src="{{ $src }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
+                    </div>
                     @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
@@ -266,7 +290,7 @@
 
             <!-- Location Section -->
             <div class="location-container">
-                <!-- <h2 class="location-title">Lokasi Campaign</h2>
+                <h2 class="location-title">Lokasi Campaign</h2>
                 <div class="location-text">
                     <svg class="location-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
@@ -274,8 +298,6 @@
                     </svg>
                     <span id="lokasi-text"></span>
                 </div>
-                <!-- Interactive Map -->
-                <!-- <div id="map"></div> -->
             </div>
         </div>
 
@@ -315,55 +337,20 @@
     <label class="form-label">Pilih tanggal</label>
     <div class="form-date-container">
         <input type="text" class="form-input" name="tanggal" id="tanggal" placeholder="Pilih tanggal" required>
-        <span class="form-date-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-        </span>
     </div>
-
-    <!-- Alamat Campaign Lengkap -->
-    <!-- <label class="form-label">Alamat campaign lengkap</label>
-    <div class="relative">
-        <input type="text" class="form-input" name="alamat_campaign" value="{{ old('alamat_campaign', $campaign->lokasi) }}" id="alamat-campaign">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z"/>
-            </svg>
-        </span>
-    </div> -->
 
     <!-- Lokasi -->
     <label class="form-label">Lokasi Campaign</label>
-    <select class="form-input" name="alamat_campaign" required>
-        <option value="">Pilih Lokasi</option>
-        @php
-        $cities = [
-            'Jakarta', 'Surabaya', 'Bandung', 'Medan', 'Semarang', 'Palembang', 'Makassar',
-            'Bekasi', 'Depok', 'Tangerang', 'Denpasar', 'Yogyakarta', 'Malang', 'Padang',
-            'Samarinda', 'Batam', 'Pekanbaru', 'Balikpapan', 'Pontianak', 'Banjarmasin',
-            'Manado', 'Ambon', 'Jayapura', 'Cirebon', 'Tasikmalaya', 'Solo', 'Magelang', 'Cimahi'
-            ];
-        @endphp
-        @foreach($cities as $city)
-            <option value="{{ $city }}">{{ $city }}</option>
-        @endforeach
-    </select>
-
-    <!-- Hidden input latitude & longitude jika ingin dikirim -->
+    <div style="position:relative;">
+        <input type="text" class="form-input" name="alamat_campaign" id="alamat-campaign" placeholder="Tulis alamat atau cari lokasi..." required value="">
+        <input type="hidden" name="alamat_singkat" id="alamat-singkat" value="">
+        <div id="suggestion-box" class="suggestion-box" style="display:none;"></div>
+    </div>
+    <div class="location-container">
+        <div id="map" style="height: 180px; border-radius: 0.75rem; margin-top: 0.5rem;"></div>
+    </div>
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
-
-    <!-- Upload Portofolio -->
-    <label class="upload-container" id="portofolio-label">
-        <svg xmlns="http://www.w3.org/2000/svg" class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        <span class="upload-text">Upload Portofolio (PDF)</span>
-        <input type="file" name="portofolio" accept="application/pdf" class="hidden" id="portofolio-input">
-        <span id="portofolio-filename" style="margin-top:8px; color:#225151; font-size:14px;"></span>
-    </label>
 
     <button type="submit" class="form-submit-btn">
         Simpan
@@ -373,11 +360,10 @@
     </div>
 
     <!-- Modal Notification -->
-    <div id="modal-success" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
-        <div class="bg-white rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
-            <button id="close-modal" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-[#810000]">&times;</button>
+    <div id="modal-success" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
+        <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
             <h2 class="text-2xl md:text-3xl font-bold text-[#225151] text-center mb-2">Perubahan<br>Disimpan!</h2>
-            <img src="{{ asset('berhasil.png') }}" alt="Pendaftaran Berhasil" class="w-56 md:w-72 mb-6" />
+            <img src="{{ asset('ilustration.png') }}" class="w-56 md:w-72 mb-6" />
             <a href="{{ url('campaign/' . $campaign->id) }}" class="w-full">
                 <button class="w-full bg-[#810000] text-white rounded-full py-3 font-semibold text-base hover:bg-[#a30000] transition mb-3">
                     Lihat Campaign
@@ -402,33 +388,133 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Default Surabaya coordinates
         var defaultLat = -7.2819;
         var defaultLng = 112.7953;
-
         var map = L.map('map').setView([defaultLat, defaultLng], 15);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-
         var marker = L.marker([defaultLat, defaultLng], {draggable:true}).addTo(map);
-
-        // Set initial hidden input values
         document.getElementById('latitude').value = defaultLat;
         document.getElementById('longitude').value = defaultLng;
+        document.getElementById('lokasi-text').innerText = `Lat: ${defaultLat.toFixed(5)}, Lng: ${defaultLng.toFixed(5)}`;
+
+        // Flag untuk membedakan perubahan manual/otomatis
+        let isUpdatingFromMap = false;
+        let isUpdatingFromInput = false;
+
+        const LOCATIONIQ_KEY = 'pk.7a3a66a4b2e1082fa82fbcce11b0f5c9';
 
         function updateAddress(lat, lng) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+            isUpdatingFromMap = true;
+            fetch(`https://us1.locationiq.com/v1/reverse?key=${LOCATIONIQ_KEY}&lat=${lat}&lon=${lng}&format=json`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.display_name) {
                         document.getElementById('alamat-campaign').value = data.display_name;
+                        // Ambil 3 bagian terakhir sebelum kode pos/negara untuk disimpan ke db
+                        let parts = data.display_name.split(',').map(s => s.trim());
+                        while (parts.length && (/^\d+$/.test(parts[parts.length-1]) || parts[parts.length-1].toLowerCase() === 'indonesia')) {
+                            parts.pop();
+                        }
+                        let singkat = '';
+                        if (parts.length >= 4) {
+                            singkat = parts.slice(-3).join(', ');
+                        } else {
+                            singkat = parts.join(', ');
+                        }
+                        document.getElementById('alamat-singkat').value = singkat;
                     }
+                })
+                .finally(() => {
+                    setTimeout(() => { isUpdatingFromMap = false; }, 100);
                 });
         }
 
-        // Update marker and inputs when map is clicked
+        function geocodeAddress(address) {
+            isUpdatingFromInput = true;
+            fetch(`https://us1.locationiq.com/v1/search?key=${LOCATIONIQ_KEY}&q=${encodeURIComponent(address)}&format=json`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lon = parseFloat(data[0].lon);
+                        map.setView([lat, lon], 15);
+                        marker.setLatLng([lat, lon]);
+                        document.getElementById('latitude').value = lat;
+                        document.getElementById('longitude').value = lon;
+                        document.getElementById('lokasi-text').innerText = `Lat: ${lat.toFixed(5)}, Lng: ${lon.toFixed(5)}`;
+                    }
+                })
+                .finally(() => {
+                    setTimeout(() => { isUpdatingFromInput = false; }, 100);
+                });
+        }
+
+        // Event: user mengetik alamat (autocomplete LocationIQ)
+        const suggestionBox = document.getElementById('suggestion-box');
+        const alamatInput = document.getElementById('alamat-campaign');
+        let geocodeTimeout = null;
+        alamatInput.addEventListener('input', function() {
+            if (isUpdatingFromMap) return; // Jangan trigger jika perubahan dari map
+            clearTimeout(geocodeTimeout);
+            const address = this.value;
+            if (address.length > 2) {
+                geocodeTimeout = setTimeout(() => {
+                    fetch(`https://us1.locationiq.com/v1/autocomplete?key=${LOCATIONIQ_KEY}&q=${encodeURIComponent(address)}&limit=5&countrycodes=ID&normalizeaddress=1`)
+                        .then(res => res.json())
+                        .then(data => {
+                            suggestionBox.innerHTML = '';
+                            if (Array.isArray(data) && data.length > 0) {
+                                suggestionBox.style.display = 'block';
+                                data.forEach(item => {
+                                    let div = document.createElement('div');
+                                    div.className = 'suggestion-item';
+                                    div.textContent = item.display_place ? `${item.display_place}, ${item.display_address}` : item.display_name;
+                                    div.onclick = function() {
+                                        alamatInput.value = item.display_name;
+                                        // Ambil 3 bagian terakhir sebelum kode pos/negara untuk disimpan ke db
+                                        let parts = item.display_name.split(',').map(s => s.trim());
+                                        // Buang bagian belakang jika berupa angka (kode pos) atau 'Indonesia'
+                                        while (parts.length && (/^\d+$/.test(parts[parts.length-1]) || parts[parts.length-1].toLowerCase() === 'indonesia')) {
+                                            parts.pop();
+                                        }
+                                        let singkat = '';
+                                        if (parts.length >= 4) {
+                                            singkat = parts.slice(-3).join(', ');
+                                        } else {
+                                            singkat = parts.join(', ');
+                                        }
+                                        document.getElementById('alamat-singkat').value = singkat;
+                                        // Update peta dan marker
+                                        const lat = parseFloat(item.lat);
+                                        const lon = parseFloat(item.lon);
+                                        map.setView([lat, lon], 15);
+                                        marker.setLatLng([lat, lon]);
+                                        document.getElementById('latitude').value = lat;
+                                        document.getElementById('longitude').value = lon;
+                                        document.getElementById('lokasi-text').innerText = `Lat: ${lat.toFixed(5)}, Lng: ${lon.toFixed(5)}`;
+                                        suggestionBox.style.display = 'none';
+                                    };
+                                    suggestionBox.appendChild(div);
+                                });
+                            } else {
+                                suggestionBox.style.display = 'none';
+                            }
+                        });
+                }, 400);
+            } else {
+                suggestionBox.style.display = 'none';
+            }
+        });
+        // Sembunyikan suggestion jika klik di luar
+        document.addEventListener('click', function(e) {
+            if (!alamatInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+                suggestionBox.style.display = 'none';
+            }
+        });
+
+        // Event: klik pada map
         map.on('click', function(e) {
             marker.setLatLng(e.latlng);
             document.getElementById('latitude').value = e.latlng.lat;
@@ -437,7 +523,7 @@
             updateAddress(e.latlng.lat, e.latlng.lng);
         });
 
-        // Update inputs when marker is moved
+        // Event: marker digeser
         marker.on('move', function(e) {
             document.getElementById('latitude').value = e.latlng.lat;
             document.getElementById('longitude').value = e.latlng.lng;
@@ -445,57 +531,26 @@
             updateAddress(e.latlng.lat, e.latlng.lng);
         });
 
-        // Call once on initial load
+        // Inisialisasi alamat pada load pertama
         updateAddress(defaultLat, defaultLng);
 
-        // Modal logic
-        const btnSimpan = document.querySelector('.form-submit-btn');
-        const modal = document.getElementById('modal-success');
-        const closeModal = document.getElementById('close-modal');
-
-        btnSimpan.addEventListener('click', function(e) {
-            // e.preventDefault(); // HAPUS BARIS INI!
-            // modal.classList.remove('hidden'); // Hapus juga jika tidak ingin modal muncul sebelum submit
-        });
-
-        closeModal.addEventListener('click', function() {
-            modal.classList.add('hidden');
-        });
-
-        // Close modal when clicking outside
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var singkat = document.getElementById('alamat-singkat').value;
+            var lengkap = document.getElementById('alamat-campaign').value;
+            if (!singkat && lengkap) {
+                // Ambil 3 bagian terakhir sebelum kode pos/negara
+                let parts = lengkap.split(',').map(s => s.trim());
+                while (parts.length && (/^\\d+$/.test(parts[parts.length-1]) || parts[parts.length-1].toLowerCase() === 'indonesia')) {
+                    parts.pop();
+                }
+                if (parts.length >= 4) {
+                    singkat = parts.slice(-3).join(', ');
+                } else {
+                    singkat = parts.join(', ');
+                }
+                document.getElementById('alamat-singkat').value = singkat;
             }
         });
-
-        // Preview gambar latar
-        const gambarInput = document.getElementById('gambar-latar-input');
-        const gambarFilename = document.getElementById('gambar-latar-filename');
-        const gambarLabel = document.getElementById('gambar-latar-label');
-
-        gambarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                gambarFilename.textContent = file.name;
-            } else {
-                gambarFilename.textContent = '';
-            }
-        });
-
-        const portofolioInput = document.getElementById('portofolio-input');
-const portofolioFilename = document.getElementById('portofolio-filename');
-const portofolioLabel = document.getElementById('portofolio-label');
-
-portofolioInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        portofolioFilename.textContent = file.name;
-    } else {
-        portofolioFilename.textContent = '';
-    }
-});
-
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
