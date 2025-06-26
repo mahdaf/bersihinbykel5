@@ -60,10 +60,13 @@ class CampaignController extends Controller
             ]);
         }
 
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
         return back()->with('success', 'Campaign berhasil ditandai!');
     }
 
-    public function unbookmark($id)
+    public function unbookmark($id, Request $request)
     {
         $akunId = auth()->id();
         \DB::table('campaign_ditandai')
@@ -71,6 +74,9 @@ class CampaignController extends Controller
             ->where('campaign_id', $id)
             ->delete();
 
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
         return back()->with('success', 'Bookmark dihapus!');
     }
 
@@ -187,7 +193,7 @@ class CampaignController extends Controller
 
     public function hapusGambar($id)
     {
-        $gambar = \App\Models\GambarCampaign::find($id);
+        $gambar = GambarCampaign::find($id);
         if ($gambar) {
             // Hapus file dari storage jika bukan URL
             if (!filter_var($gambar->gambar, FILTER_VALIDATE_URL)) {

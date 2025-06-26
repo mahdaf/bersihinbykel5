@@ -23,3 +23,32 @@ html {
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+.swiper-pagination,
+.swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  display: block !important;
+  text-align: center !important;
+  margin-top: 1rem !important;
+  flex-direction: unset !important;
+  flex-wrap: unset !important;
+}
+
+.swiper-pagination {
+  position: static !important;
+  margin-top: 1rem !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.swiper-pagination-bullet {
+  display: inline-block !important;
+  margin: 0 4px !important;
+  background: #d8d2f0 !important;
+  opacity: 1 !important;
+  vertical-align: middle !important;
+}
+.swiper-pagination-bullet-active {
+  background: #e4b100 !important;
+}
+
+
