@@ -78,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaigncontoh/{id}', [CampaignController::class, 'show']);
     Route::put('/campaign/{id}', [CampaignController::class, 'update'])->name('campaign.update');
-    Route::post('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
+    Route::get('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
     Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');

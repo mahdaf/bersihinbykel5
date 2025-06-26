@@ -188,7 +188,7 @@ class CampaignController extends Controller
         $campaign->kuota_partisipan = null;
         $campaign->save();
 
-        return back()->with('success', 'Data campaign telah dinull-kan!');
+        return redirect()->route('dashboard')->with('success', 'Data campaign telah dinull-kan!');
     }
 
     public function hapusGambar($id)

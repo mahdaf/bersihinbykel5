@@ -23,7 +23,16 @@
         ->exists();
 @endphp
 
-    <div class="max-w-7xl mx-auto px-14 py-10">
+<div class="max-w-7xl mx-auto px-14 py-10">
+    @if(is_null($campaign->nama))
+        <div class="flex flex-col items-center justify-center min-h-[300px]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 7H7a2 2 0 01-2-2V7a2 2 0 012-2h5l2 2h5a2 2 0 012 2v10a2 2 0 01-2 2z" />
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-700 mb-2">Campaign telah dihapus</h2>
+            <p class="text-gray-500">Campaign ini sudah tidak tersedia.</p>
+        </div>
+    @else
         <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
             <!-- Kolom kiri: Swiper + pagination -->
             <div class= "mt-10">
@@ -51,7 +60,7 @@
                         </svg>
                     </a>
                     <!-- Hapus -->
-                    <button type="button" title="Hapus Campaign" class="focus:outline-none">
+                    <a href="{{ route('campaign.nullify', $campaign->id) }}" title="Hapus Campaign" onclick="return confirm('Yakin ingin men-null-kan campaign ini?')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
                             viewBox="0 0 24 24" stroke="#810000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 7l16 0" />
@@ -60,7 +69,7 @@
                             <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
                             <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
                 <div class="flex items-center mb-2">
                     @if($campaign->akun && $campaign->akun->fotoProfil)
@@ -172,7 +181,8 @@
                 
             </div>
         </div>
-    </div>
+    @endif
+</div>
 </body>
 
 </html>

@@ -23,7 +23,9 @@
                 </div>
             @else
                 @forelse($campaigns as $campaign)
-                    @include('components.campaign-item', ['campaign' => $campaign])
+                    @if(!is_null($campaign->nama) && \Carbon\Carbon::parse($campaign->waktu)->isFuture())
+                        @include('components.campaign-item', ['campaign' => $campaign])
+                    @endif
                 @empty
                     <div class="col-span-3 text-center text-gray-500 py-10">{{ $emptyMessage ?? 'Tidak ada campaign untuk ditampilkan' }}
                     </div>
