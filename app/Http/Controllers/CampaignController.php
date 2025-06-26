@@ -76,46 +76,88 @@ class CampaignController extends Controller
 
     public function edit($id)
     {
+        $user = auth()->user();
         $campaign = Campaign::findOrFail($id);
-        // return view edit campaign, misal:
-        return view('editcampaign', compact('campaign'));
+
+        // Hanya izinkan jika user komunitas dan pemilik campaign
+        if ($user->jenis_akun_id == 2 && $campaign->akun_id == $user->id) {
+            return view('editcampaign', compact('campaign'));
+        } else {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit campaign ini');
+        }
     }
 
     public function update(Request $request, $id)
     {
+        // dd($request->file('gambar_latar'));
         $request->validate([
             'nama_campaign' => 'required|string|max:100',
             'deskripsi_campaign' => 'required|string',
-            'tanggal' => 'required',
+            'waktu' => 'required|date_format:d-m-Y H:i',
+            'kuota_partisipan' => 'required|integer|min:10',
             'alamat_singkat' => 'required|string|max:100',
-            'portofolio' => 'nullable|file|mimes:pdf,doc,docx',
-            'gambar_latar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'gambar_latar.*' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
         ]);
 
+        $success = false;
         // Update campaign
         $campaign = Campaign::findOrFail($id);
+        $oldData = $campaign->toArray();
         $campaign->nama = $request->nama_campaign;
         $campaign->deskripsi = $request->deskripsi_campaign;
-        $campaign->waktu_diperbarui = $request->tanggal;
+        $campaign->waktu_diperbarui = now();
+        $campaign->waktu = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request->waktu)->format('Y-m-d H:i:s');
+        $campaign->kuota_partisipan = $request->kuota_partisipan;
         $campaign->lokasi = $request->alamat_singkat;
-        $campaign->save();
-
-        // Update portofolio akun komunitas
-        if ($request->hasFile('portofolio')) {
-            $path = $request->file('portofolio')->store('portofolio', 'public');
-            AkunKomunitas::updateOrCreate(
-                ['akun_id' => Auth::id()],
-                ['portofolio' => $path]
-            );
+        if ($campaign->isDirty()) {
+            $campaign->save();
+            $success = true;
         }
 
-        // Update gambar latar campaign
+        // Hapus gambar yang dihapus user (jika ada)
+        if ($request->has('gambar_dihapus')) {
+            foreach ($request->gambar_dihapus as $idGambar) {
+                $gambar = GambarCampaign::find($idGambar);
+                if ($gambar) {
+                    if (!filter_var($gambar->gambar, FILTER_VALIDATE_URL)) {
+                        \Storage::disk('public')->delete($gambar->gambar);
+                    }
+                    $gambar->delete();
+                    $success = true;
+                }
+            }
+        }
+
+        // Tambah gambar baru (maksimal 3 gambar total, isCover urut 1-3)
         if ($request->hasFile('gambar_latar')) {
-            $path = $request->file('gambar_latar')->store('gambar_campaign', 'public');
-            GambarCampaign::updateOrCreate(
-                ['campaign_id' => $campaign->id, 'isCover' => true],
-                ['gambar' => $path]
-            );
+            $gambarLama = GambarCampaign::where('campaign_id', $campaign->id)->orderBy('isCover')->get();
+            $jumlahGambarLama = $gambarLama->count();
+            $gambarBaru = $request->file('gambar_latar');
+            if (!is_array($gambarBaru)) {
+                $gambarBaru = $gambarBaru ? [$gambarBaru] : [];
+            }
+            \Log::info('DEBUG_GAMBAR_BARU', ['gambarBaru' => $gambarBaru]);
+            // dd($gambarBaru); // Uncomment baris ini untuk debug langsung di browser
+            $sisaSlot = 3 - $jumlahGambarLama;
+            $startIsCover = $jumlahGambarLama + 1;
+            foreach (array_slice($gambarBaru, 0, $sisaSlot) as $idx => $file) {
+                if ($file && $file->isValid()) {
+                    $path = $file->store('gambar_campaign', 'public');
+                    $gambar = GambarCampaign::create([
+                        'campaign_id' => $campaign->id,
+                        'gambar' => $path,
+                        'isCover' => $startIsCover + $idx,
+                    ]);
+                    \Log::info('DEBUG_GAMBAR_SIMPAN', ['gambar' => $gambar]);
+                    $success = true;
+                } else {
+                    \Log::error('DEBUG_FILE_TIDAK_VALID', ['file' => $file]);
+                }
+            }
+        }
+
+        if (!$success) {
+            return redirect()->back()->with('error', 'Tidak ada perubahan data atau gambar yang berhasil disimpan.')->withInput();
         }
 
         return redirect()->back()->with('success', 'Campaign berhasil diperbarui!');
@@ -143,4 +185,17 @@ class CampaignController extends Controller
         return back()->with('success', 'Data campaign telah dinull-kan!');
     }
 
+    public function hapusGambar($id)
+    {
+        $gambar = \App\Models\GambarCampaign::find($id);
+        if ($gambar) {
+            // Hapus file dari storage jika bukan URL
+            if (!filter_var($gambar->gambar, FILTER_VALIDATE_URL)) {
+                \Storage::disk('public')->delete($gambar->gambar);
+            }
+            $gambar->delete();
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false], 404);
+    }
 }

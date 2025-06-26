@@ -84,7 +84,7 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $campaign->nama }}</h1>
                 <div class="flex items-center text-sm text-gray-600 mb-4">
                     <span class="mr-4 flex items-center"><i class="far fa-calendar mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('d/m/Y') }}</span>
-                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('H.i') }} – {{ \Carbon\Carbon::parse($campaign->waktu)->addHours(8)->format('H.i') }}</span>
+                    <span class="flex items-center"><i class="far fa-clock mr-1"></i> {{ \Carbon\Carbon::parse($campaign->waktu)->format('H.i') }} – Selesai</span>
                 </div>
 
                 @php
