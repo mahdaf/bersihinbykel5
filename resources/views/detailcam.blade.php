@@ -144,15 +144,31 @@
                 <!-- Button Ikuti Campaign -->
                 @php
                     $user = auth()->user();
+                    $sudahTerdaftar = false;
+                    if ($user && $user->jenis_akun_id == 1) {
+                        $sudahTerdaftar = \DB::table('partisipan_campaign')
+                            ->where('akun_id', $user->id)
+                            ->where('campaign_id', $campaign->id)
+                            ->exists();
+                    }
                 @endphp
 
                 @if($user && $user->jenis_akun_id == 1)
-                    <a
-                        href="{{ route('partisipan.create', $campaign->id) }}"
-                        class="mt-6 inline-block px-6 py-3 bg-[#810000] hover:bg-yellow-600 text-white rounded-3xl shadow transition-colors duration-200 focus:outline-none"
-                    >
-                        IKUTI CAMPAIGN
-                    </a>
+                    @if($sudahTerdaftar)
+                        <button
+                            class="mt-6 inline-block px-6 py-3 bg-green-500 text-white rounded-3xl shadow cursor-not-allowed"
+                            disabled
+                        >
+                            TERDAFTAR
+                        </button>
+                    @else
+                        <a
+                            href="{{ route('partisipan.create', $campaign->id) }}"
+                            class="mt-6 inline-block px-6 py-3 bg-[#810000] hover:bg-yellow-600 text-white rounded-3xl shadow transition-colors duration-200 focus:outline-none"
+                        >
+                            IKUTI CAMPAIGN
+                        </a>
+                    @endif
                 @elseif($user && $user->jenis_akun_id == 2)
                     <button
                         class="mt-6 inline-block px-6 py-3 bg-gray-400 text-white rounded-3xl shadow cursor-not-allowed"

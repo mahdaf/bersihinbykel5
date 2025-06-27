@@ -16,7 +16,7 @@ class SeederPartisipanCampaign extends Seeder
                 'nama' => 'Kai Wave',
                 'email' => 'kai.wave@gmail.com',
                 'nomorTelepon' => '08110054321',
-                'ktp' => null,
+                'motivasi' => null,
             ],
             [
                 'akun_id' => 2,
@@ -24,7 +24,7 @@ class SeederPartisipanCampaign extends Seeder
                 'nama' => 'Kai Wave',
                 'email' => 'kai.wave@gmail.com',
                 'nomorTelepon' => '08110054321',
-                'ktp' => null,
+                'motivasi' => null,
             ],
             [
                 'akun_id' => 2,
@@ -32,7 +32,7 @@ class SeederPartisipanCampaign extends Seeder
                 'nama' => 'Kai Wave',
                 'email' => 'kai.wave@gmail.com',
                 'nomorTelepon' => '08110054321',
-                'ktp' => null,
+                'motivasi' => null,
             ],
         ]);
     }
