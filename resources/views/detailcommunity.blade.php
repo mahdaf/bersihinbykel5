@@ -38,13 +38,14 @@
             <div class= "mt-10">
                 <x-swiper-gallery :gambar="$campaign->gambar_campaign" />
                 <p class="text-600 font-semibold mt-2">Lokasi Campaign</p>
-                <p class="flex items-center text-gray-500 mt-2 text-[16px]">
+                <p class="flex items-start text-gray-500 mt-2 text-[16px]">
                     <!-- Ikon Lokasi -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 21c-4.418 0-8-5.373-8-10a8 8 0 1 1 16 0c0 4.627-3.582 10-8 10zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                    </svg>
-                    {{ $campaign->lokasi ?? '-' }}
+                    <span class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 21c-4.418 0-8-5.373-8-10a8 8 0 1 1 16 0c0 4.627-3.582 10-8 10zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    </span>
+                    <span class="break-words">{{ $campaign->lokasi ?? '-' }}</span>
                 </p>
 
             </div>
@@ -171,14 +172,6 @@
                         </span>
                     @endif
                 </div>
-                <!-- Button Ikuti Campaign (selalu disabled di halaman ini) -->
-                <button
-                    class="mt-6 inline-block px-6 py-3 bg-gray-400 text-white rounded-3xl shadow cursor-not-allowed"
-                    disabled
-                    title="Hanya volunteer yang bisa mengikuti campaign"
-                >
-                    IKUTI CAMPAIGN
-                </button>
                 
             </div>
         </div>

@@ -101,7 +101,7 @@ class CampaignController extends Controller
             'deskripsi_campaign' => 'required|string',
             'waktu' => 'required|date_format:d-m-Y H:i',
             'kuota_partisipan' => 'required|integer|min:10',
-            'alamat_singkat' => 'required|string|max:100',
+            'alamat_campaign' => 'required|string',
             'gambar_latar.*' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
         ]);
 
@@ -114,7 +114,7 @@ class CampaignController extends Controller
         $campaign->waktu_diperbarui = now();
         $campaign->waktu = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request->waktu)->format('Y-m-d H:i:s');
         $campaign->kuota_partisipan = $request->kuota_partisipan;
-        $campaign->lokasi = $request->alamat_singkat;
+        $campaign->lokasi = $request->alamat_campaign;
         if ($campaign->isDirty()) {
             $campaign->save();
             $success = true;
