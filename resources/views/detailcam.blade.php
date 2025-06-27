@@ -123,22 +123,26 @@
                 <p class="font-semibold mt-8 text-[16px]">TENTANG CAMPAIGN</p>
                 <p class="text-600 mt-2 text-[16px]">{{ $campaign->deskripsi }}</p>
                 <p class="font-semibold mt-4 text-[16px]">PARTISIPAN</p>
-                <div class="flex items-center mt-2">
-                    @foreach($campaign->partisipanCampaigns->take(3) as $partisipan)
-                        @if($partisipan->akun && $partisipan->akun->fotoProfil)
-                            <img
-                                src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
-                                    ? $partisipan->akun->fotoProfil
-                                    : asset('storage/' . $partisipan->akun->fotoProfil) }}"
-                                class="w-8 h-8 rounded-full border-2 border-white shadow -ml-2"
-                                title="{{ $partisipan->nama }}"
-                            />
+                <div class="flex items-center mt-2 min-h-[40px]">
+                    @if($campaign->partisipanCampaigns->count() === 0)
+                        <span class="text-gray-400 text-sm">Belum ada partisipan</span>
+                    @else
+                        @foreach($campaign->partisipanCampaigns->take(3) as $partisipan)
+                            @if($partisipan->akun && $partisipan->akun->fotoProfil)
+                                <img
+                                    src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
+                                        ? $partisipan->akun->fotoProfil
+                                        : asset('storage/' . $partisipan->akun->fotoProfil) }}"
+                                    class="w-8 h-8 rounded-full border-2 border-white shadow -ml-2"
+                                    title="{{ $partisipan->nama }}"
+                                />
+                            @endif
+                        @endforeach
+                        @if($campaign->partisipanCampaigns->count() > 3)
+                            <span class="ml-2 text-sm text-gray-500">
+                                +{{ $campaign->partisipanCampaigns->count() - 3 }}
+                            </span>
                         @endif
-                    @endforeach
-                    @if($campaign->partisipanCampaigns->count() > 3)
-                        <span class="ml-2 text-sm text-gray-500">
-                            +{{ $campaign->partisipanCampaigns->count() - 3 }}
-                        </span>
                     @endif
                 </div>
                 <!-- Button Ikuti Campaign -->

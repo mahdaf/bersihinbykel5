@@ -20,7 +20,8 @@ class ProfilVolunteerController extends Controller
             ->select(
                 'komentar.komentar as isi_komentar',
                 'komentar.waktu',
-                'campaign.nama as nama_campaign'
+                'campaign.nama as nama_campaign',
+                'campaign.id as campaign_id'
             )
             ->orderByDesc('komentar.waktu')
             ->get();
@@ -54,7 +55,8 @@ class ProfilVolunteerController extends Controller
             ->select(
                 'komentar.komentar as isi_komentar',
                 'komentar.waktu',
-                'campaign.nama as nama_campaign'
+                'campaign.nama as nama_campaign',
+                'campaign.id as campaign_id' // tambahkan baris ini!
             )
             ->orderByDesc('komentar.waktu')
             ->get();

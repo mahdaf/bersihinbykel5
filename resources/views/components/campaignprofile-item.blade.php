@@ -17,7 +17,7 @@
     }
 @endphp
 
-<a href="#" class="block group">
+<a href="{{ url('/campaign/'.$campaign->id) }}" class="block group">
     <div class="relative h-32 rounded-2xl overflow-hidden cursor-pointer transition-transform hover:scale-[1.02]">
         <img src="{{ $isUrl ? $cover : asset('storage/' . $cover) }}"
              alt="{{ $campaign->nama }}"

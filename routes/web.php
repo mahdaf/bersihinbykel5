@@ -75,8 +75,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profil/campaign-created', [DashboardController::class, 'campaignCreated'])->name('campaign.created');
     Route::get('/campaign-recommendations', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
 
+
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaigncontoh/{id}', [CampaignController::class, 'show']);
+
+    Route::get('/campaign/{id}', [CampaignController::class, 'show'])->name('detailcam');
     Route::put('/campaign/{id}', [CampaignController::class, 'update'])->name('campaign.update');
     Route::get('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
     Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
@@ -92,4 +95,3 @@ Route::get('/profilvolunteer', function () {
 Route::get('/error404',function (){
     return view('halamanerror');
 });
-Route::get('/campaign/{id}', [App\Http\Controllers\CampaignController::class, 'show'])->name('detailcam');

@@ -7,6 +7,8 @@
     <title>Detail Campaign</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="//unpkg.com/alpinejs" defer></script>
+    <!-- Tambahkan SweetAlert2 di <head> jika belum -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="mb-20 bg-white">
@@ -61,7 +63,7 @@
                         </svg>
                     </a>
                     <!-- Hapus -->
-                    <a href="{{ route('campaign.nullify', $campaign->id) }}" title="Hapus Campaign" onclick="return confirm('Yakin ingin men-null-kan campaign ini?')">
+                    <a href="#" onclick="confirmDeletion({{ $campaign->id }})" title="Hapus Campaign">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
                             viewBox="0 0 24 24" stroke="#810000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 7l16 0" />
@@ -154,22 +156,26 @@
                 <p class="font-semibold mt-8 text-[16px]">TENTANG CAMPAIGN</p>
                 <p class="text-600 mt-2 text-[16px]">{{ $campaign->deskripsi }}</p>
                 <p class="font-semibold mt-4 text-[16px]">PARTISIPAN</p>
-                <div class="flex items-center mt-2">
-                    @foreach($campaign->partisipanCampaigns->take(3) as $partisipan)
-                        @if($partisipan->akun && $partisipan->akun->fotoProfil)
-                            <img
-                                src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
-                                    ? $partisipan->akun->fotoProfil
-                                    : asset('storage/' . $partisipan->akun->fotoProfil) }}"
-                                class="w-8 h-8 rounded-full border-2 border-white shadow -ml-2"
-                                title="{{ $partisipan->nama }}"
-                            />
+                <div class="flex items-center mt-2 min-h-[40px]">
+                    @if($campaign->partisipanCampaigns->count() === 0)
+                        <span class="text-gray-400 text-sm">Belum ada partisipan</span>
+                    @else
+                        @foreach($campaign->partisipanCampaigns->take(3) as $partisipan)
+                            @if($partisipan->akun && $partisipan->akun->fotoProfil)
+                                <img
+                                    src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
+                                        ? $partisipan->akun->fotoProfil
+                                        : asset('storage/' . $partisipan->akun->fotoProfil) }}"
+                                    class="w-8 h-8 rounded-full border-2 border-white shadow -ml-2"
+                                    title="{{ $partisipan->nama }}"
+                                />
+                            @endif
+                        @endforeach
+                        @if($campaign->partisipanCampaigns->count() > 3)
+                            <span class="ml-2 text-sm text-gray-500">
+                                +{{ $campaign->partisipanCampaigns->count() - 3 }}
+                            </span>
                         @endif
-                    @endforeach
-                    @if($campaign->partisipanCampaigns->count() > 3)
-                        <span class="ml-2 text-sm text-gray-500">
-                            +{{ $campaign->partisipanCampaigns->count() - 3 }}
-                        </span>
                     @endif
                 </div>
                 
@@ -177,6 +183,30 @@
         </div>
     @endif
 </div>
+
+<script>
+function confirmDeletion(campaignId) {
+    Swal.fire({
+        title: 'Apakah Anda yakin ingin menghapus campaign?',
+        html: '<span style="">Semua data campaign dan seluruh partisipan akan dihapus dari campaign.</span>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#810000',
+        cancelButtonColor: '#b0b0b0',
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Batal',
+        customClass: {
+            popup: 'rounded-xl',
+            confirmButton: 'rounded-3xl px-6 py-2',
+            cancelButton: 'rounded-3xl px-6 py-2'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "{{ route('campaign.nullify', ':id') }}".replace(':id', campaignId);
+        }
+    });
+}
+</script>
 </body>
 
 </html>
