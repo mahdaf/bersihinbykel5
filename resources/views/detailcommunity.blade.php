@@ -171,13 +171,14 @@
                         </span>
                     @endif
                 </div>
-                <!-- Button Ikuti Campaign -->
-                <a
-                    href="{{ route('partisipan.create', $campaign->id) }}"
-                    class="mt-6 inline-block px-6 py-3 bg-[#810000] hover:bg-yellow-600 text-white rounded-3xl shadow transition-colors duration-200 focus:outline-none"
+                <!-- Button Ikuti Campaign (selalu disabled di halaman ini) -->
+                <button
+                    class="mt-6 inline-block px-6 py-3 bg-gray-400 text-white rounded-3xl shadow cursor-not-allowed"
+                    disabled
+                    title="Hanya volunteer yang bisa mengikuti campaign"
                 >
                     IKUTI CAMPAIGN
-                </a>
+                </button>
                 
             </div>
         </div>

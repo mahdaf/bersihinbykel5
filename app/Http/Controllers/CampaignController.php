@@ -20,12 +20,12 @@ class CampaignController extends Controller
 
         // Cek role berdasarkan jenis_akun_id
         if ($user->jenis_akun_id == 1) {
-            return view('detailcampaignvol', compact('campaign'));
+            return view('detailcam', compact('campaign'));
         } elseif ($user->jenis_akun_id == 2) {
             if ($campaign->akun_id == $user->id) {
-                return view('detailcampaigncom', compact('campaign'));
+                return view('detailcommunity', compact('campaign'));
             } else {
-                return view('detailcampaignvol', compact('campaign'));
+                return view('detailcam', compact('campaign'));
             }
         } else {
             abort(403, 'Role tidak dikenali');

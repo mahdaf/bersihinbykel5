@@ -142,12 +142,26 @@
                     @endif
                 </div>
                 <!-- Button Ikuti Campaign -->
-                <a
-                    href="{{ route('partisipan.create', $campaign->id) }}"
-                    class="mt-6 inline-block px-6 py-3 bg-[#810000] hover:bg-yellow-600 text-white rounded-3xl shadow transition-colors duration-200 focus:outline-none"
-                >
-                    IKUTI CAMPAIGN
-                </a>
+                @php
+                    $user = auth()->user();
+                @endphp
+
+                @if($user && $user->jenis_akun_id == 1)
+                    <a
+                        href="{{ route('partisipan.create', $campaign->id) }}"
+                        class="mt-6 inline-block px-6 py-3 bg-[#810000] hover:bg-yellow-600 text-white rounded-3xl shadow transition-colors duration-200 focus:outline-none"
+                    >
+                        IKUTI CAMPAIGN
+                    </a>
+                @elseif($user && $user->jenis_akun_id == 2)
+                    <button
+                        class="mt-6 inline-block px-6 py-3 bg-gray-400 text-white rounded-3xl shadow cursor-not-allowed"
+                        disabled
+                        title="Akun komunitas tidak bisa mengikuti campaign"
+                    >
+                        IKUTI CAMPAIGN
+                    </button>
+                @endif
                 
             </div>
         </div>

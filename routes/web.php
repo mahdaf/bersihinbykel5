@@ -92,7 +92,4 @@ Route::get('/profilvolunteer', function () {
 Route::get('/error404',function (){
     return view('halamanerror');
 });
-Route::get('/campaign/{id}', function ($id) {
-    $campaign = Campaign::with(['akun', 'partisipanCampaigns.akun'])->findOrFail($id);
-    return view('detailcommunity', compact('campaign'));
-})->name('detailcommunity');
+Route::get('/campaign/{id}', [App\Http\Controllers\CampaignController::class, 'show'])->name('detailcam');
