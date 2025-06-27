@@ -140,6 +140,7 @@
                                     'nama' => $item->nama_campaign,
                                     'waktu' => $item->waktu,
                                     'komentar' => $item->isi_komentar,
+                                    'campaign_id' => $item->campaign_id,
                                 ])
                             @empty
                                 <div class="text-center text-gray-400 py-10">Belum ada komentar diunggah.</div>
@@ -151,6 +152,7 @@
                                     'nama' => $item->nama_campaign,
                                     'waktu' => $item->waktu,
                                     'komentar' => $item->isi_komentar,
+                                    'campaign_id' => $item->campaign_id,
                                 ])
                             @empty
                                 <div class="text-center text-gray-400 py-10">Belum ada komentar disukai.</div>

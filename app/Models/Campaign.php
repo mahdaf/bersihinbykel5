@@ -24,4 +24,8 @@ class Campaign extends Model
     {
         return $this->hasMany(GambarCampaign::class, 'campaign_id');
     }
+    public function akun()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'akun_id');
+    }
 }

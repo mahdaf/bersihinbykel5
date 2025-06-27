@@ -8,7 +8,7 @@ class PartisipanCampaign extends Model
 {
     protected $table = 'partisipan_campaign';
     protected $fillable = [
-        'akun_id', 'campaign_id', 'nama', 'email', 'nomorTelepon', 'ktp'
+        'akun_id', 'campaign_id', 'nama', 'email', 'nomorTelepon', 'motivasi'
     ];
 
     public $timestamps = false; // Tambahkan baris ini

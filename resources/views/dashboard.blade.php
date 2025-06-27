@@ -49,7 +49,9 @@
                     </div>
                 @else
                     @forelse($userCampaigns as $campaign)
-                        @include('components.campaign-item', ['campaign' => $campaign])
+                        @if(!is_null($campaign->nama) && \Carbon\Carbon::parse($campaign->waktu)->isFuture())
+                            @include('components.campaign-item', ['campaign' => $campaign])
+                        @endif
                     @empty
                         <div class="col-span-3 text-center text-gray-500 py-20">Belum ada campaign yang kamu ikuti
                         </div>
@@ -72,7 +74,9 @@
             {{-- Grid Campaign --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-7">
                 @forelse($recommendedCampaigns as $campaign)
-                    @include('components.campaign-item', ['campaign' => $campaign])
+                    @if(!is_null($campaign->nama) && \Carbon\Carbon::parse($campaign->waktu)->isFuture())
+                        @include('components.campaign-item', ['campaign' => $campaign])
+                    @endif
                 @empty
                     <div class="col-span-3 text-center text-gray-500 py-10">Belum ada campaign rekomendasi</div>
                 @endforelse

@@ -18,7 +18,12 @@ class PartisipanCampaignController extends Controller
         $request->validate([
             'nama' => 'required|string|max:100',
             'email' => 'required|email|max:100',
-            'nomorTelepon' => 'required|string|max:100',
+            'nomorTelepon' => 'required|digits_between:9,15|numeric',
+            'motivasi' => 'nullable|string|max:200',
+        ], [
+            'nomorTelepon.digits_between' => 'Nomor telepon harus 9-15 digit.',
+            'nomorTelepon.numeric' => 'Nomor telepon hanya boleh angka.',
+            'motivasi.max' => 'Motivasi tidak boleh melebihi 200 karakter.',
         ]);
 
         PartisipanCampaign::create([
@@ -27,6 +32,7 @@ class PartisipanCampaignController extends Controller
             'nama' => $request->nama,
             'email' => $request->email,
             'nomorTelepon' => $request->nomorTelepon,
+            'motivasi' => $request->motivasi,
         ]);
 
         // Tampilkan halaman berhasil daftar

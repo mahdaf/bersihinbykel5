@@ -260,7 +260,7 @@
     <!-- Lokasi -->
     <label class="form-label">Lokasi Campaign</label>
     <div style="position:relative;">
-        <input type="text" class="form-input" name="alamat_campaign" id="alamat-campaign" placeholder="Ganti alamat atau cari lokasi..." required value="">
+        <input type="text" class="form-input" name="alamat_campaign" id="alamat-campaign" placeholder="Ganti alamat atau cari lokasi..." required value="{{ old('alamat_campaign', $campaign->lokasi) }}">
         <input type="hidden" name="alamat_singkat" id="alamat-singkat" value="">
         <div id="suggestion-box" class="suggestion-box" style="display:none;"></div>
     </div>

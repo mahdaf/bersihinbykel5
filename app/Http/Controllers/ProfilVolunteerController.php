@@ -16,10 +16,12 @@ class ProfilVolunteerController extends Controller
         $komentarList = \DB::table('komentar')
             ->join('campaign', 'komentar.campaign_id', '=', 'campaign.id')
             ->where('komentar.akun_id', $user->id)
+            ->whereNotNull('campaign.nama') // hanya campaign valid
             ->select(
                 'komentar.komentar as isi_komentar',
                 'komentar.waktu',
-                'campaign.nama as nama_campaign'
+                'campaign.nama as nama_campaign',
+                'campaign.id as campaign_id'
             )
             ->orderByDesc('komentar.waktu')
             ->get();
@@ -31,6 +33,7 @@ class ProfilVolunteerController extends Controller
                     ->from('partisipan_campaign')
                     ->where('akun_id', $user->id);
             })
+            ->whereNotNull('nama') // hanya campaign valid
             ->get();
 
         // Campaign yang ditandai user
@@ -40,6 +43,7 @@ class ProfilVolunteerController extends Controller
                     ->from('campaign_ditandai')
                     ->where('akun_id', $user->id);
             })
+            ->whereNotNull('nama') // hanya campaign valid
             ->get();
 
         // Komentar yang disukai user
@@ -47,10 +51,12 @@ class ProfilVolunteerController extends Controller
             ->join('komentar', 'komentar_disukai.komentar_id', '=', 'komentar.id')
             ->join('campaign', 'komentar.campaign_id', '=', 'campaign.id')
             ->where('komentar_disukai.akun_id', $user->id)
+            ->whereNotNull('campaign.nama') // hanya campaign valid
             ->select(
                 'komentar.komentar as isi_komentar',
                 'komentar.waktu',
-                'campaign.nama as nama_campaign'
+                'campaign.nama as nama_campaign',
+                'campaign.id as campaign_id' // tambahkan baris ini!
             )
             ->orderByDesc('komentar.waktu')
             ->get();

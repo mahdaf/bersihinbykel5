@@ -10,6 +10,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\PartisipanCampaignController;
+use App\Models\Campaign;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -74,10 +75,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profil/campaign-created', [DashboardController::class, 'campaignCreated'])->name('campaign.created');
     Route::get('/campaign-recommendations', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
 
+
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
-    Route::get('/campaign/{id}', [CampaignController::class, 'show']);
+    Route::get('/campaigncontoh/{id}', [CampaignController::class, 'show']);
+
+    Route::get('/campaign/{id}', [CampaignController::class, 'show'])->name('detailcam');
     Route::put('/campaign/{id}', [CampaignController::class, 'update'])->name('campaign.update');
-    Route::post('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
+    Route::get('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
     Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
@@ -88,7 +92,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/profilvolunteer', function () {
         return view('profilvolunteer');
     });
-
 Route::get('/error404',function (){
     return view('halamanerror');
 });

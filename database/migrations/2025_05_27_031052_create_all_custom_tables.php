@@ -37,7 +37,7 @@ return new class extends Migration {
             $table->dateTime('waktu')->nullable();
             $table->dateTime('waktu_diperbarui')->nullable();
             $table->text('deskripsi')->nullable();
-            $table->string('lokasi', 100)->nullable();
+            $table->text('lokasi')->nullable();
             $table->string('kontak', 100)->nullable();
             $table->integer('kuota_partisipan')->nullable();
         });
@@ -74,7 +74,7 @@ return new class extends Migration {
             $table->string('nama', 100)->nullable();
             $table->string('email', 100)->nullable();
             $table->string('nomorTelepon', 100)->nullable();
-            $table->string('ktp', 100)->nullable();
+            $table->text('motivasi')->nullable();
         });
 
         Schema::create('session', function (Blueprint $table) {

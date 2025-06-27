@@ -20,12 +20,12 @@ class CampaignController extends Controller
 
         // Cek role berdasarkan jenis_akun_id
         if ($user->jenis_akun_id == 1) {
-            return view('detailcampaignvol', compact('campaign'));
+            return view('detailcam', compact('campaign'));
         } elseif ($user->jenis_akun_id == 2) {
             if ($campaign->akun_id == $user->id) {
-                return view('detailcampaigncom', compact('campaign'));
+                return view('detailcommunity', compact('campaign'));
             } else {
-                return view('detailcampaignvol', compact('campaign'));
+                return view('detailcam', compact('campaign'));
             }
         } else {
             abort(403, 'Role tidak dikenali');
@@ -60,10 +60,13 @@ class CampaignController extends Controller
             ]);
         }
 
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
         return back()->with('success', 'Campaign berhasil ditandai!');
     }
 
-    public function unbookmark($id)
+    public function unbookmark($id, Request $request)
     {
         $akunId = auth()->id();
         \DB::table('campaign_ditandai')
@@ -71,6 +74,9 @@ class CampaignController extends Controller
             ->where('campaign_id', $id)
             ->delete();
 
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
         return back()->with('success', 'Bookmark dihapus!');
     }
 
@@ -95,7 +101,7 @@ class CampaignController extends Controller
             'deskripsi_campaign' => 'required|string',
             'waktu' => 'required|date_format:d-m-Y H:i',
             'kuota_partisipan' => 'required|integer|min:10',
-            'alamat_singkat' => 'required|string|max:100',
+            'alamat_campaign' => 'required|string',
             'gambar_latar.*' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
         ]);
 
@@ -108,7 +114,7 @@ class CampaignController extends Controller
         $campaign->waktu_diperbarui = now();
         $campaign->waktu = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request->waktu)->format('Y-m-d H:i:s');
         $campaign->kuota_partisipan = $request->kuota_partisipan;
-        $campaign->lokasi = $request->alamat_singkat;
+        $campaign->lokasi = $request->alamat_campaign;
         if ($campaign->isDirty()) {
             $campaign->save();
             $success = true;
@@ -182,12 +188,12 @@ class CampaignController extends Controller
         $campaign->kuota_partisipan = null;
         $campaign->save();
 
-        return back()->with('success', 'Data campaign telah dinull-kan!');
+        return redirect()->route('dashboard')->with('success', 'Data campaign telah dinull-kan!');
     }
 
     public function hapusGambar($id)
     {
-        $gambar = \App\Models\GambarCampaign::find($id);
+        $gambar = GambarCampaign::find($id);
         if ($gambar) {
             // Hapus file dari storage jika bukan URL
             if (!filter_var($gambar->gambar, FILTER_VALIDATE_URL)) {

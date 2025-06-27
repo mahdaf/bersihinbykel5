@@ -95,7 +95,7 @@
                     @guest
                         <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
                     @else
-                        @forelse ($campaigns as $campaign)
+                        @forelse ($campaignsAll as $campaign)
                             @include('components.campaignprofile-item', ['campaign' => $campaign])
                         @empty
                             <div class="text-center text-gray-400 py-10">Tidak ada campaign.</div>
@@ -110,21 +110,11 @@
                     @guest
                         <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
                     @else
-                        @php $ada = false; @endphp
-                        @foreach ($campaigns as $campaign)
-                            @php
-                                $now = now();
-                                $waktuDiperbarui = \Carbon\Carbon::parse($campaign->waktu_diperbarui);
-                                $waktu = \Carbon\Carbon::parse($campaign->waktu);
-                            @endphp
-                            @if ($now->gte($waktuDiperbarui->copy()->addSeconds(60)) && $now->lt($waktu))
-                                @php $ada = true; @endphp
-                                @include('components.campaignprofile-item', ['campaign' => $campaign])
-                            @endif
-                        @endforeach
-                        @unless($ada)
+                        @forelse ($campaignsBerlangsung as $campaign)
+                            @include('components.campaignprofile-item', ['campaign' => $campaign])
+                        @empty
                             <div class="text-center text-gray-400 py-10">Tidak ada campaign yang sedang berlangsung.</div>
-                        @endunless
+                        @endforelse
                     @endguest
                 </div>
             </div>
@@ -135,20 +125,11 @@
                     @guest
                         <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
                     @else
-                        @php $ada = false; @endphp
-                        @foreach ($campaigns as $campaign)
-                            @php
-                                $now = now();
-                                $waktu = \Carbon\Carbon::parse($campaign->waktu);
-                            @endphp
-                            @if ($now->gte($waktu))
-                                @php $ada = true; @endphp
-                                @include('components.campaignprofile-item', ['campaign' => $campaign])
-                            @endif
-                        @endforeach
-                        @unless($ada)
+                        @forelse ($campaignsSelesai as $campaign)
+                            @include('components.campaignprofile-item', ['campaign' => $campaign])
+                        @empty
                             <div class="text-center text-gray-400 py-10">Tidak ada campaign yang sudah selesai.</div>
-                        @endunless
+                        @endforelse
                     @endguest
                 </div>
             </div>
