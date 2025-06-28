@@ -62,6 +62,7 @@ return new class extends Migration {
         Schema::create('komentar_disukai', function (Blueprint $table) {
             $table->foreignId('komentar_id')->constrained('komentar');
             $table->foreignId('akun_id')->constrained('akun');
+            $table->unique(['komentar_id', 'akun_id']);
         });
 
         Schema::create('partisipan_campaign', function (Blueprint $table) {

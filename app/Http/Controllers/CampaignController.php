@@ -16,4 +16,13 @@ class CampaignController extends Controller
 
         return view('detailcampaignvol', compact('campaign', 'komentar', 'user'));
     }
+
+     public function showCommunity($id)
+    {
+        $campaign = Campaign::with('gambar_campaign')->findOrFail($id);
+        $komentar = \App\Models\Komentar::with(['akun', 'likes'])->where('campaign_id', $id)->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+
+        return view('detailcampaigncom', compact('campaign', 'komentar', 'user'));
+    }
 }

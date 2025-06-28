@@ -141,8 +141,24 @@
                         <div class="flex items-center mb-2 mt-2">
         <img src="{{ $k->akun->fotoProfil }}" class="w-10 h-10 rounded-full mr-3">
         <div>
-            <p class="font-semibold text-sm">{{ $k->akun->namaPengguna }} <span class="text-xs text-gray-500">• {{ $k->created_at->diffForHumans() }}</span></p>
+            <p class="font-semibold text-sm">
+                {{ $k->akun?->namaPengguna ?? '-' }}
+            </p>
             <p class="text-sm text-gray-700">{{ $k->komentar }}</p>
+            @if(auth()->check() && auth()->user()->jenis_akun_id == 1) {{-- Untuk volunteer --}}
+            <button
+                type="button"
+                class="like-btn mt-1 text-xs flex items-center gap-1"
+                data-id="{{ $k->id }}"
+                data-liked="{{ $k->likes->contains(auth()->id()) ? '1' : '0' }}"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $k->likes->contains(auth()->id()) ? 'red' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+            </svg>
+            <span class="like-count">{{ $k->likes->count() }}</span>
+            </button>
+            @endif
         </div>
     </div>
                     @endforeach
@@ -175,30 +191,18 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
     fetch('{{ route('komentar.store', $campaign->id) }}', {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
         body: JSON.stringify({ komentar: text })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            // Tambahkan komentar baru ke atas daftar komentar
-            const list = document.getElementById('commentsList');
-            const div = document.createElement('div');
-            div.innerHTML = `
-                <div class="flex items-center mb-2 mt-2">
-                    <img src="${data.komentar.avatar}" class="w-10 h-10 rounded-full mr-3">
-                    <div>
-                        <p class="font-semibold text-sm">${data.komentar.user} <span class="text-xs text-gray-500">• ${data.komentar.created_at}</span></p>
-                        <p class="text-sm text-gray-700">${data.komentar.komentar}</p>
-                    </div>
-                </div>
-            `;
-            list.prepend(div);
             input.value = '';
+            location.reload(); // Tambahkan baris ini
         } else {
-            alert('Gagal menambah komentar');
+            // Tampilkan pesan error jika perlu
         }
     });
 });
@@ -304,6 +308,34 @@ document.getElementById('commentForm').addEventListener('submit', function(e) {
         },
         watchOverflow: false,
     });
+</script>
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const komentarId = btn.getAttribute('data-id');
+        fetch(`/komentar/${komentarId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ role: 'volunteer' }) // Ganti 'volunteer' jadi 'komunitas' di halaman komunitas
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Update UI
+                const svg = btn.querySelector('svg');
+                svg.setAttribute('fill', data.liked ? 'red' : 'none');
+                btn.setAttribute('data-liked', data.liked ? '1' : '0');
+                btn.querySelector('.like-count').textContent = data.count;
+            } else {
+                alert(data.message || 'Tidak bisa like komentar.');
+            }
+        });
+    });
+});
 </script>
 
 </body>

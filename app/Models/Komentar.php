@@ -34,4 +34,9 @@ class Komentar extends Model
             $table->timestamps();
         });
     }
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'komentar_disukai', 'komentar_id', 'akun_id');
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\KomentarLikeController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -59,9 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hapuscampaign', function () {
         return view('hapuscampaign');
     });
-    Route::get('/detailcampaigncom', function () {
-        return view('detailcampaigncom');
-    });
+    
     Route::get('/detailcampaignvol', function () {
         return view('detailcampaignvol');
     });
@@ -76,6 +75,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
     Route::post('/campaign/{id}/komentar', [\App\Http\Controllers\KomentarController::class, 'store'])->name('komentar.store');
+    Route::post('/komentar/{id}/like', [KomentarLikeController::class, 'toggle'])->middleware('auth');
+    Route::get('/campaign/com/{id}', [\App\Http\Controllers\CampaignController::class, 'showCommunity'])->name('campaign.community.detail');
 });
 
 // Route::get('/profil',function (){
