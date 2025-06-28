@@ -15,7 +15,7 @@
 
     @include('components.navbar')
 
-    
+
 @php
     use Carbon\Carbon;
     // Cek apakah campaign sudah di-bookmark user
@@ -153,9 +153,9 @@
                         {{ Carbon::parse($campaign->waktu)->format('H.i') }}
                     </span>
                 </div>
-                <p class="font-semibold mt-8 text-[16px]">TENTANG CAMPAIGN</p>
+                <p class="font-semibold mt-8 text-[16px]">Tentang Campaign</p>
                 <p class="text-600 mt-2 text-[16px]">{{ $campaign->deskripsi }}</p>
-                <p class="font-semibold mt-4 text-[16px]">PARTISIPAN</p>
+                <p class="font-semibold mt-4 text-[16px]">Partisipan</p>
                 <div class="flex items-center mt-2 min-h-[40px]">
                     @if($campaign->partisipanCampaigns->count() === 0)
                         <span class="text-gray-400 text-sm">Belum ada partisipan</span>
@@ -178,7 +178,7 @@
                         @endif
                     @endif
                 </div>
-                
+
             </div>
         </div>
     @endif
