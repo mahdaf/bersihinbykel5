@@ -92,6 +92,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/profilvolunteer', function () {
         return view('profilvolunteer');
     });
-Route::get('/error404',function (){
+
+// Handle 404 dan 403 error
+Route::fallback(function () {
     return view('halamanerror');
 });
