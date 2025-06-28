@@ -30,6 +30,12 @@ class CampaignController extends Controller
         } else {
             abort(403, 'Role tidak dikenali');
         }
+
+        $campaign = Campaign::with('gambar_campaign')->findOrFail($id);
+        $komentar = \App\Models\Komentar::with('akun')->where('campaign_id', $id)->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+
+        return view('detailcampaignvol', compact('campaign', 'komentar', 'user'));
     }
 
     public function showCom($id)
@@ -42,6 +48,12 @@ class CampaignController extends Controller
 
         // Kirim ke blade
         return view('detailcampaigncom', compact('campaign'));
+
+        $campaign = Campaign::with('gambar_campaign')->findOrFail($id);
+        $komentar = \App\Models\Komentar::with(['akun', 'likes'])->where('campaign_id', $id)->orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+
+        return view('detailcampaigncom', compact('campaign', 'komentar', 'user'));
     }
 
     public function bookmark($id, Request $request)
@@ -203,5 +215,10 @@ class CampaignController extends Controller
             return response()->json(['success' => true]);
         }
         return response()->json(['success' => false], 404);
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany(\App\Models\Komentar::class, 'komentar_disukai', 'akun_id', 'komentar_id');
     }
 }
