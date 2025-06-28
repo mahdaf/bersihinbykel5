@@ -201,27 +201,6 @@
         // Panggil sekali saat load awal
         updateAddress(defaultLat, defaultLng);
 
-        // Modal logic
-        const btnBuat = document.getElementById('btn-buat');
-        const modal = document.getElementById('modal-success');
-        const closeModal = document.getElementById('close-modal');
-
-        btnBuat.addEventListener('click', function(e) {
-            e.preventDefault(); // Hapus baris ini!
-            modal.classList.remove('hidden');
-        });
-
-        closeModal.addEventListener('click', function() {
-            modal.classList.add('hidden');
-        });
-
-        // Optional: close modal on outside click
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
         // --- LOGIKA PREVIEW GAMBAR ---
         document.addEventListener('DOMContentLoaded', function() {
             const imageInput = document.getElementById('gambar-latar-input');
