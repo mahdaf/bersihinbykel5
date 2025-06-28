@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Campaign</title>
-    @vite('resources/css/app.css')
+    <title>Edit - {{ $campaign->nama }}</title>
+    @vite('resources/css/app.css','resource/js/app.js')
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
@@ -12,21 +12,27 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+
+    <style>.main-grid{display:flex;width:90%;max-width:1200px;gap:3rem;margin:0 auto;padding-top:2rem}.left-column{flex:1;max-width:45%}.right-column{flex:1.2;max-width:55%}#map{height:130px;border-radius:.75rem;margin-top:.5rem}.form-container{background-color:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.1)}.form-input,.form-textarea{background-color:#f5f5f5;border:none;padding:12px 16px;margin-bottom:16px;font-size:14px;width:100%}.form-input{border-radius:8px}.form-input:focus{outline:0;box-shadow:0 0 0 2px #810000}.form-textarea{border-radius:8px;resize:vertical;min-height:80px}.form-label,.form-submit-btn{font-size:16px;font-weight:600}.form-label{margin-bottom:8px;display:block}.form-date-container{position:relative}.form-date-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#555}.form-submit-btn{background-color:#810000;color:#fff;border:none;border-radius:20px;padding:12px 0;width:100%;cursor:pointer;margin-top:8px}.form-submit-btn:hover{background-color:#6a0000}.syarat-list{margin-top:8px;padding-left:20px}.syarat-list li{margin-bottom:6px;list-style-type:decimal}.upload-container{width:100%;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed #55a7aa;border-radius:12px;background-color:#ddedee;cursor:pointer;margin-bottom:1.5rem}.upload-icon{height:2rem;width:2rem;color:#55a7aa;margin-bottom:.5rem}.image-preview,.page-header{width:100%;margin-bottom:1rem}.upload-text{color:#55a7aa;font-weight:600;text-align:center}.page-header{display:flex;align-items:center}.back-button{font-size:1.5rem;color:#225151;margin-right:1rem}.page-title{font-size:1.5rem;font-weight:700;color:#000;text-align:center;flex-grow:1}.image-preview{border-radius:.75rem;max-width:28rem;height:20rem;object-fit:cover;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}.carousel-dots{display:flex;justify-content:center;align-items:center;gap:.5rem;margin-bottom:1rem}.dot{width:.75rem;height:.75rem;border-radius:9999px;background-color:#d9d9d9}.dot.active{background-color:#c9a74a}.location-container{width:100%;max-width:28rem;margin-top:.5rem}.location-title{font-weight:600;font-size:1.125rem;margin-bottom:.25rem}.location-text{display:flex;align-items:center;color:#4b5563;font-size:.875rem;margin-bottom:.5rem}.location-icon{height:1.25rem;width:1.25rem;color:#225151;margin-right:.25rem}.suggestion-box{position:absolute;background:#fff;border:1px solid #ccc;border-radius:0 0 8px 8px;max-height:180px;overflow-y:auto;width:100%;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.08)}.suggestion-item{padding:10px 16px;cursor:pointer}.suggestion-item:hover{background:#f5f5f5}.swiper-pagination{position:relative;bottom:auto;left:auto;width:100%;margin-top:1rem;text-align:center}.swiper-pagination-bullet{background-color:#d8d2f0;opacity:1;width:12px;height:12px;margin:0 4px}.swiper-pagination-bullet-active{background-color:#e4b100}</style>
+
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        new Swiper('.mySwiper', {
-            loop: true,
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
+        const swiperElements = document.querySelectorAll('.mySwiper');
+        swiperElements.forEach(function(element) {
+            const paginationElement = element.parentElement.querySelector('.swiper-pagination');
+
+            new Swiper(element, {
+                loop: true,
+                pagination: {
+                    el: paginationElement,
+                    clickable: true,
+                },
+            });
         });
     });
     </script>
-
-    <style>.page-container{background-color:#fafafa;min-height:100vh}.main-grid{display:flex;width:90%;max-width:1200px;gap:3rem;margin:0 auto;padding-top:2rem}.left-column{flex:1;max-width:45%}.right-column{flex:1.2;max-width:55%}#map{height:130px;border-radius:.75rem;margin-top:.5rem}.form-container{background-color:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.1)}.form-input,.form-textarea{background-color:#f5f5f5;border:none;padding:12px 16px;margin-bottom:16px;font-size:14px;width:100%}.form-input{border-radius:8px}.form-input:focus{outline:0;box-shadow:0 0 0 2px #810000}.form-textarea{border-radius:8px;resize:vertical;min-height:80px}.form-label,.form-submit-btn{font-size:16px;font-weight:600}.form-label{margin-bottom:8px;display:block}.form-date-container{position:relative}.form-date-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#555}.form-submit-btn{background-color:#810000;color:#fff;border:none;border-radius:20px;padding:12px 0;width:100%;cursor:pointer;margin-top:8px}.form-submit-btn:hover{background-color:#6a0000}.syarat-list{margin-top:8px;padding-left:20px}.syarat-list li{margin-bottom:6px;list-style-type:decimal}.upload-container{width:100%;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed #55a7aa;border-radius:12px;background-color:#ddedee;cursor:pointer;margin-bottom:1.5rem}.upload-icon{height:2rem;width:2rem;color:#55a7aa;margin-bottom:.5rem}.image-preview,.page-header{width:100%;margin-bottom:1rem}.upload-text{color:#55a7aa;font-weight:600;text-align:center}.page-header{display:flex;align-items:center}.back-button{font-size:1.5rem;color:#225151;margin-right:1rem}.page-title{font-size:1.5rem;font-weight:700;color:#000;text-align:center;flex-grow:1}.image-preview{border-radius:.75rem;max-width:28rem;height:20rem;object-fit:cover;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}.carousel-dots{display:flex;justify-content:center;align-items:center;gap:.5rem;margin-bottom:1rem}.dot{width:.75rem;height:.75rem;border-radius:9999px;background-color:#d9d9d9}.dot.active{background-color:#c9a74a}.location-container{width:100%;max-width:28rem;margin-top:.5rem}.location-title{font-weight:600;font-size:1.125rem;margin-bottom:.25rem}.location-text{display:flex;align-items:center;color:#4b5563;font-size:.875rem;margin-bottom:.5rem}.location-icon{height:1.25rem;width:1.25rem;color:#225151;margin-right:.25rem}.mySwiper .swiper-pagination{position:relative;bottom:auto;left:auto;width:100%;margin-top:1rem;text-align:center}.mySwiper .swiper-pagination-bullet{background-color:#d8d2f0;opacity:1}.mySwiper .swiper-pagination-bullet-active{background-color:#e4b100}.suggestion-box{position:absolute;background:#fff;border:1px solid #ccc;border-radius:0 0 8px 8px;max-height:180px;overflow-y:auto;width:100%;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.08)}.suggestion-item{padding:10px 16px;cursor:pointer}.suggestion-item:hover{background:#f5f5f5}</style>
 </head>
-<body class="page-container">
+<body>
     @include('components.navbar')
 
     <div class="main-grid">
@@ -35,25 +41,11 @@
             <!-- Header -->
             <div class="page-header">
                 <a href="javascript:history.back()" class="back-button">&#60;</a>
-                <h1 class="page-title">Edit Campaign</h1>
+                <h1 class="page-title">Edit - {{ $campaign->nama }}</h1>
             </div>
 
-            <!-- Main Image -->
-            <!-- Swiper dinamis -->
-            <div class="swiper mySwiper rounded-xl overflow-hidden">
-                <div class="swiper-wrapper">
-                    @foreach($campaign->gambar_campaign as $gambar)
-                    <div class="swiper-slide">
-                        @php
-                            $isUrl = filter_var($gambar->gambar, FILTER_VALIDATE_URL);
-                            $src = $isUrl ? $gambar->gambar : asset('storage/' . $gambar->gambar);
-                        @endphp
-                        <img src="{{ $src }}" alt="Gambar Campaign" class="w-full h-full object-cover" />
-                    </div>
-                    @endforeach
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
+            <!-- Gambar Section -->
+            <div><x-swiper-gallery :gambar="$campaign->gambar_campaign" /></div>
 
             <!-- Location Section -->
             <div class="location-container">
@@ -261,7 +253,6 @@
     <label class="form-label">Lokasi Campaign</label>
     <div style="position:relative;">
         <input type="text" class="form-input" name="alamat_campaign" id="alamat-campaign" placeholder="Ganti alamat atau cari lokasi..." required value="{{ old('alamat_campaign', $campaign->lokasi) }}">
-        <input type="hidden" name="alamat_singkat" id="alamat-singkat" value="">
         <div id="suggestion-box" class="suggestion-box" style="display:none;"></div>
     </div>
     <div class="location-container">
@@ -280,6 +271,10 @@
     <!-- Modal Notification -->
     <div id="modal-success" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
         <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
+            <!-- Tombol Close -->
+            <button onclick="document.getElementById('modal-success').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">
+                ×
+            </button>
             <h2 class="text-2xl md:text-3xl font-bold text-[#225151] text-center mb-2">Perubahan<br>Disimpan!</h2>
             <img src="{{ asset('ilustration.png') }}" class="w-56 md:w-72 mb-6" />
             <a href="{{ url('campaign/' . $campaign->id) }}" class="w-full">
@@ -298,6 +293,10 @@
     <!-- Modal Notification Gagal -->
     <div id="modal-error" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
         <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
+            <!-- Tombol Close -->
+            <button onclick="document.getElementById('modal-error').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">
+                ×
+            </button>
             <h2 class="text-2xl md:text-3xl font-bold text-[#a30000] text-center mb-2">Perubahan<br>Gagal Disimpan!</h2>
             <img src="{{ asset('ilustration.png') }}" class="w-56 md:w-72 mb-6" />
             <div class="w-full text-center text-[#a30000] font-semibold mb-4">{{ session('error') }}</div>
@@ -349,18 +348,6 @@
                 .then(data => {
                     if (data.display_name) {
                         document.getElementById('alamat-campaign').value = data.display_name;
-                        // Ambil 3 bagian terakhir sebelum kode pos/negara untuk disimpan ke db
-                        let parts = data.display_name.split(',').map(s => s.trim());
-                        while (parts.length && (/^\d+$/.test(parts[parts.length-1]) || parts[parts.length-1].toLowerCase() === 'indonesia')) {
-                            parts.pop();
-                        }
-                        let singkat = '';
-                        if (parts.length >= 4) {
-                            singkat = parts.slice(-3).join(', ');
-                        } else {
-                            singkat = parts.join(', ');
-                        }
-                        document.getElementById('alamat-singkat').value = singkat;
                     }
                 })
                 .finally(() => {
@@ -410,19 +397,6 @@
                                     div.textContent = item.display_place ? `${item.display_place}, ${item.display_address}` : item.display_name;
                                     div.onclick = function() {
                                         alamatInput.value = item.display_name;
-                                        // Ambil 3 bagian terakhir sebelum kode pos/negara untuk disimpan ke db
-                                        let parts = item.display_name.split(',').map(s => s.trim());
-                                        // Buang bagian belakang jika berupa angka (kode pos) atau 'Indonesia'
-                                        while (parts.length && (/^\d+$/.test(parts[parts.length-1]) || parts[parts.length-1].toLowerCase() === 'indonesia')) {
-                                            parts.pop();
-                                        }
-                                        let singkat = '';
-                                        if (parts.length >= 4) {
-                                            singkat = parts.slice(-3).join(', ');
-                                        } else {
-                                            singkat = parts.join(', ');
-                                        }
-                                        document.getElementById('alamat-singkat').value = singkat;
                                         // Update peta dan marker
                                         const lat = parseFloat(item.lat);
                                         const lon = parseFloat(item.lon);
@@ -470,24 +444,6 @@
 
         // Inisialisasi alamat pada load pertama
         updateAddress(defaultLat, defaultLng);
-
-        document.querySelector('form').addEventListener('submit', function(e) {
-            var singkat = document.getElementById('alamat-singkat').value;
-            var lengkap = document.getElementById('alamat-campaign').value;
-            if (!singkat && lengkap) {
-                // Ambil 3 bagian terakhir sebelum kode pos/negara
-                let parts = lengkap.split(',').map(s => s.trim());
-                while (parts.length && (/^\\d+$/.test(parts[parts.length-1]) || parts[parts.length-1].toLowerCase() === 'indonesia')) {
-                    parts.pop();
-                }
-                if (parts.length >= 4) {
-                    singkat = parts.slice(-3).join(', ');
-                } else {
-                    singkat = parts.join(', ');
-                }
-                document.getElementById('alamat-singkat').value = singkat;
-            }
-        });
     </script>
 </body>
 </html>
