@@ -50,9 +50,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/search', [SearchController::class, 'search'])->name('search');
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil');
+
+    // Route untuk membuat campaign
     Route::get('/campaign/tambah', function () {
         return view('components.TambahCampaign');
     })->name('campaign.tambah');
+    Route::post('/campaign', [CampaignController::class, 'store'])->name('campaign.store');
+
     // ...tambahkan semua route lain yang ingin dibatasi login di sini...
     Route::get('/editcampaign/{id}', [CampaignController::class, 'edit'])->name('editcampaign');
     Route::get('/hapuscampaign', function () {

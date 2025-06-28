@@ -44,6 +44,67 @@ class CampaignController extends Controller
         return view('detailcampaigncom', compact('campaign'));
     }
 
+    public function store(Request $request)
+    {
+        // 1. Validasi input
+        $request->validate([
+            'nama_campaign' => 'required|string|max:100',
+            'deskripsi_campaign' => 'required|string',
+            'waktu' => 'required|date_format:d-m-Y H:i',
+            'kuota_partisipan' => 'required|integer|min:1',
+            'alamat_campaign' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'gambar_latar' => 'required|array|max:3',
+            'gambar_latar.*' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
+        ], [
+            'gambar_latar.required' => 'Setidaknya satu gambar harus diunggah.',
+            'gambar_latar.max' => 'Anda dapat mengunggah hingga 3 gambar.',
+            'gambar_latar.*.image' => 'File harus berupa gambar.',
+            'gambar_latar.*.mimes' => 'Gambar harus berformat JPEG, PNG, JPG, atau SVG.',
+            'gambar_latar.*.max' => 'Ukuran gambar tidak boleh lebih dari 2MB.',
+            'nama_campaign.required' => 'Nama campaign wajib diisi.',
+            'deskripsi_campaign.required' => 'Deskripsi campaign wajib diisi.',
+            'waktu.required' => 'Waktu pelaksanaan wajib diisi.',
+            'kuota_partisipan.required' => 'Kuota partisipan wajib diisi.',
+            'alamat_campaign.required' => 'Alamat campaign wajib diisi.',
+        ]);
+
+        // Cek apakah user adalah komunitas
+        $user = Auth::user();
+        if ($user->jenisAkun->jenisAkun !== 'Komunitas') {
+            abort(403, 'Hanya akun komunitas yang dapat membuat campaign.');
+        }
+
+        // 2. Simpan data campaign
+        $campaign = new Campaign();
+        $campaign->akun_id = $user->id;
+        $campaign->nama = $request->nama_campaign;
+        $campaign->waktu = \Carbon\Carbon::createFromFormat('d-m-Y H:i', $request->waktu)->format('Y-m-d H:i:s');
+        $campaign->waktu_diperbarui = now();
+        $campaign->deskripsi = $request->deskripsi_campaign;
+        $campaign->lokasi = $request->alamat_campaign;
+        $campaign->kontak = $user->nomorTelepon; // Menggunakan nomor telepon komunitas sebagai kontak
+        $campaign->kuota_partisipan = $request->kuota_partisipan;
+        $campaign->latitude = $request->latitude;
+        $campaign->longitude = $request->longitude;
+        $campaign->save();
+
+        // 3. Upload dan simpan gambar
+        $files = $request->file('gambar_latar');
+        foreach ($files as $index => $file) {
+            $path = $file->store('campaign_images', 'public');
+            GambarCampaign::create([
+                'campaign_id' => $campaign->id,
+                'gambar' => $path,
+                'isCover' => ($index === 0), // Gambar pertama menjadi cover
+            ]);
+        }
+
+        // 4. Redirect ke halaman detail campaign yang baru dibuat
+        return redirect()->route('detailcam', $campaign->id)->with('success', 'Campaign berhasil dibuat!');
+    }
+
     public function bookmark($id, Request $request)
     {
         $akunId = Auth::id();
@@ -280,4 +341,4 @@ class CampaignController extends Controller
         }
         return response()->json(['success' => false], 404);
     }
-}
+}   

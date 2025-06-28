@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Campaign extends Model
 {
     protected $table = 'campaign';
+    protected $fillable = [
+        'akun_id',
+        'nama',
+        'waktu',
+        'deskripsi',
+        'lokasi',
+        'kontak',
+        'kuota_partisipan',
+        'latitude',
+        'longitude'
+    ];
 
     // Mapping kolom timestamp ke nama kolom yang kamu gunakan di tabel
     const CREATED_AT = 'waktu';
