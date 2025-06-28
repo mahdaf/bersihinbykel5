@@ -34,16 +34,31 @@
                         PROFIL
                     </a>
                 </li>
-                <li>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="relative px-1 pb-3 text-[#810000] hover:border-b-2 hover:border-[#810000] flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
+                <li class="relative">
+                    <!-- Tombol titik tiga -->
+                    <button id="logout-dropdown-btn" class="relative px-1 pb-3 text-[#810000] hover:border-b-2 hover:border-[#810000] flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                        </svg>
+                    </button>
 
-                        </button>
-                    </form>
+                    <!-- Dropdown konfirmasi logout -->
+                    <div id="logout-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                        <div class="p-4">
+                            <p class="text-gray-700 text-sm mb-4">Keluar dari akun Anda?</p>
+                            <div class="flex space-x-2">
+                                <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                                    @csrf
+                                    <button type="submit" class="w-full px-3 py-2 bg-[#E7424B] text-white text-sm rounded-md hover:bg-[#c7323a] transition">
+                                        Log Out
+                                    </button>
+                                </form>
+                                <button id="cancel-logout" class="flex-1 px-3 py-2 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300 transition">
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
         @else
@@ -80,15 +95,31 @@
                 </a>
             </li>
             <li class="pb-2">
-                <form method="POST" action="{{ route('logout') }}" class="block">
-                    @csrf
-                    <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
+                <!-- Tombol titik tiga untuk mobile -->
+                <button id="mobile-logout-dropdown-btn" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                    Menu
+                </button>
 
-                    </button>
-                </form>
+                <!-- Dropdown konfirmasi logout untuk mobile -->
+                <div id="mobile-logout-dropdown" class="hidden bg-gray-50 border-t border-gray-200">
+                    <div class="p-4">
+                        <p class="text-gray-700 text-sm mb-4">Keluar dari akun Anda?</p>
+                        <div class="flex space-x-2">
+                            <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                                @csrf
+                                <button type="submit" class="w-full px-3 py-2 bg-[#E7424B] text-white text-sm rounded-md hover:bg-[#c7323a] transition">
+                                    Log Out
+                                </button>
+                            </form>
+                            <button id="mobile-cancel-logout" class="flex-1 px-3 py-2 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300 transition">
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </li>
         </ul>
     @else
@@ -121,6 +152,42 @@
             menuIcon.classList.toggle('hidden');
             closeIcon.classList.toggle('hidden');
             btn.setAttribute('aria-expanded', !isHidden);
+        });
+
+        // Toggle logout dropdown untuk desktop
+        const logoutBtn = document.getElementById('logout-dropdown-btn');
+        const logoutDropdown = document.getElementById('logout-dropdown');
+        const cancelLogout = document.getElementById('cancel-logout');
+
+        logoutBtn.addEventListener('click', () => {
+            logoutDropdown.classList.toggle('hidden');
+        });
+
+        cancelLogout.addEventListener('click', () => {
+            logoutDropdown.classList.add('hidden');
+        });
+
+        // Toggle logout dropdown untuk mobile
+        const mobileLogoutBtn = document.getElementById('mobile-logout-dropdown-btn');
+        const mobileLogoutDropdown = document.getElementById('mobile-logout-dropdown');
+        const mobileCancelLogout = document.getElementById('mobile-cancel-logout');
+
+        mobileLogoutBtn.addEventListener('click', () => {
+            mobileLogoutDropdown.classList.toggle('hidden');
+        });
+
+        mobileCancelLogout.addEventListener('click', () => {
+            mobileLogoutDropdown.classList.add('hidden');
+        });
+
+        // Tutup dropdown ketika klik di luar
+        document.addEventListener('click', (e) => {
+            if (!logoutBtn.contains(e.target) && !logoutDropdown.contains(e.target)) {
+                logoutDropdown.classList.add('hidden');
+            }
+            if (!mobileLogoutBtn.contains(e.target) && !mobileLogoutDropdown.contains(e.target)) {
+                mobileLogoutDropdown.classList.add('hidden');
+            }
         });
     </script>
 </nav>
