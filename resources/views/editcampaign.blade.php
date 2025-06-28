@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit - {{ $campaign->nama }}</title>
+    <title>Edit Campaign - {{ $campaign->nama }}</title>
     @vite('resources/css/app.css','resource/js/app.js')
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
@@ -12,273 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 
-
-    <style>
-        /* Layout Grid */
-        .main-grid {
-            display: flex;
-            width: 90%;
-            max-width: 1200px;
-            gap: 3rem;
-            margin: 0 auto;
-            padding-top: 2rem;
-        }
-
-        .left-column {
-            flex: 1;
-            max-width: 45%;
-        }
-
-        .right-column {
-            flex: 1.2;
-            max-width: 55%;
-        }
-
-        /* Map */
-        #map {
-            height: 130px;
-            border-radius: 0.75rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Form Container */
-        .form-container {
-            background-color: #fff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Form Inputs */
-        .form-input,
-        .form-textarea {
-            background-color: #f5f5f5;
-            border: none;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-            font-size: 14px;
-            width: 100%;
-        }
-
-        .form-input {
-            border-radius: 8px;
-        }
-
-        .form-input:focus {
-            outline: 0;
-            box-shadow: 0 0 0 2px #810000;
-        }
-
-        .form-textarea {
-            border-radius: 8px;
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Form Labels & Submit Button */
-        .form-label,
-        .form-submit-btn {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .form-label {
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        /* Date Container */
-        .form-date-container {
-            position: relative;
-        }
-
-        .form-date-icon {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #555;
-        }
-
-        /* Submit Button */
-        .form-submit-btn {
-            background-color: #810000;
-            color: #fff;
-            border: none;
-            border-radius: 20px;
-            padding: 12px 0;
-            width: 100%;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
-        .form-submit-btn:hover {
-            background-color: #6a0000;
-        }
-
-        /* Syarat List */
-        .syarat-list {
-            margin-top: 8px;
-            padding-left: 20px;
-        }
-
-        .syarat-list li {
-            margin-bottom: 6px;
-            list-style-type: decimal;
-        }
-
-        /* Upload Container */
-        .upload-container {
-            width: 100%;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #55a7aa;
-            border-radius: 12px;
-            background-color: #ddedee;
-            cursor: pointer;
-            margin-bottom: 1.5rem;
-        }
-
-        .upload-icon {
-            height: 2rem;
-            width: 2rem;
-            color: #55a7aa;
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-text {
-            color: #55a7aa;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        /* Page Header */
-        .page-header {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .back-button {
-            font-size: 1.5rem;
-            color: #225151;
-            margin-right: 1rem;
-        }
-
-        .page-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #000;
-            text-align: center;
-            flex-grow: 1;
-        }
-
-        /* Image Preview */
-        .image-preview {
-            border-radius: 0.75rem;
-            max-width: 28rem;
-            height: 20rem;
-            object-fit: cover;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        /* Carousel Dots */
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .dot {
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 9999px;
-            background-color: #d9d9d9;
-        }
-
-        .dot.active {
-            background-color: #c9a74a;
-        }
-
-        /* Location Container */
-        .location-container {
-            width: 100%;
-            max-width: 28rem;
-            margin-top: 0.5rem;
-        }
-
-        .location-title {
-            font-weight: 600;
-            font-size: 1.125rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .location-text {
-            display: flex;
-            align-items: center;
-            color: #4b5563;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .location-icon {
-            height: 1.25rem;
-            width: 1.25rem;
-            color: #225151;
-            margin-right: 0.25rem;
-        }
-
-        /* Suggestion Box */
-        .suggestion-box {
-            position: absolute;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 0 0 8px 8px;
-            max-height: 180px;
-            overflow-y: auto;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .suggestion-item {
-            padding: 10px 16px;
-            cursor: pointer;
-        }
-
-        .suggestion-item:hover {
-            background: #f5f5f5;
-        }
-
-        /* Swiper Pagination */
-        .swiper-pagination {
-            position: relative;
-            bottom: auto;
-            left: auto;
-            width: 100%;
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        .swiper-pagination-bullet {
-            background-color: #d8d2f0;
-            opacity: 1;
-            width: 12px;
-            height: 12px;
-            margin: 0 4px;
-        }
-
-        .swiper-pagination-bullet-active {
-            background-color: #e4b100;
-        }
+    <style>.main-grid{display:flex;width:90%;max-width:1200px;gap:3rem;margin:0 auto;padding-top:2rem}.left-column{flex:1;max-width:45%}.right-column{flex:1.2;max-width:55%}#map{height:130px;border-radius:.75rem;margin-top:.5rem}.form-container{background-color:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgb(0 0 0 / .1)}.form-input,.form-textarea{background-color:#f5f5f5;border:none;padding:12px 16px;margin-bottom:16px;font-size:14px;width:100%}.form-input{border-radius:8px}.form-input:focus{outline:0;box-shadow:0 0 0 2px #810000}.form-textarea{border-radius:8px;resize:vertical;min-height:80px}.form-label,.form-submit-btn{font-size:16px;font-weight:600}.form-label{margin-bottom:8px;display:block}.form-date-container{position:relative}.form-date-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#555}.form-submit-btn{background-color:#810000;color:#fff;border:none;border-radius:20px;padding:12px 0;width:100%;cursor:pointer;margin-top:8px}.form-submit-btn:hover{background-color:#6a0000}.syarat-list{margin-top:8px;padding-left:20px}.syarat-list li{margin-bottom:6px;list-style-type:decimal}.upload-container{width:100%;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed #55a7aa;border-radius:12px;background-color:#ddedee;cursor:pointer;margin-bottom:1.5rem}.upload-icon{height:2rem;width:2rem;color:#55a7aa;margin-bottom:.5rem}.upload-text{color:#55a7aa;font-weight:600;text-align:center}.page-header{display:flex;align-items:center;width:100%;margin-bottom:1rem}.back-button{font-size:1.5rem;color:#225151;margin-right:1rem}.page-title{font-size:1.5rem;font-weight:700;color:#000;text-align:center;flex-grow:1}.image-preview{border-radius:.75rem;max-width:28rem;height:20rem;object-fit:cover;box-shadow:0 4px 6px -1px rgb(0 0 0 / .1);width:100%;margin-bottom:1rem}.carousel-dots{display:flex;justify-content:center;align-items:center;gap:.5rem;margin-bottom:1rem}.dot{width:.75rem;height:.75rem;border-radius:9999px;background-color:#d9d9d9}.dot.active{background-color:#c9a74a}.location-container{width:100%;max-width:28rem;margin-top:.5rem}.location-title{font-weight:600;font-size:1.125rem;margin-bottom:.25rem}.location-text{display:flex;align-items:center;color:#4b5563;font-size:.875rem;margin-bottom:.5rem}.location-icon{height:1.25rem;width:1.25rem;color:#225151;margin-right:.25rem}.suggestion-box{border:2px solid #810000;border-top:none;background:#fff;box-shadow:0 4px 12px rgb(129 0 0 / .1);z-index:9999;position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;pointer-events:auto}.suggestion-item{border-bottom:1px solid #f0f0f0;transition:all 0.2s ease;font-size:14px;color:#333;cursor:pointer;padding:10px 16px;pointer-events:auto}.suggestion-item:last-child{border-bottom:none}.suggestion-item:hover{background:#f8f8f8;color:#810000;padding-left:20px}.map-instruction{position:absolute;top:10px;left:10px;background:rgb(255 255 255 / .9);padding:8px 12px;border-radius:6px;font-size:12px;color:#666;z-index:1000;pointer-events:none;transition:opacity 0.3s ease;border:1px solid #ddd}
+    /* Tambahan CSS untuk peta dan suggestion */
+    #map{cursor:crosshair;transition:all 0.3s ease}#map:hover{box-shadow:0 4px 12px rgb(0 0 0 / .15)}.suggestion-box{border:2px solid #810000;border-top:none;background:#fff;box-shadow:0 4px 12px rgb(129 0 0 / .1);z-index:9999;position:absolute;top:100%;left:0;right:0;max-height:200px;overflow-y:auto;pointer-events:auto}.suggestion-item{border-bottom:1px solid #f0f0f0;transition:all 0.2s ease;font-size:14px;color:#333;cursor:pointer;padding:10px 16px;pointer-events:auto}.suggestion-item:last-child{border-bottom:none}.suggestion-item:hover{background:#f8f8f8;color:#810000;padding-left:20px}.map-instruction{position:absolute;top:10px;left:10px;background:rgb(255 255 255 / .9);padding:8px 12px;border-radius:6px;font-size:12px;color:#666;z-index:1000;pointer-events:none;transition:opacity 0.3s ease;border:1px solid #ddd}
     </style>
 
     <script>
@@ -298,7 +34,7 @@
         <div class="left-column">
             <div class="page-header">
                 <a href="javascript:history.back()" class="back-button">&#60;</a>
-                <h1 class="page-title">Edit - {{ $campaign->nama }}</h1>
+                <h1 class="page-title">{{ $campaign->nama }}</h1>
             </div>
             <div><x-swiper-gallery :gambar="$campaign->gambar_campaign" /></div>
             <div class="location-container">
@@ -406,11 +142,17 @@
                         placeholder="Ganti alamat atau cari lokasi..."
                         required
                         value="{{ old('alamat_campaign', $campaign->lokasi) }}"
+                        autocomplete="off"
                     />
                     <div id="suggestion-box" class="suggestion-box" style="display:none;"></div>
                 </div>
                 <div class="location-container">
-                    <div id="map" style="height: 180px; border-radius: 0.75rem; margin-top: 0.5rem;"></div>
+                    <div id="map" style="height: 180px; border-radius: 0.75rem; margin-top: 0.5rem; position: relative;">
+                        <div class="map-instruction">Klik pada peta untuk memilih lokasi</div>
+                    </div>
+                    <div id="coordinates-info" style="font-size: 12px; color: #666; margin-top: 8px; text-align: center;">
+                        Koordinat: {{ number_format(optional($campaign)->latitude ?? -7.2819, 6) }}, {{ number_format(optional($campaign)->longitude ?? 112.7953, 6) }}
+                    </div>
                 </div>
                 <input type="hidden" name="latitude" id="latitude">
                 <input type="hidden" name="longitude" id="longitude">
@@ -419,7 +161,7 @@
         </div>
     </div>
 
-    <div id="modal-success" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
+    <div id="modal-success" class="fixed inset-0 z-50 items-center justify-center backdrop-blur-sm hidden">
         <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
             <button onclick="document.getElementById('modal-success').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
             <h2 class="text-2xl md:text-3xl font-bold text-[#225151] text-center mb-2">Perubahan<br>Disimpan!</h2>
@@ -432,7 +174,7 @@
             </a>
         </div>
     </div>
-    <div id="modal-error" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm hidden">
+    <div id="modal-error" class="fixed inset-0 z-50 items-center justify-center backdrop-blur-sm hidden">
         <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
             <button onclick="document.getElementById('modal-error').classList.add('hidden')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
             <h2 class="text-2xl md:text-3xl font-bold text-[#a30000] text-center mb-2">Perubahan<br>Gagal Disimpan!</h2>
@@ -447,7 +189,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Tampilkan modal jika ada session flash
             @if(session('success'))
-                document.getElementById('modal-success').classList.remove('hidden');
+                const modalSuccess = document.getElementById('modal-success');
+                modalSuccess.classList.remove('hidden');
+                modalSuccess.classList.add('flex');
             @endif
             @if(session('error'))
                 const modalError = document.getElementById('modal-error');
@@ -558,13 +302,239 @@
 
             // DATE PICKER & MAPS
             flatpickr("#waktu", { enableTime: true, dateFormat: "d-m-Y H:i", time_24hr: true, locale: "id" });
+
+            const LOCATIONIQ_KEY = 'pk.7a3a66a4b2e1082fa82fbcce11b0f5c9';
             var defaultLat = {{ optional($campaign)->latitude ?? -7.2819 }};
             var defaultLng = {{ optional($campaign)->longitude ?? 112.7953 }};
             var map = L.map('map').setView([defaultLat, defaultLng], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
             var marker = L.marker([defaultLat, defaultLng], {draggable:true}).addTo(map);
-            document.getElementById('latitude').value = defaultLat;
-            document.getElementById('longitude').value = defaultLng;
+
+            const alamatInput = document.getElementById('alamat-campaign');
+            const latInput = document.getElementById('latitude');
+            const lngInput = document.getElementById('longitude');
+            const suggestionBox = document.getElementById('suggestion-box');
+            const coordinatesInfo = document.getElementById('coordinates-info');
+
+            // Set nilai awal
+            latInput.value = defaultLat;
+            lngInput.value = defaultLng;
+            updateCoordinatesInfo(defaultLat, defaultLng);
+
+            // Fungsi untuk memperbarui informasi koordinat
+            function updateCoordinatesInfo(lat, lng) {
+                if (coordinatesInfo && !isNaN(lat) && !isNaN(lng)) {
+                    coordinatesInfo.textContent = `Koordinat: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                }
+            }
+
+            // Fungsi untuk mendapatkan alamat dari koordinat (reverse geocoding)
+            function getAddressFromCoordinates(lat, lng) {
+                // Validasi koordinat
+                if (isNaN(lat) || isNaN(lng)) {
+                    alamatInput.value = 'Koordinat tidak valid';
+                    alamatInput.style.color = '#999';
+                    return Promise.reject('Invalid coordinates');
+                }
+
+                // Tampilkan loading indicator
+                alamatInput.value = 'Mengambil alamat...';
+                alamatInput.style.color = '#666';
+
+                return fetch(`https://us1.locationiq.com/v1/reverse?key=${LOCATIONIQ_KEY}&lat=${lat}&lon=${lng}&format=json`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.display_name) {
+                            alamatInput.value = data.display_name;
+                            alamatInput.style.color = '#333';
+                            // Update teks lokasi di sebelah kiri
+                            const lokasiText = document.getElementById('lokasi-text');
+                            if (lokasiText) {
+                                lokasiText.textContent = data.display_name;
+                            }
+                        } else {
+                            alamatInput.value = 'Alamat tidak ditemukan';
+                            alamatInput.style.color = '#999';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error getting address:', error);
+                        alamatInput.value = 'Gagal mengambil alamat';
+                        alamatInput.style.color = '#999';
+                    });
+            }
+
+            // Event listener untuk klik pada peta
+            map.on('click', function(e) {
+                var latlng = e.latlng;
+
+                // Update marker ke posisi yang diklik
+                marker.setLatLng(latlng);
+
+                // Update input koordinat
+                latInput.value = latlng.lat;
+                lngInput.value = latlng.lng;
+
+                // Update informasi koordinat
+                updateCoordinatesInfo(latlng.lat, latlng.lng);
+
+                // Dapatkan alamat dari koordinat yang diklik
+                getAddressFromCoordinates(latlng.lat, latlng.lng);
+
+                // Hilangkan instruksi peta setelah digunakan
+                const mapInstruction = document.querySelector('.map-instruction');
+                if (mapInstruction) {
+                    mapInstruction.style.opacity = '0';
+                    setTimeout(() => {
+                        mapInstruction.style.display = 'none';
+                    }, 300);
+                }
+            });
+
+            // Reverse geocoding: marker digeser, update alamat
+            marker.on('moveend', function(e) {
+                var latlng = marker.getLatLng();
+                latInput.value = latlng.lat;
+                lngInput.value = latlng.lng;
+                updateCoordinatesInfo(latlng.lat, latlng.lng);
+                getAddressFromCoordinates(latlng.lat, latlng.lng);
+            });
+
+            // Geocoding: input alamat diubah, update marker & suggestion
+            alamatInput.addEventListener('input', function() {
+                var query = alamatInput.value;
+
+                if(query.length < 3) {
+                    suggestionBox.style.display = 'none';
+                    return;
+                }
+
+                // Tambahkan debounce untuk mengurangi request API
+                clearTimeout(alamatInput.searchTimeout);
+                alamatInput.searchTimeout = setTimeout(() => {
+                    fetch(`https://us1.locationiq.com/v1/autocomplete?key=${LOCATIONIQ_KEY}&q=${encodeURIComponent(query)}&limit=5`)
+                        .then(res => res.json())
+                        .then(data => {
+                            suggestionBox.innerHTML = '';
+                            if(Array.isArray(data) && data.length > 0) {
+                                data.forEach((item, index) => {
+                                    var div = document.createElement('div');
+                                    div.className = 'suggestion-item';
+                                    div.textContent = item.display_name;
+                                    div.style.cursor = 'pointer';
+                                    div.style.padding = '10px 16px';
+                                    div.style.borderBottom = '1px solid #f0f0f0';
+                                    div.style.transition = 'all 0.2s ease';
+                                    div.setAttribute('data-index', index);
+
+                                    // Tambahkan event listener langsung
+                                    div.addEventListener('click', function(e) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+
+                                        // Update input alamat
+                                        alamatInput.value = item.display_name;
+                                        alamatInput.style.color = '#333';
+
+                                        // Update koordinat
+                                        latInput.value = item.lat;
+                                        lngInput.value = item.lon;
+
+                                        // Update marker dan peta
+                                        marker.setLatLng([item.lat, item.lon]);
+                                        map.setView([item.lat, item.lon], 16);
+
+                                        // Update informasi koordinat
+                                        updateCoordinatesInfo(item.lat, item.lon);
+
+                                        // Sembunyikan suggestion box
+                                        suggestionBox.style.display = 'none';
+
+                                        // Update teks lokasi di sebelah kiri
+                                        const lokasiText = document.getElementById('lokasi-text');
+                                        if (lokasiText) {
+                                            lokasiText.textContent = item.display_name;
+                                        }
+                                    });
+
+                                    // Tambahkan hover effect
+                                    div.addEventListener('mouseenter', function() {
+                                        this.style.background = '#f8f8f8';
+                                        this.style.color = '#810000';
+                                        this.style.paddingLeft = '20px';
+                                    });
+
+                                    div.addEventListener('mouseleave', function() {
+                                        this.style.background = '';
+                                        this.style.color = '';
+                                        this.style.paddingLeft = '10px';
+                                    });
+
+                                    suggestionBox.appendChild(div);
+                                });
+                                suggestionBox.style.display = 'block';
+                            } else {
+                                suggestionBox.innerHTML = '<div class="suggestion-item" style="color: #999; padding: 10px 16px;">Tidak ada hasil ditemukan</div>';
+                                suggestionBox.style.display = 'block';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error getting suggestions:', error);
+                            suggestionBox.innerHTML = '<div class="suggestion-item" style="color: #999; padding: 10px 16px;">Gagal memuat saran lokasi</div>';
+                            suggestionBox.style.display = 'block';
+                        });
+                }, 300); // Delay 300ms
+            });
+
+            // Hide suggestion box on blur dengan delay yang lebih lama
+            alamatInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    // Cek apakah mouse masih di atas suggestion box
+                    const isMouseOverSuggestion = suggestionBox.matches(':hover');
+                    if (!isMouseOverSuggestion) {
+                        suggestionBox.style.display = 'none';
+                    }
+                }, 300);
+            });
+
+            // Tambahkan event listener untuk suggestion box
+            suggestionBox.addEventListener('mouseleave', function() {
+                setTimeout(() => {
+                    if (!alamatInput.matches(':focus')) {
+                        suggestionBox.style.display = 'none';
+                    }
+                }, 200);
+            });
+
+            // Tambahkan event listener untuk Enter pada input alamat
+            alamatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    // Jika ada suggestion yang aktif, pilih yang pertama
+                    const firstSuggestion = suggestionBox.querySelector('.suggestion-item');
+                    if (firstSuggestion && suggestionBox.style.display !== 'none') {
+                        firstSuggestion.click();
+                    }
+                }
+            });
+
+            // Validasi form sebelum submit
+            form.addEventListener('submit', function(e) {
+                const lat = parseFloat(latInput.value);
+                const lng = parseFloat(lngInput.value);
+
+                if (isNaN(lat) || isNaN(lng)) {
+                    e.preventDefault();
+                    alert('Koordinat lokasi tidak valid. Silakan pilih lokasi dari peta atau dropdown.');
+                    return false;
+                }
+
+                if (!alamatInput.value || alamatInput.value.trim() === '') {
+                    e.preventDefault();
+                    alert('Alamat lokasi harus diisi.');
+                    return false;
+                }
+            });
 
         });
     </script>
