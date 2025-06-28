@@ -162,7 +162,9 @@ document.querySelectorAll('.like-btn').forEach(btn => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ role: 'komunitas' })
+            body: JSON.stringify({ 
+                role: '{{ auth()->user()->jenis_akun_id == 2 ? "komunitas" : "volunteer" }}'
+            })
         })
         .then(res => res.json())
         .then(data => {

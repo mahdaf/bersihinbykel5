@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaign/{id}', [CampaignController::class, 'show']);
     Route::post('/campaign/{id}/komentar', [\App\Http\Controllers\KomentarController::class, 'store'])->name('komentar.store');
-    Route::post('/komentar/{id}/like', [KomentarLikeController::class, 'toggle'])->middleware('auth');
+    Route::post('/komentar/{id}/like', [\App\Http\Controllers\KomentarController::class, 'like'])->middleware('auth')->name('komentar.like');
     Route::get('/campaign/com/{id}', [\App\Http\Controllers\CampaignController::class, 'showCommunity'])->name('campaign.community.detail');
 });
 

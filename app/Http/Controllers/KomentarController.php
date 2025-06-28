@@ -36,4 +36,27 @@ class KomentarController extends Controller
             ]
         ]);
     }
+
+    public function like($id, Request $request)
+    {
+        $user = auth()->user();
+        $komentar = Komentar::findOrFail($id);
+
+        // Cek apakah user sudah like
+        $liked = $komentar->likes()->where('akun_id', $user->id)->exists();
+
+        if ($liked) {
+            // Unlike
+            $komentar->likes()->detach($user->id);
+        } else {
+            // Like
+            $komentar->likes()->attach($user->id);
+        }
+
+        return response()->json([
+            'success' => true,
+            'liked' => !$liked,
+            'count' => $komentar->likes()->count(),
+        ]);
+    }
 }

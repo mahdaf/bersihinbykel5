@@ -37,6 +37,6 @@ class Komentar extends Model
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'komentar_disukai', 'komentar_id', 'akun_id');
+        return $this->belongsToMany(\App\Models\User::class, 'komentar_disukai', 'komentar_id', 'akun_id');
     }
 }

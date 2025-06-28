@@ -145,7 +145,7 @@
                 {{ $k->akun?->namaPengguna ?? '-' }}
             </p>
             <p class="text-sm text-gray-700">{{ $k->komentar }}</p>
-            @if(auth()->check() && auth()->user()->jenis_akun_id == 1) {{-- Untuk volunteer --}}
+            @if(auth()->check() && in_array(auth()->user()->jenis_akun_id, [1,2]))
             <button
                 type="button"
                 class="like-btn mt-1 text-xs flex items-center gap-1"
@@ -320,12 +320,13 @@ document.querySelectorAll('.like-btn').forEach(btn => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ role: 'volunteer' }) // Ganti 'volunteer' jadi 'komunitas' di halaman komunitas
+            body: JSON.stringify({ 
+                role: '{{ auth()->user()->jenis_akun_id == 2 ? "komunitas" : "volunteer" }}'
+            })
         })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // Update UI
                 const svg = btn.querySelector('svg');
                 svg.setAttribute('fill', data.liked ? 'red' : 'none');
                 btn.setAttribute('data-liked', data.liked ? '1' : '0');
