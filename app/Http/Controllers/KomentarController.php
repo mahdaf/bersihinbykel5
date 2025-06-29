@@ -18,6 +18,8 @@ class KomentarController extends Controller
             'akun_id' => Auth::id(),
             'campaign_id' => $id,
             'komentar' => $request->komentar,
+            'waktu' => now(), // waktu komentar
+            'updated_at' => now(), // waktu update terakhir
         ]);
 
         // Ambil ulang komentar beserta relasi user
@@ -30,7 +32,7 @@ class KomentarController extends Controller
                 'akun_id' => $komentar->akun_id,
                 'campaign_id' => $komentar->campaign_id,
                 'komentar' => $komentar->komentar,
-                'created_at' => $komentar->created_at->diffForHumans(),
+                'updated_at' => $komentar->updated_at->diffForHumans(),
                 'user' => $komentar->akun->namaPengguna ?? '',
                 'avatar' => $komentar->akun->fotoProfil ?? '',
             ]

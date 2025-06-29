@@ -223,73 +223,106 @@
             @endif
             </div>
         </div>
-        <h3 class="mx-14 font-semibold text-lg mb-4 text-gray-700">Komentar</h3>
-
-        {{-- List Komentar --}}
-        <div id="commentsList">
-            @forelse($komentar as $k)
-                <div class="flex items-start mb-4">
-                    <img src="{{ filter_var($k->akun->fotoProfil, FILTER_VALIDATE_URL) ? $k->akun->fotoProfil : asset('storage/' . $k->akun->fotoProfil) }}"
-                         class="w-10 h-10 rounded-full mr-3" alt="Avatar">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold text-sm">{{ $k->akun?->namaPengguna ?? '-' }}</span>
-                            <span class="text-xs text-gray-400">• {{ $k->created_at->diffForHumans() }}</span>
-                        </div>
-                        <div class="text-sm text-gray-700 mb-1">{{ $k->komentar }}</div>
-                        <button
-                            type="button"
-                            class="like-btn mt-1 text-xs flex items-center gap-1"
-                            data-id="{{ $k->id }}"
-                            data-liked="{{ isset($k->likes) && $k->likes->contains(auth()->id()) ? '1' : '0' }}"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 fill="{{ isset($k->likes) && $k->likes->contains(auth()->id()) ? 'red' : 'none' }}"
-                                 viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
-                            </svg>
-                            <span class="like-count">{{ isset($k->likes) ? $k->likes->count() : 0 }}</span>
-                        </button>
-                    </div>
-                </div>
-            @empty
-                <div class="text-gray-400 text-sm">Belum ada komentar.</div>
-            @endforelse
+        <div class= "mx-14">
+            <h3 class="font-semibold text-lg mb-4 text-gray-700">Komentar</h3>
+            <x-list-komentar :komentar="$komentar" />
         </div>
 
-        <script>
-        function updateLikeBtn(btn, liked, count) {
-            const svg = btn.querySelector('svg');
-            svg.setAttribute('fill', liked ? 'red' : 'none');
-            btn.setAttribute('data-liked', liked ? '1' : '0');
-            btn.querySelector('.like-count').textContent = count;
-        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.like-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const komentarId = btn.getAttribute('data-id');
-                    fetch(`/komentar/${komentarId}/like`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            updateLikeBtn(btn, data.liked, data.count);
-                        } else {
-                            alert(data.message || 'Tidak bisa like komentar.');
-                        }
-                    });
-                });
+        <script>
+function updateLikeBtn(btn, liked, count) {
+    const svg = btn.querySelector('svg');
+    svg.setAttribute('fill', liked ? 'red' : 'none');
+    svg.setAttribute('stroke', liked ? 'red' : '#171717');
+    btn.setAttribute('data-liked', liked ? '1' : '0');
+    btn.querySelector('.like-count').textContent = count;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // AJAX untuk submit komentar
+    const form = document.getElementById('commentForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('commentInput');
+            const komentar = input.value.trim();
+            if (!komentar) return;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ komentar })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const list = document.getElementById('commentsList');
+                    const html = `
+                        <div class="flex items-start mb-4">
+                            <img src="${data.komentar.avatar ? data.komentar.avatar : '{{ asset('default-profile.png') }}'}" class="w-10 h-10 rounded-full mr-3" alt="Avatar">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-sm">${data.komentar.user}</span>
+                                    <span class="text-xs text-gray-400">• ${data.komentar.updated_at}</span>
+                                </div>
+                                <div class="text-sm text-gray-700 mb-1">${data.komentar.komentar}</div>
+                                <button
+                                    type="button"
+                                    class="like-btn mt-1 text-xs flex items-center gap-1"
+                                    data-id="${data.komentar.id}"
+                                    data-liked="0"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         class="w-5 h-5 transition-colors duration-200"
+                                         fill="none"
+                                         stroke="#171717"
+                                         stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                                    </svg>
+                                    <span class="like-count text-[#171717]-400">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    list.insertAdjacentHTML('afterbegin', html);
+                    input.value = '';
+                } else {
+                    alert('Gagal menambah komentar.');
+                }
             });
         });
-        </script>
+    }
+
+    // EVENT DELEGATION UNTUK LIKE
+    document.getElementById('commentsList').addEventListener('click', function(e) {
+        const btn = e.target.closest('.like-btn');
+        if (!btn) return;
+        const komentarId = btn.getAttribute('data-id');
+        fetch(`/komentar/${komentarId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                updateLikeBtn(btn, data.liked, data.count);
+            } else {
+                alert(data.message || 'Tidak bisa like komentar.');
+            }
+        });
+    });
+});
+</script>
     </div>
 </body>
 

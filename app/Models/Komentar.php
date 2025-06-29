@@ -12,11 +12,19 @@ class Komentar extends Model
     use HasFactory;
 
     protected $table = 'komentar';
+    public $timestamps = false;
 
     protected $fillable = [
         'akun_id',
         'campaign_id',
         'komentar',
+        'waktu',
+        'updated_at',
+    ];
+
+    protected $casts = [
+        'waktu' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function akun()
@@ -31,7 +39,8 @@ class Komentar extends Model
             $table->foreignId('akun_id')->constrained('akun');
             $table->foreignId('campaign_id')->constrained('campaign');
             $table->string('komentar', 280);
-            $table->timestamps();
+            $table->dateTime('waktu');
+            $table->dateTime('updated_at')->nullable();
         });
     }
 

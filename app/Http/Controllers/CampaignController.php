@@ -25,8 +25,9 @@ class CampaignController extends Controller
         // Ambil komentar beserta relasi akun dan likes
         $komentar = \App\Models\Komentar::with(['akun', 'likes'])
             ->where('campaign_id', $id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('waktu', 'desc')
             ->get();
+        return view('detailcam', compact('campaign', 'komentar'));
 
         // Cek role berdasarkan jenis_akun_id
         if ($user->jenis_akun_id == 1) {
