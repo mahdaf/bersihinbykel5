@@ -31,8 +31,13 @@ class ProfilController extends Controller
         $user = auth()->user();
         $request->validate([
             'namaPengguna' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:akun,email,' . $user->id,
-            'nomorTelepon' => 'required|string|max:20',
+            'email' => ['required', 'email', 'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/'],
+            'nomorTelepon' => [
+                'required',
+                'regex:/^08[0-9]+$/',
+                'min:11',
+                'max:13'
+            ],
             'fotoProfil' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
         ]);
 

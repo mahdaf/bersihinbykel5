@@ -34,7 +34,7 @@
                 </div>
             @else
                 <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200">
-                    <img src="{{ $user->fotoProfil }}" alt="Profile" class="w-full h-full object-cover" />
+                    <img src="{{ $user->fotoProfil ? asset('storage/' . $user->fotoProfil) . '?v=' . time() : asset('img/default-profile.png') }}" alt="Profile" class="w-full h-full object-cover" />
                 </div>
                 <div class="flex flex-col items-start text-left">
                     <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ $user->namaPengguna }}</h1>
@@ -175,7 +175,7 @@
                     @csrf
                     @method('POST')
                     <div class="flex flex-col items-center gap-2">
-                        <img id="preview-foto" src="{{ $user->fotoProfil }}" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover border mb-2">
+                        <img id="preview-foto" src="{{ $user->fotoProfil ? asset('storage/' . $user->fotoProfil) . '?v=' . time() : asset('img/default-profile.png') }}" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover border mb-2">
                         <input type="file" name="fotoProfil" accept="image/*" class="hidden" id="fotoProfilInput" onchange="previewFoto(event)">
                         <button type="button" onclick="document.getElementById('fotoProfilInput').click()" class="text-sm text-[#810000] underline">Ganti Foto</button>
                     </div>
@@ -183,13 +183,26 @@
                         <label class="block text-sm font-medium mb-1">Nama</label>
                         <input type="text" name="namaPengguna" value="{{ $user->namaPengguna }}" class="w-full rounded-lg border px-3 py-2" required>
                     </div>
+                    <!-- Email -->
                     <div>
                         <label class="block text-sm font-medium mb-1">Email</label>
-                        <input type="email" name="email" value="{{ $user->email }}" class="w-full rounded-lg border px-3 py-2" required>
+                        <input type="email" name="email" value="{{ $user->email }}"
+                            class="w-full rounded-lg border px-3 py-2"
+                            required
+                            pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                            title="Email harus diakhiri dengan @gmail.com">
                     </div>
+
+                    <!-- Nomor Telepon -->
                     <div>
                         <label class="block text-sm font-medium mb-1">Nomor Telepon</label>
-                        <input type="text" name="nomorTelepon" value="{{ $user->nomorTelepon }}" class="w-full rounded-lg border px-3 py-2" required>
+                        <input type="text" name="nomorTelepon" value="{{ $user->nomorTelepon }}"
+                            class="w-full rounded-lg border px-3 py-2"
+                            required
+                            pattern="^08[0-9]{9,11}$"
+                            minlength="11"
+                            maxlength="13"
+                            title="Nomor telepon harus diawali 08 dan 11-13 digit angka">
                     </div>
                     <button type="submit" class="w-full bg-[#810000] text-white rounded-lg py-2 font-semibold mt-2">Simpan Perubahan</button>
                 </form>
