@@ -66,7 +66,6 @@ return new class extends Migration {
             $table->foreignId('komentar_id')->constrained('komentar');
             $table->foreignId('akun_id')->constrained('akun');
             $table->unique(['komentar_id', 'akun_id']);
-            $table->unique(['komentar_id', 'akun_id']);
         });
 
         Schema::create('partisipan_campaign', function (Blueprint $table) {
