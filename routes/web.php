@@ -94,6 +94,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/campaign/{id}/komentar', [\App\Http\Controllers\KomentarController::class, 'store'])->name('komentar.store');
     Route::post('/komentar/{id}/like', [\App\Http\Controllers\KomentarController::class, 'like'])->middleware('auth')->name('komentar.like');
     Route::get('/campaign/com/{id}', [\App\Http\Controllers\CampaignController::class, 'showCommunity'])->name('campaign.community.detail');
+    Route::post('/campaign/{id}/komentar', [\App\Http\Controllers\KomentarController::class, 'store'])->name('komentar.store');
+    Route::post('/komentar/{id}/like', [\App\Http\Controllers\KomentarController::class, 'like'])->middleware('auth')->name('komentar.like');
+    Route::get('/campaign/com/{id}', [\App\Http\Controllers\CampaignController::class, 'showCommunity'])->name('campaign.community.detail');
 });
 Route::get('/profilvolunteer', function () {
         return view('profilvolunteer');

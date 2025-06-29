@@ -315,9 +315,8 @@
     </div>
                     @endforeach
                     </div>
-
+                    
                     <!-- Form Komentar Baru -->
-                    @if(auth()->check())
                     <form id="commentForm" class="flex items-start gap-2 mt-4">
                         <img src="{{ $user->fotoProfil }}" class="w-10 h-10 rounded-full mt-1">
                         <div class="flex-1">

@@ -287,7 +287,7 @@
                     EDIT CAMPAIGN
                 </a>
 
-                <div class="mt-8 border-t pt-4">
+    <div class="mt-8 border-t pt-4">
     <div class="max-w-2xl mx-auto mt-8">
         {{-- Komentar --}}
         <div id="commentsList">
