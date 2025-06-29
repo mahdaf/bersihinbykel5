@@ -27,7 +27,7 @@
 
             {{-- Tombol Aksi --}}
             <div class="space-y-3 w-full px-6">
-                <a href="/" class="block border border-red-800 text-red-800 py-2 rounded-full font-semibold hover:bg-red-50 transition">Kembali ke beranda</a>
+                <a href="/dashboard" class="block border border-red-800 text-red-800 py-2 rounded-full font-semibold hover:bg-red-50 transition">Kembali ke beranda</a>
             </div>
         </div>
     </div>

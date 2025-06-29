@@ -8,6 +8,7 @@ class GambarCampaign extends Model
 {
     protected $table = 'gambar_campaign';
     public $timestamps = false;
+    protected $fillable = ['campaign_id', 'gambar', 'isCover'];
 
     public function campaign()
     {

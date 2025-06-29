@@ -29,16 +29,19 @@ return new class extends Migration {
 
         Schema::create('campaign', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('akun_id')->constrained('akun');
-            $table->string('nama', 100);
-            $table->dateTime('waktu');
-            $table->dateTime('waktu_diperbarui');
-            $table->text('deskripsi');
-            $table->string('lokasi', 100);
-            $table->string('kontak', 100);
-            $table->integer('kuota_partisipan');
+            $table->foreignId('akun_id')
+                ->nullable() // Boleh null
+                ->constrained('akun')
+                ->nullOnDelete(); // Jika akun dihapus, akun_id jadi null
+            $table->string('nama', 100)->nullable();
+            $table->dateTime('waktu')->nullable();
+            $table->dateTime('waktu_diperbarui')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->text('lokasi')->nullable();
+            $table->string('kontak', 100)->nullable();
+            $table->integer('kuota_partisipan')->nullable();
         });
-
+        
         Schema::create('campaign_ditandai', function (Blueprint $table) {
             $table->foreignId('akun_id')->constrained('akun');
             $table->foreignId('campaign_id')->constrained('campaign');
@@ -56,7 +59,7 @@ return new class extends Migration {
             $table->foreignId('akun_id')->constrained('akun');
             $table->foreignId('campaign_id')->constrained('campaign');
             $table->string('komentar', 280);
-            $table->timestamps();
+            $table->dateTime('waktu');
         });
 
         Schema::create('komentar_disukai', function (Blueprint $table) {
@@ -72,7 +75,7 @@ return new class extends Migration {
             $table->string('nama', 100)->nullable();
             $table->string('email', 100)->nullable();
             $table->string('nomorTelepon', 100)->nullable();
-            $table->string('ktp', 100)->nullable();
+            $table->text('motivasi')->nullable();
         });
 
         Schema::create('session', function (Blueprint $table) {

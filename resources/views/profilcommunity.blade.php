@@ -9,7 +9,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="mb-20 bg-gray-50 min-h-screen">
+<body class="mb-20 min-h-screen" style="background-color: #FDFEFE;">
     @include('components.navbar')
 
     {{-- Profile Section --}}
@@ -56,13 +56,13 @@
         {{-- Tabs + Content --}}
         <div x-data="{ tab: 'all' }">
             {{-- Tabs --}}
-            <div class="flex gap-16 mb-8 justify-center">
+            <div class="flex gap-16 mb-8 justify-center relative">
                 <button @click="tab = 'all'"
                     class="relative pb-3 font-medium text-gray-500 hover:text-gray-900 transition-colors"
                     :class="tab === 'all' ? 'text-gray-900' : ''">
                     All
                     <div x-show="tab === 'all'" x-transition
-                        class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-24"
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-16"
                         style="background-color: #CE1212; border-radius: 9999px;">
                     </div>
                 </button>
@@ -86,18 +86,19 @@
                         style="background-color: #CE1212; border-radius: 9999px;">
                     </div>
                 </button>
+                <div class="absolute left-0 w-full h-px bg-[#e5e7eb]" style="bottom: 0; z-index: 0;"></div>
             </div>
 
-            {{-- All Campaigns --}}
+            {{-- All --}}
             <div x-show="tab === 'all'" x-transition>
                 <div class="space-y-4">
                     @guest
                         <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
                     @else
-                        @forelse ($campaigns as $campaign)
+                        @forelse ($campaignsAll as $campaign)
                             @include('components.campaignprofile-item', ['campaign' => $campaign])
                         @empty
-                            <div class="text-center text-gray-400 py-10">Belum ada campaign yang Anda buat.</div>
+                            <div class="text-center text-gray-400 py-10">Tidak ada campaign.</div>
                         @endforelse
                     @endguest
                 </div>
@@ -109,21 +110,11 @@
                     @guest
                         <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
                     @else
-                        @php $ada = false; @endphp
-                        @foreach ($campaigns as $campaign)
-                            @php
-                                $now = now();
-                                $waktuDiperbarui = \Carbon\Carbon::parse($campaign->waktu_diperbarui);
-                                $waktu = \Carbon\Carbon::parse($campaign->waktu);
-                            @endphp
-                            @if ($now->gte($waktuDiperbarui->copy()->addSeconds(60)) && $now->lt($waktu))
-                                @php $ada = true; @endphp
-                                @include('components.campaignprofile-item', ['campaign' => $campaign])
-                            @endif
-                        @endforeach
-                        @unless($ada)
+                        @forelse ($campaignsBerlangsung as $campaign)
+                            @include('components.campaignprofile-item', ['campaign' => $campaign])
+                        @empty
                             <div class="text-center text-gray-400 py-10">Tidak ada campaign yang sedang berlangsung.</div>
-                        @endunless
+                        @endforelse
                     @endguest
                 </div>
             </div>
@@ -134,20 +125,11 @@
                     @guest
                         <div class="text-center text-gray-400 py-10">Silakan login untuk melihat campaign Anda.</div>
                     @else
-                        @php $ada = false; @endphp
-                        @foreach ($campaigns as $campaign)
-                            @php
-                                $now = now();
-                                $waktu = \Carbon\Carbon::parse($campaign->waktu);
-                            @endphp
-                            @if ($now->gte($waktu))
-                                @php $ada = true; @endphp
-                                @include('components.campaignprofile-item', ['campaign' => $campaign])
-                            @endif
-                        @endforeach
-                        @unless($ada)
+                        @forelse ($campaignsSelesai as $campaign)
+                            @include('components.campaignprofile-item', ['campaign' => $campaign])
+                        @empty
                             <div class="text-center text-gray-400 py-10">Tidak ada campaign yang sudah selesai.</div>
-                        @endunless
+                        @endforelse
                     @endguest
                 </div>
             </div>
