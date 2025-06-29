@@ -16,16 +16,26 @@ class CampaignController extends Controller
         $user = auth()->user();
 
         // Ambil campaign beserta gambar
-        $campaign = \App\Models\Campaign::with('gambar_campaign')->findOrFail($id);
+        $campaign = \App\Models\Campaign::with([
+            'akun',
+            'gambar_campaign',
+            'partisipanCampaigns.akun'
+        ])->findOrFail($id);
+
+        // Ambil komentar beserta relasi akun dan likes
+        $komentar = \App\Models\Komentar::with(['akun', 'likes'])
+            ->where('campaign_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         // Cek role berdasarkan jenis_akun_id
         if ($user->jenis_akun_id == 1) {
-            return view('detailcam', compact('campaign'));
+            return view('detailcam', compact('campaign', 'komentar'));
         } elseif ($user->jenis_akun_id == 2) {
             if ($campaign->akun_id == $user->id) {
-                return view('detailcommunity', compact('campaign'));
+                return view('detailcommunity', compact('campaign', 'komentar'));
             } else {
-                return view('detailcam', compact('campaign'));
+                return view('detailcam', compact('campaign', 'komentar'));
             }
         } else {
             abort(403, 'Role tidak dikenali');
