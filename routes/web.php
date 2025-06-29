@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\PartisipanCampaignController;
 use App\Models\Campaign;
+use App\Http\Controllers\KomentarLikeController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -89,6 +90,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/campaign/{id}/bookmark', [CampaignController::class, 'unbookmark'])->name('campaign.unbookmark');
     Route::delete('campaign/gambar/hapus/{id}', [CampaignController::class, 'hapusGambar']);
     Route::post('/profil/update', [\App\Http\Controllers\ProfilController::class, 'update'])->name('profil.update');
+    Route::post('/campaign/{id}/komentar', [\App\Http\Controllers\KomentarController::class, 'store'])->name('komentar.store');
+    Route::post('/komentar/{id}/like', [\App\Http\Controllers\KomentarController::class, 'like'])->middleware('auth')->name('komentar.like');
+    Route::get('/campaign/com/{id}', [\App\Http\Controllers\CampaignController::class, 'showCommunity'])->name('campaign.community.detail');
 });
 Route::get('/profilvolunteer', function () {
         return view('profilvolunteer');
