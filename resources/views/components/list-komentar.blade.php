@@ -1,5 +1,9 @@
 {{-- List Komentar --}}
 <div id="commentsList">
+    @php
+        // Kirim $campaign dari blade utama ke komponen ini (pastikan dikirim!)
+        $isOwner = isset($campaign) && auth()->id() === $campaign->akun_id;
+    @endphp
     @forelse($komentar as $k)
         <div class="flex items-start mb-4">
             <img src="{{ filter_var($k->akun->fotoProfil, FILTER_VALIDATE_URL) ? $k->akun->fotoProfil : asset('storage/' . $k->akun->fotoProfil) }}"
@@ -10,7 +14,7 @@
                         <span class="font-semibold text-sm">{{ $k->akun?->namaPengguna ?? '-' }}</span>
                         <span class="text-xs text-gray-400 waktu-komentar">• {{ $k->updated_at->diffForHumans() }}@if($k->updated_at && $k->updated_at->ne($k->waktu)) <span class=" text-xs text-gray-400">(Edited)</span>@endif</span>
                     </div>
-                    @if(auth()->id() === $k->akun_id)
+                    @if($isOwner || auth()->id() === $k->akun_id)
                         <div class="relative">
                             <button
                                 type="button"
@@ -29,27 +33,44 @@
                                 class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow z-10 menu-popup"
                                 id="menu-popup-{{ $k->id }}"
                             >
-                                <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 edit-comment-btn" data-id="{{ $k->id }}">
-                                    <!-- Ikon pensil sama seperti detailcommunity -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                         viewBox="0 0 24 24" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-                                        <path d="M13.5 6.5l4 4" />
-                                    </svg>
-                                    Edit Komentar
-                                </button>
-                                <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 text-red-600 delete-comment-btn" data-id="{{ $k->id }}">
-                                    <!-- Ikon tong sampah sama seperti detailcommunity -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                         viewBox="0 0 24 24" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 7l16 0" />
-                                        <path d="M10 11l0 6" />
-                                        <path d="M14 11l0 6" />
-                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                    </svg>
-                                    Hapus Komentar
-                                </button>
+                                @if($isOwner && auth()->id() !== $k->akun_id)
+                                    {{-- Pemilik campaign, tapi bukan komentarnya sendiri: hanya hapus --}}
+                                    <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 text-red-600 delete-comment-btn" data-id="{{ $k->id }}">
+                                        <!-- Ikon tong sampah -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                             viewBox="0 0 24 24" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 7l16 0" />
+                                            <path d="M10 11l0 6" />
+                                            <path d="M14 11l0 6" />
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                        Hapus Komentar
+                                    </button>
+                                @elseif(auth()->id() === $k->akun_id)
+                                    {{-- Komentar milik sendiri: edit & hapus --}}
+                                    <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 edit-comment-btn" data-id="{{ $k->id }}">
+                                        <!-- Ikon pensil -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                             viewBox="0 0 24 24" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                            <path d="M13.5 6.5l4 4" />
+                                        </svg>
+                                        Edit Komentar
+                                    </button>
+                                    <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 text-red-600 delete-comment-btn" data-id="{{ $k->id }}">
+                                        <!-- Ikon tong sampah -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                             viewBox="0 0 24 24" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 7l16 0" />
+                                            <path d="M10 11l0 6" />
+                                            <path d="M14 11l0 6" />
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                        Hapus Komentar
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -78,7 +99,6 @@
             </div>
         </div>
     @empty
-        <div class="text-gray-400 text-sm">Belum ada komentar.</div>
     @endforelse
 </div>
 

@@ -92,8 +92,14 @@ class KomentarController extends Controller
     {
         $komentar = \App\Models\Komentar::findOrFail($id);
 
-        // Pastikan hanya pemilik komentar yang bisa hapus
-        if ($komentar->akun_id !== auth()->id()) {
+        // Ambil campaign terkait komentar
+        $campaign = \App\Models\Campaign::find($komentar->campaign_id);
+
+        // Boleh hapus jika: pemilik komentar ATAU pemilik campaign
+        if (
+            $komentar->akun_id !== auth()->id() &&
+            (!$campaign || $campaign->akun_id !== auth()->id())
+        ) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 

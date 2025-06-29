@@ -158,6 +158,8 @@
                     @php
                         $user = auth()->user();
                         $sudahTerdaftar = false;
+                        $jumlahPartisipan = $campaign->partisipanCampaigns->count();
+                        $kuota = $campaign->kuota_partisipan ?? 0;
                         if ($user && $user->jenis_akun_id == 1) {
                             $sudahTerdaftar = \DB::table('partisipan_campaign')
                                 ->where('akun_id', $user->id)
@@ -173,6 +175,13 @@
                                 disabled
                             >
                                 TERDAFTAR
+                            </button>
+                        @elseif($jumlahPartisipan >= $kuota && $kuota > 0)
+                            <button
+                                class="mt-6 inline-block px-6 py-3 bg-gray-400 text-white rounded-3xl shadow cursor-not-allowed"
+                                disabled
+                            >
+                                CAMPAIGN PENUH
                             </button>
                         @else
                             <a
@@ -467,7 +476,5 @@ document.addEventListener('DOMContentLoaded', function() {
     attachCommentEvents();
 });
 </script>
-    </div>
 </body>
-
 </html>
