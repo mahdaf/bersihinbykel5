@@ -86,6 +86,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/campaign/{id}/komentar', [KomentarController::class, 'store'])->name('komentar.store');
     Route::post('/komentar/{id}/like', [KomentarController::class, 'like'])->name('komentar.like');
+    Route::patch('/komentar/{id}', [KomentarController::class, 'update'])->name('komentar.update');
+    Route::delete('/komentar/{id}', [\App\Http\Controllers\KomentarController::class, 'destroy'])->name('komentar.destroy');
 
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
