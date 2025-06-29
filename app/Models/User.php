@@ -69,4 +69,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(AkunKomunitas::class, 'akun_id');
     }
+
+    /**
+     * Get the comments that the user likes.
+     */
+    public function likes()
+    {
+        return $this->belongsToMany(\App\Models\Komentar::class, 'komentar_disukai', 'akun_id', 'komentar_id');
+    }
 }

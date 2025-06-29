@@ -289,12 +289,37 @@
 
                 <div class="mt-8 border-t pt-4">
                     <div id="commentsList">
+                    @foreach($komentar as $k)
+                        <div class="flex items-center mb-2 mt-2">
+        <img src="{{ $k->akun->fotoProfil }}" class="w-10 h-10 rounded-full mr-3">
+        <div>
+            <p class="font-semibold text-sm">
+                {{ $k->akun?->namaPengguna ?? '-' }}
+            </p>
+            <p class="text-sm text-gray-700">{{ $k->komentar }}</p>
+            @if(auth()->check() && in_array(auth()->user()->jenis_akun_id, [1,2]))
+            <button
+                type="button"
+                class="like-btn mt-1 text-xs flex items-center gap-1"
+                data-id="{{ $k->id }}"
+                data-liked="{{ $k->likes->contains(auth()->id()) ? '1' : '0' }}"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $k->likes->contains(auth()->id()) ? 'red' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+            </svg>
+            <span class="like-count">{{ $k->likes->count() }}</span>
+            </button>
+            @endif
+        </div>
+    </div>
+                    @endforeach
                     </div>
 
                     <!-- Form Komentar Baru -->
                     @if(auth()->check())
                     <form id="commentForm" class="flex items-start gap-2 mt-4">
-                        <img src="{{ $user->fotoProfil ? asset('storage/' . $user->fotoProfil) : asset('img/default-profile.png') }}" class="w-10 h-10 rounded-full mt-1" alt="Foto Profil">
+                        <img src="{{ $user->fotoProfil }}" class="w-10 h-10 rounded-full mt-1">
                         <div class="flex-1">
                             <input
                                 id="commentInput"
@@ -309,26 +334,163 @@
                             Kirim
                         </button>
                     </form>
-                    @endif
-
                     <script>
-                    document.getElementById('commentForm').addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        const input = document.getElementById('commentInput');
-                        const text = input.value.trim();
-                        if (!text) return;
+document.getElementById('commentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text) return;
 
-                        fetch('{{ route('komentar.store', $campaign->id) }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ komentar: text })
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                input.value = '';
-                                location.reload();
-                           
+    fetch('{{ route('komentar.store', $campaign->id) }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ komentar: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            input.value = '';
+            location.reload(); // Tambahkan baris ini
+        } else {
+            // Tampilkan pesan error jika perlu
+        }
+    });
+});
+</script>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome CDN buat icon kalender & jam -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+    function toggleModal() {
+        const modal = document.getElementById("popupModal");
+        modal.classList.toggle("hidden");
+    }
+
+    function timeAgo(date) {
+        const now = new Date();
+        const seconds = Math.floor((now - date) / 1000);
+        if (seconds < 60) return "baru saja";
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes} menit`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} jam`;
+        const days = Math.floor(hours / 24);
+        return `${days} hari`;
+    }
+
+
+
+    function renderComments() {
+        const list = document.getElementById('commentsList');
+        let html = "";
+        comments.forEach((c, i) => {
+            html += `
+            <div class="flex items-center mb-2 mt-2">
+                <img src="${c.avatar}" class="w-10 h-10 rounded-full mr-3">
+                <div>
+                    <p class="font-semibold text-sm">${c.user} <span class="text-xs text-gray-500">• <span class="comment-time" data-time="${c.time}">${timeAgo(new Date(c.time))}</span></span></p>
+                    <p class="text-sm text-gray-700">${c.text}</p>
+                    <button type="button" class="like-btn mt-1 text-xs flex items-center gap-1" data-index="${i}">
+                        <span class="heart-icon ${c.liked ? 'text-red-600' : 'text-gray-400'} transition-colors">&#10084;</span>
+                        <span class="like-count">${c.likes}</span>
+                    </button>
+                </div>
+            </div>
+            `;
+        });
+        list.innerHTML = html;
+
+        // Event listener untuk like
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            btn.onclick = function() {
+                const idx = +btn.getAttribute('data-index');
+                if (!comments[idx].liked) {
+                    comments[idx].likes += 1;
+                    comments[idx].liked = true;
+                } else {
+                    comments[idx].likes -= 1;
+                    comments[idx].liked = false;
+                }
+                renderComments();
+            }
+        });
+    }
+
+    // Submit handler untuk form komentar
+    document.getElementById('commentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('commentInput');
+        const text = input.value.trim();
+        if (!text) return;
+        comments.unshift({
+            user: "kamu",
+            avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+            text,
+            time: new Date().toISOString(),
+            likes: 0,
+            liked: false
+        });
+        renderComments();
+        input.value = '';
+    });
+
+    renderComments();
+
+    // Update waktu setiap 30 detik
+    setInterval(() => {
+        document.querySelectorAll('.comment-time').forEach(span => {
+            const t = span.getAttribute('data-time');
+            span.textContent = timeAgo(new Date(t));
+        });
+    }, 30000);
+
+    var swiper = new Swiper('.mySwiper', {
+        loop: false,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            dynamicBullets: false
+        },
+        watchOverflow: false,
+    });
+</script>
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const komentarId = btn.getAttribute('data-id');
+        fetch(`/komentar/${komentarId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                role: '{{ auth()->user()->jenis_akun_id == 2 ? "komunitas" : "volunteer" }}'
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const svg = btn.querySelector('svg');
+                svg.setAttribute('fill', data.liked ? 'red' : 'none');
+                btn.setAttribute('data-liked', data.liked ? '1' : '0');
+                btn.querySelector('.like-count').textContent = data.count;
+            } else {
+                alert(data.message || 'Tidak bisa like komentar.');
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
