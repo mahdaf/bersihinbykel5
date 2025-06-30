@@ -4,13 +4,6 @@
 
 @section('content')
 
-<!-- @php
-$coverImage = \DB::table('gambar_campaign')
-->where('campaign_id', $campaign->id)
-->where('isCover', 1)
-->first();
-@endphp -->
-
 <div class="min-h-screen flex items-center justify-center bg-[#DDEDEE] p-10">
     <div class="bg-white rounded-xl shadow max-w-5xl w-full flex flex-col md:flex-row overflow-hidden">
         <!-- Gambar di kiri -->
@@ -22,11 +15,8 @@ $coverImage = \DB::table('gambar_campaign')
 
         <!-- Konten di kanan -->
         <div class="flex-1 py-8 px-20 flex flex-col justify-center">
-            <h1 class="text-4xl font-bold text-center text-[#224344]">Pendaftaran Berhasil!</h2>
+            <h1 class="text-4xl font-bold text-center text-[#224344]">Campaign Penuh!</h2>
                 <img class="w-full max-w-sm mx-auto object-contain" src="/welcome.png" alt="">
-                <button type="submit" class="my-2 w-full bg-[#810000] text-white py-2 rounded-full transition cursor-pointer">
-                    Buka Grup
-                </button>
                 <button type="submit" class="my-2 w-full bg-white text-[#810000] border-2 border-[#810000] py-2 rounded-full transition cursor-pointer">
                     Kembali ke beranda
                 </button>
