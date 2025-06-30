@@ -13,7 +13,7 @@
     @include('components.navbar')
 
     {{-- Profile Section --}}
-    <main class="max-w-4xl mx-auto px-6 py-12">
+    <main class="max-w-4xl mx-auto px-6 py-12" x-data="{ showEdit: false, tab: 'campaign' }">
         <div class="flex items-center gap-6 mb-12 justify-center">
             @guest
                 <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
@@ -34,13 +34,13 @@
                 </div>
             @else
                 <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200">
-                    <img src="{{ $user->fotoProfil }}" alt="Profile" class="w-full h-full object-cover" />
+                    <img src="{{ filter_var($user->fotoProfil, FILTER_VALIDATE_URL) ? $user->fotoProfil : asset('storage/' . $user->fotoProfil) }}" alt="Profile" class="w-full h-full object-cover" />
                 </div>
                 <div class="flex flex-col items-start text-left">
                     <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ $user->namaPengguna }}</h1>
                     <p class="mb-1">{{ $user->email }}</p>
                     <p class="mb-4">{{ $user->nomorTelepon }}</p>
-                    <a href="#"
+                    <a href="#" @click.prevent="showEdit = true"
                         class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transform transition-transform duration-200 hover:scale-105"
                         style="background-color: #DDEDEE; border: 1px solid #DDEDEE; color: #333;">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
@@ -48,13 +48,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15.232 5.232l3.536 3.536M16.5 9.75l-9.75 9.75H5.25v-1.5l9.75-9.75z" />
                         </svg>
-                        edit profile
+                        Edit Profile
                     </a>
                 </div>
             @endguest
         </div>
         {{-- Tabs + Content --}}
-        <div x-data="{ tab: 'campaign' }">
+        <div>
             {{-- Tabs --}}
             <div class="flex gap-16 mb-2 justify-center relative">
                 <button @click="tab = 'campaign'"
@@ -162,6 +162,75 @@
                 </div>
             </div>
         </div>
+
+        {{-- Modal Edit Profil --}}
+        <div x-show="showEdit" x-cloak
+            class="fixed inset-0 z-50 flex items-center justify-center"
+            style="background: rgba(0,0,0,0.08);">
+            <div class="bg-white rounded-2xl p-8 w-full max-w-md relative">
+                <button @click="showEdit = false" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+                <form method="POST" action="{{ route('profil.update') }}" enctype="multipart/form-data" class="flex flex-col gap-4">
+                    @csrf
+                    <div class="flex flex-col items-center gap-2">
+                        <img id="preview-foto" src="{{ filter_var($user->fotoProfil, FILTER_VALIDATE_URL) ? $user->fotoProfil : asset('storage/' . $user->fotoProfil) }}" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover border mb-2">
+                        <input type="file" name="fotoProfil" accept="image/*" class="hidden" id="fotoProfilInput" onchange="previewFoto(event)">
+                        <button type="button" onclick="document.getElementById('fotoProfilInput').click()" class="text-sm text-[#810000] underline">Ganti Foto</button>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nama</label>
+                        <input type="text" name="namaPengguna" value="{{ $user->namaPengguna }}" class="w-full rounded-lg border px-3 py-2" required maxlength="100">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" name="email" value="{{ $user->email }}"
+                            class="w-full rounded-lg border px-3 py-2"
+                            required
+                            pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                            title="Email harus diakhiri dengan @gmail.com">
+                        <p id="email-error" class="text-red-600 text-xs mt-1" style="display:none;"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nomor Telepon</label>
+                        <input type="text" name="nomorTelepon" value="{{ $user->nomorTelepon }}"
+                            class="w-full rounded-lg border px-3 py-2"
+                            required
+                            pattern="^08[0-9]{9,11}$"
+                            minlength="11"
+                            maxlength="13"
+                            title="Nomor telepon harus diawali 08 dan 11-13 digit angka">
+                        <p id="telepon-error" class="text-red-600 text-xs mt-1" style="display:none;"></p>
+                    </div>
+                    <button type="submit" class="w-full bg-[#810000] text-white rounded-lg py-2 font-semibold mt-2">Simpan Perubahan</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            function previewFoto(event) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-foto').src = e.target.result;
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+
+            document.querySelector('form[action="{{ route('profil.update') }}"]').addEventListener('submit', function(e) {
+                const emailInput = this.querySelector('input[name="email"]');
+                const errorMsg = document.getElementById('email-error');
+                const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+                if (!regex.test(emailInput.value)) {
+                    errorMsg.textContent = 'Email harus diakhiri dengan @gmail.com';
+                    errorMsg.style.display = 'block';
+                    emailInput.classList.add('border-red-500');
+                    emailInput.focus();
+                    e.preventDefault();
+                    return false;
+                } else {
+                    errorMsg.textContent = '';
+                    errorMsg.style.display = 'none';
+                    emailInput.classList.remove('border-red-500');
+                }
+            });
+        </script>
     </main>
 </body>
 

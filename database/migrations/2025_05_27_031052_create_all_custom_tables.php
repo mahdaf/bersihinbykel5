@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->text('fotoProfil');
             $table->string('nomorTelepon', 100);
             $table->foreignId('jenis_akun_id')->constrained('jenis_akun');
+            $table->timestamps();
         });
 
         Schema::create('akun_komunitas', function (Blueprint $table) {

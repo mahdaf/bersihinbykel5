@@ -94,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/campaign/{id}/bookmark', [CampaignController::class, 'bookmark'])->name('campaign.bookmark');
     Route::delete('/campaign/{id}/bookmark', [CampaignController::class, 'unbookmark'])->name('campaign.unbookmark');
     Route::delete('campaign/gambar/hapus/{id}', [CampaignController::class, 'hapusGambar']);
+    Route::post('/profil/update', [\App\Http\Controllers\ProfilController::class, 'update'])->name('profil.update');
 });
 
 // Handle 404 dan 403 error
