@@ -9,4 +9,7 @@ class AkunKomunitas extends Model
     protected $table = 'akun_komunitas';
     public $timestamps = false;
     protected $fillable = ['akun_id', 'portofolio'];
+
+    protected $primaryKey = 'akun_id';
+    public $incrementing = false;
 }

@@ -13,7 +13,21 @@
     @include('components.navbar')
 
     {{-- Profile Section --}}
-    <main class="max-w-4xl mx-auto px-6 py-12" x-data="{ showEdit: false, tab: 'campaign' }">
+    <main class="max-w-4xl mx-auto px-6 py-12" x-data="{ showEdit: false, tab: 'all' }">
+        @if(session('success'))
+            <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-4" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if($errors->any())
+            <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-4" role="alert">
+                <ul class="list-disc list-inside">
+                    @foreach($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="flex items-center gap-6 mb-12 justify-center">
             @guest
                 <div class="w-30 h-30 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">

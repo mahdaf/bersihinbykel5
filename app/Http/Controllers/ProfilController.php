@@ -39,6 +39,7 @@ class ProfilController extends Controller
             ],
             'nomorTelepon' => 'required|string|max:20',
             'fotoProfil' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
+            'portofolio' => 'nullable|string|max:1000',
         ]);
 
         // Update foto profil jika ada
@@ -51,7 +52,16 @@ class ProfilController extends Controller
         $user->namaPengguna = $request->namaPengguna;
         $user->email = $request->email;
         $user->nomorTelepon = $request->nomorTelepon;
+        $user->updated_at = now();
         $user->save();
+
+        // Update portofolio komunitas jika user komunitas
+        if ($user->jenis_akun_id == 2 && $request->has('portofolio')) {
+            \App\Models\AkunKomunitas::updateOrCreate(
+                ['akun_id' => $user->id],
+                ['portofolio' => $request->portofolio]
+            );
+        }
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }

@@ -32,6 +32,7 @@ class RegisterController extends Controller
                 'fotoProfil'    => '',
                 'nomorTelepon'  => '',
                 'jenis_akun_id' => $jenisAkunId,
+                'created_at'    => now(),
             ]);
 
             if ($request->role === 'komunitas') {

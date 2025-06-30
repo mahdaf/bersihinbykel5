@@ -51,6 +51,7 @@ class ForgotPasswordController extends Controller
 
         \DB::table('akun')->where('email', $request->email)->update([
             'password' => Hash::make($request->password),
+            'updated_at' => now(),
         ]);
 
         // Hapus session reset_email
