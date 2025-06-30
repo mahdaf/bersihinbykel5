@@ -53,8 +53,6 @@ class CampaignController extends Controller
             'waktu' => 'required|date_format:d-m-Y H:i',
             'kuota_partisipan' => 'required|integer|min:1',
             'alamat_campaign' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
             'gambar_latar' => 'required|array|max:3',
             'gambar_latar.*' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
         ], [
@@ -341,4 +339,4 @@ class CampaignController extends Controller
         }
         return response()->json(['success' => false], 404);
     }
-}   
+}
