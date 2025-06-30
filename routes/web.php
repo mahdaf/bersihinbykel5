@@ -11,6 +11,8 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\PartisipanCampaignController;
 use App\Models\Campaign;
+use App\Http\Controllers\KomentarLikeController;
+use App\Http\Controllers\KomentarController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -58,9 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hapuscampaign', function () {
         return view('hapuscampaign');
     });
-    Route::get('/detailcampaigncom', function () {
-        return view('detailcampaigncom');
-    });
+    
     Route::get('/detailcampaignvol', function () {
         return view('detailcampaignvol');
     });
@@ -83,17 +83,22 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/campaign/{id}', [CampaignController::class, 'update'])->name('campaign.update');
     Route::get('/campaign/{id}/nullify', [CampaignController::class, 'nullify'])->name('campaign.nullify');
     Route::get('/campaigncom/{id}', [CampaignController::class, 'showCom'])->name('campaigncom.detail');
+
+    Route::post('/campaign/{id}/komentar', [KomentarController::class, 'store'])->name('komentar.store');
+    Route::post('/komentar/{id}/like', [KomentarController::class, 'like'])->name('komentar.like');
+    Route::patch('/komentar/{id}', [KomentarController::class, 'update'])->name('komentar.update');
+    Route::delete('/komentar/{id}', [\App\Http\Controllers\KomentarController::class, 'destroy'])->name('komentar.destroy');
+
     Route::get('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'create'])->name('partisipan.create');
     Route::post('/campaign/{id}/daftar', [PartisipanCampaignController::class, 'store'])->name('partisipan.store');
     Route::post('/campaign/{id}/bookmark', [CampaignController::class, 'bookmark'])->name('campaign.bookmark');
     Route::delete('/campaign/{id}/bookmark', [CampaignController::class, 'unbookmark'])->name('campaign.unbookmark');
     Route::delete('campaign/gambar/hapus/{id}', [CampaignController::class, 'hapusGambar']);
+    Route::post('/profil/update', [\App\Http\Controllers\ProfilController::class, 'update'])->name('profil.update');
 });
-Route::get('/profilvolunteer', function () {
-        return view('profilvolunteer');
-    });
 
 // Handle 404 dan 403 error
 Route::fallback(function () {
     return view('halamanerror');
 });
+

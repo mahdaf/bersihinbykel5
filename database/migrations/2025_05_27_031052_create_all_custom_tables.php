@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->text('fotoProfil');
             $table->string('nomorTelepon', 100);
             $table->foreignId('jenis_akun_id')->constrained('jenis_akun');
+            $table->timestamps();
         });
 
         Schema::create('akun_komunitas', function (Blueprint $table) {
@@ -59,12 +60,14 @@ return new class extends Migration {
             $table->foreignId('akun_id')->constrained('akun');
             $table->foreignId('campaign_id')->constrained('campaign');
             $table->string('komentar', 280);
-            $table->dateTime('waktu');
+            $table->datetime('waktu');
+            $table->datetime('updated_at')->nullable();
         });
 
         Schema::create('komentar_disukai', function (Blueprint $table) {
             $table->foreignId('komentar_id')->constrained('komentar');
             $table->foreignId('akun_id')->constrained('akun');
+            $table->unique(['komentar_id', 'akun_id']);
         });
 
         Schema::create('partisipan_campaign', function (Blueprint $table) {

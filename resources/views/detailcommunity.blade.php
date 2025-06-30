@@ -184,11 +184,42 @@
     @endif
 </div>
 
+{{-- Komentar --}}
+<div class="mx-14 mt-8 mb-6 border border-gray-200 rounded-xl p-4">
+    {{-- Form Komentar --}}
+    @if(auth()->check())
+        <form id="commentForm" class="flex items-center gap-3 mb-4" method="POST" action="{{ route('komentar.store', $campaign->id) }}">
+            @csrf
+            <img src="{{ filter_var(auth()->user()->fotoProfil, FILTER_VALIDATE_URL) ? auth()->user()->fotoProfil : asset('storage/' . auth()->user()->fotoProfil) }}" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+                <div class="font-semibold text-sm mb-1">{{ auth()->user()->namaPengguna }}</div>
+                <input
+                    id="commentInput"
+                    name="komentar"
+                    type="text"
+                    class="w-full border-0 border-b border-gray-300 rounded-none px-0 py-2 text-sm focus:outline-none focus:ring-0 focus:border-[#810000]"
+                    placeholder="Tulis komentar kamu..."
+                    autocomplete="off"
+                    maxlength="280"
+                    required
+                >
+            </div>
+            <button type="submit" class="bg-[#810000] text-white px-4 py-2 rounded-md hover:bg-red-800 transition">
+                Kirim
+            </button>
+        </form>
+    @endif
+</div>
+<div class="mx-14" id="commentsSection">
+    <h3 class="font-semibold text-lg mb-4 text-gray-700">Komentar</h3>
+    <x-list-komentar :komentar="$komentar" :campaign="$campaign" />
+</div>
+
 <script>
 function confirmDeletion(campaignId) {
     Swal.fire({
         title: 'Apakah Anda yakin ingin menghapus campaign?',
-        html: '<span style="">Semua data campaign dan seluruh partisipan akan dihapus dari campaign.</span>',
+        html: '<span>Semua data campaign dan seluruh partisipan akan dihapus dari campaign.</span>',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#810000',
@@ -206,6 +237,244 @@ function confirmDeletion(campaignId) {
         }
     });
 }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function attachCommentEvents() {
+        document.querySelectorAll('.menu-toggle-btn').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                const popup = document.getElementById('menu-popup-' + id);
+                document.querySelectorAll('.menu-popup').forEach(function(p) {
+                    if (p !== popup) p.classList.add('hidden');
+                });
+                popup.classList.toggle('hidden');
+            };
+        });
+
+        document.querySelectorAll('.edit-comment-btn').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                btn.closest('.menu-popup').classList.add('hidden');
+                const id = btn.getAttribute('data-id');
+                const commentDiv = btn.closest('.flex-1');
+                const textDiv = commentDiv.querySelector('.text-sm.text-gray-700');
+                const oldText = textDiv.textContent.trim();
+                if (commentDiv.querySelector('.edit-comment-form')) return;
+                const form = document.createElement('form');
+                form.className = 'edit-comment-form flex gap-2 mt-1';
+                form.innerHTML = `
+                    <input type="text" class="border rounded px-2 py-1 text-sm flex-1" value="${oldText}" maxlength="280" required>
+                    <button type="submit" class="bg-[#810000] text-white px-3 py-1 rounded text-xs">Kirim</button>
+                    <button type="button" class="cancel-edit text-gray-500 px-2 text-xs">Batal</button>
+                `;
+                textDiv.style.display = 'none';
+                textDiv.parentNode.insertBefore(form, textDiv);
+                form.querySelector('.cancel-edit').onclick = function() {
+                    form.remove();
+                    textDiv.style.display = '';
+                };
+                form.onsubmit = function(ev) {
+                    ev.preventDefault();
+                    const newText = form.querySelector('input').value.trim();
+                    if (!newText) return;
+                    fetch(`/komentar/${id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ komentar: newText })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            textDiv.textContent = data.komentar.komentar;
+                            const waktuSpan = commentDiv.querySelector('.waktu-komentar');
+                            if (waktuSpan) waktuSpan.innerHTML = '• ' + data.komentar.updated_at + ' <span class="text-xs text-gray-400">(Edited)</span>';
+                            form.remove();
+                            textDiv.style.display = '';
+                        } else {
+                            alert(data.message || 'Gagal update komentar.');
+                        }
+                    });
+                };
+            };
+        });
+
+        document.querySelectorAll('.delete-comment-btn').forEach(function(btn) {
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                btn.closest('.menu-popup').classList.add('hidden');
+                const id = btn.getAttribute('data-id');
+                fetch(`/komentar/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        btn.closest('.flex.items-start').remove();
+                        const notif = document.getElementById('notif-delete-comment');
+                        if (notif) {
+                            notif.classList.remove('hidden');
+                            setTimeout(() => notif.classList.add('hidden'), 2000);
+                        }
+                    } else {
+                        alert(data.message || 'Gagal hapus komentar.');
+                    }
+                });
+            };
+        });
+    }
+
+    // AJAX untuk submit komentar
+    const form = document.getElementById('commentForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('commentInput');
+            const komentar = input.value.trim();
+            if (!komentar) return;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ komentar })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const k = data.komentar;
+                    const isOwner = k.akun_id == {{ auth()->id() }};
+                    let menuHtml = '';
+                    if (isOwner) {
+                        menuHtml = `
+                            <div class="relative">
+                                <button
+                                    type="button"
+                                    class="p-1 rounded hover:bg-gray-100 focus:outline-none menu-toggle-btn"
+                                    title="Menu"
+                                    data-id="${k.id}"
+                                    id="menu-btn-${k.id}"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="6" r="1.5" fill="#171717"/>
+                                        <circle cx="12" cy="12" r="1.5" fill="#171717"/>
+                                        <circle cx="12" cy="18" r="1.5" fill="#171717"/>
+                                    </svg>
+                                </button>
+                                <div
+                                    class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow z-10 menu-popup"
+                                    id="menu-popup-${k.id}"
+                                >
+                                    <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 edit-comment-btn" data-id="${k.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                             viewBox="0 0 24 24" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                                            <path d="M13.5 6.5l4 4" />
+                                        </svg>
+                                        Edit Komentar
+                                    </button>
+                                    <button type="button" class="w-full flex items-center gap-2 text-left px-4 py-3 text-sm hover:bg-gray-100 text-red-600 delete-comment-btn" data-id="${k.id}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                             viewBox="0 0 24 24" stroke="red" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 7l16 0" />
+                                            <path d="M10 11l0 6" />
+                                            <path d="M14 11l0 6" />
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                        Hapus Komentar
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    const html = `
+                        <div class="flex items-start mb-4">
+                            <img src="${k.fotoProfil}" class="w-10 h-10 rounded-full mr-3" alt="Avatar">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="font-semibold text-sm">${k.namaPengguna}</span>
+                                        <span class="text-xs text-gray-400 waktu-komentar">• ${k.updated_at}</span>
+                                    </div>
+                                    ${menuHtml}
+                                </div>
+                                <div class="text-sm text-gray-700 mb-1">${k.komentar}</div>
+                                <button
+                                    type="button"
+                                    class="like-btn mt-1 text-xs flex items-center gap-1"
+                                    data-id="${k.id}"
+                                    data-liked="0"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         class="w-5 h-5 transition-colors duration-200"
+                                         fill="none"
+                                         stroke="#171717"
+                                         stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+                                </svg>
+                                <span class="like-count text-[#171717]">0</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                    document.getElementById('commentsList').insertAdjacentHTML('afterbegin', html);
+                    input.value = '';
+                    attachCommentEvents();
+                } else {
+                    alert('Gagal menambah komentar.');
+                }
+            })
+            .catch(() => alert('Gagal menambah komentar (server error).'));
+        });
+    }
+
+    // Like event delegation tetap
+    document.getElementById('commentsList').addEventListener('click', function(e) {
+        const btn = e.target.closest('.like-btn');
+        if (!btn) return;
+        const komentarId = btn.getAttribute('data-id');
+        fetch(`/komentar/${komentarId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const svg = btn.querySelector('svg');
+                svg.setAttribute('fill', data.liked ? 'red' : 'none');
+                svg.setAttribute('stroke', data.liked ? 'red' : '#171717');
+                btn.setAttribute('data-liked', data.liked ? '1' : '0');
+                btn.querySelector('.like-count').textContent = data.count;
+            } else {
+                alert(data.message || 'Tidak bisa like komentar.');
+            }
+        });
+    });
+
+    // Panggil sekali di awal
+    attachCommentEvents();
+});
 </script>
 </body>
 
