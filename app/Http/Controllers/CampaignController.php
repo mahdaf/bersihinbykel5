@@ -92,7 +92,7 @@ class CampaignController extends Controller
         $campaign->waktu_diperbarui = now();
         $campaign->deskripsi = $request->deskripsi_campaign;
         $campaign->lokasi = $request->alamat_campaign;
-        $campaign->kontak = $user->nomorTelepon;
+        $campaign->kontak = $user->email;
         $campaign->kuota_partisipan = $request->kuota_partisipan;
         $campaign->save();
 

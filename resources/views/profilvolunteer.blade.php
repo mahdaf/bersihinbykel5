@@ -13,7 +13,7 @@
     @include('components.navbar')
 
     {{-- Profile Section --}}
-    <main class="max-w-4xl mx-auto px-6 py-12" x-data="{ showEdit: false, tab: 'all' }">
+    <main class="max-w-4xl mx-auto px-6 py-12" x-data="{ showEdit: false, tab: 'campaign' }">
         @if(session('success'))
             <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-4" role="alert">
                 {{ session('success') }}

@@ -58,26 +58,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('campaign.tambah');
     Route::post('/campaign', [CampaignController::class, 'store'])->name('campaign.store');
 
-    // ...tambahkan semua route lain yang ingin dibatasi login di sini...
     Route::get('/editcampaign/{id}', [CampaignController::class, 'edit'])->name('editcampaign');
     Route::get('/hapuscampaign', function () {
         return view('hapuscampaign');
     });
 
-    Route::get('/detailcampaignvol', function () {
-        return view('detailcampaignvol');
-    });
-    Route::get('/detailcampaign', function () {
-        return view('detailcampaign');
-    });
-    Route::get('/pendaftaran', function () {
-        return view('pendaftaran-campaign');
-    });
-
     Route::get('/profil/campaign-followed', [DashboardController::class, 'campaignFollowed'])->name('campaign.followed');
     Route::get('/profil/campaign-created', [DashboardController::class, 'campaignCreated'])->name('campaign.created');
     Route::get('/campaign-recommendations', [DashboardController::class, 'allRekomendasi'])->name('allrekomendasi');
-
 
     Route::get('/profilcommunity', [ProfilCommunityController::class, 'show'])->name('profilcommunity');
     Route::get('/campaigncontoh/{id}', [CampaignController::class, 'show']);
