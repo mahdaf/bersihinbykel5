@@ -166,8 +166,9 @@
                                     src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
                                         ? $partisipan->akun->fotoProfil
                                         : asset('storage/' . $partisipan->akun->fotoProfil) }}"
-                                    class="w-8 h-8 rounded-full border-2 border-white shadow -ml-2"
+                                    class="w-8 h-8 rounded-full border-2 border-white shadow -ml-2 cursor-pointer"
                                     title="{{ $partisipan->nama }}"
+                                    onclick="openModal()"
                                 />
                             @endif
                         @endforeach
@@ -183,6 +184,40 @@
         </div>
     @endif
 </div>
+
+<!-- Modal Overlay -->
+    <div id="popupModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <!-- Modal Content -->
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <!-- Close Button -->
+            <button onclick="toggleModal()" class="absolute top-2 right-2 text-gray-500 hover:text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <h2 class="text-xl font-bold mb-4">Daftar Partisipan</h2>
+            <ul class="space-y-2 max-h-60 overflow-y-auto">
+                @forelse ($campaign->partisipanCampaigns as $partisipan)
+                    <li class="flex items-center gap-3">
+                        @if($partisipan->akun && $partisipan->akun->fotoProfil)
+                            <img src="{{ filter_var($partisipan->akun->fotoProfil, FILTER_VALIDATE_URL)
+                                ? $partisipan->akun->fotoProfil
+                                : asset('storage/' . $partisipan->akun->fotoProfil) }}"
+                                class="w-8 h-8 rounded-full border" alt="{{ $partisipan->nama }}">
+                        @else
+                            <img src="{{ asset('default-profile.png') }}" class="w-8 h-8 rounded-full border" alt="Default Profile">
+                        @endif
+                        <span>{{ $partisipan->nama }}</span>
+                    </li>
+                @empty
+                    <li class="text-gray-500">Belum ada partisipan.</li>
+                @endforelse
+            </ul>
+        </div>
+    </div>
 
 <script>
 function confirmDeletion(campaignId) {
@@ -206,6 +241,16 @@ function confirmDeletion(campaignId) {
         }
     });
 }
+
+function openModal() {
+            const modal = document.getElementById('popupModal');
+            modal.classList.remove('hidden');
+        }
+
+        function toggleModal() {
+            const modal = document.getElementById('popupModal');
+            modal.classList.add('hidden');
+        }
 </script>
 </body>
 
