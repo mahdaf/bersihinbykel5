@@ -53,9 +53,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search', [SearchController::class, 'search'])->name('search');
     Route::get('/profil', [ProfilController::class, 'show'])->name('profil');
 
-    // Route untuk membuat campaign
     Route::get('/campaign/tambah', function () {
-        return view('components.TambahCampaign');
+        return view('TambahCampaign');
     })->name('campaign.tambah');
     Route::post('/campaign', [CampaignController::class, 'store'])->name('campaign.store');
 
@@ -64,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hapuscampaign', function () {
         return view('hapuscampaign');
     });
-    
+
     Route::get('/detailcampaignvol', function () {
         return view('detailcampaignvol');
     });

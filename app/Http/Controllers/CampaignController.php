@@ -51,7 +51,7 @@ class CampaignController extends Controller
         ])->findOrFail($id);
 
         // Kirim ke blade
-        return view('detailcampaigncom', compact('campaign'));
+        return view('detailcommunity', compact('campaign'));
     }
 
     public function store(Request $request)
@@ -92,14 +92,14 @@ class CampaignController extends Controller
         $campaign->waktu_diperbarui = now();
         $campaign->deskripsi = $request->deskripsi_campaign;
         $campaign->lokasi = $request->alamat_campaign;
-        $campaign->kontak = $user->nomorTelepon; // Menggunakan nomor telepon komunitas sebagai kontak
+        $campaign->kontak = $user->nomorTelepon;
         $campaign->kuota_partisipan = $request->kuota_partisipan;
         $campaign->save();
 
         // 3. Upload dan simpan gambar
         $files = $request->file('gambar_latar');
         foreach ($files as $index => $file) {
-            $path = $file->store('campaign_images', 'public');
+            $path = $file->store('gambar_campaign', 'public');
             GambarCampaign::create([
                 'campaign_id' => $campaign->id,
                 'gambar' => $path,
@@ -108,7 +108,10 @@ class CampaignController extends Controller
         }
 
         // 4. Redirect ke halaman detail campaign yang baru dibuat
-        return redirect()->route('detailcam', $campaign->id)->with('success', 'Campaign berhasil dibuat!');
+        return redirect()->route('campaign.tambah')->with([
+            'success' => 'Campaign berhasil dibuat!',
+            'new_campaign_id' => $campaign->id
+        ]);
     }
 
     public function bookmark($id, Request $request)
