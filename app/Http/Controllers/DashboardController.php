@@ -15,38 +15,35 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $userCampaigns = collect();
-        if ($user) {
-            // campaign
-            if ($user->jenis_akun_id == 2) { // Community
-                $userCampaigns = Campaign::with('coverImage')
-                    ->where('akun_id', $user->id)
-                    ->orderBy('waktu', 'desc')
-                    ->take(3)
-                    ->get();
-            }
-            // volunteer
-            elseif ($user->jenis_akun_id == 1) { // Volunteer
-                $userCampaigns = PartisipanCampaign::with('campaign.coverImage')
-                    ->where('akun_id', $user->id)
-                    ->whereHas('campaign', function($q) {
-                        $q->where('waktu', '>=', now());
-                    })
-                    ->get()
-                    ->map(function($partisipan) {
-                        return $partisipan->campaign;
-                    })
-                    ->filter()
-                    ->sortByDesc('waktu')
-                    ->take(3)
-                    ->values();
-            }
+        if ($user && $user->jenis_akun_id == 2) {
+            // Ambil semua campaign yang dibuat oleh komunitas ini
+            $userCampaigns = \App\Models\Campaign::with('coverImage')
+                ->where('akun_id', $user->id)
+                ->orderByDesc('waktu')
+                ->take(3)
+                ->get();
+        } elseif ($user && $user->jenis_akun_id == 1) {
+            // Untuk volunteer, ambil campaign yang diikuti
+            $userCampaigns = \App\Models\PartisipanCampaign::with('campaign.coverImage')
+                ->where('akun_id', $user->id)
+                ->whereHas('campaign', function($q) {
+                    $q->where('waktu', '>=', now());
+                })
+                ->get()
+                ->map(function($partisipan) {
+                    return $partisipan->campaign;
+                })
+                ->filter()
+                ->sortByDesc('waktu')
+                ->take(3)
+                ->values();
         }
 
-        $recommendedCampaigns = Campaign::with('coverImage')
-            ->withCount('partisipanCampaigns') // relasi ke tabel partisipan_campaign
-            ->where('waktu', '>', now()) // hanya campaign yang masih valid pada H-1
-            ->orderByDesc('partisipan_campaigns_count') // urutkan dari yang paling banyak partisipan
-            ->orderBy('id') // jika jumlah sama, urutkan berdasarkan id campaign
+        $recommendedCampaigns = \App\Models\Campaign::with('coverImage')
+            ->withCount('partisipanCampaigns')
+            ->where('waktu', '>', now())
+            ->orderByDesc('partisipan_campaigns_count')
+            ->orderBy('id')
             ->take(3)
             ->get();
 
