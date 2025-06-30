@@ -84,8 +84,6 @@ class CampaignController extends Controller
         $campaign->lokasi = $request->alamat_campaign;
         $campaign->kontak = $user->nomorTelepon; // Menggunakan nomor telepon komunitas sebagai kontak
         $campaign->kuota_partisipan = $request->kuota_partisipan;
-        $campaign->latitude = $request->latitude;
-        $campaign->longitude = $request->longitude;
         $campaign->save();
 
         // 3. Upload dan simpan gambar
