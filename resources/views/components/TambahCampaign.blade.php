@@ -116,15 +116,6 @@
                     <input type="hidden" name="latitude" id="latitude">
                     <input type="hidden" name="longitude" id="longitude">
 
-                    {{-- Added Portofolio PDF input as per your original file --}}
-                    <label class="flex flex-col items-center justify-center border-2 border-dashed border-[#55A7AA] bg-[#DDEDEE] rounded-xl py-6 cursor-pointer mb-2 mt-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#55A7AA] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        <span class="text-[#55A7AA] font-semibold">Upload Portofolio (PDF)</span>
-                        <input type="file" name="portofolio" accept="application/pdf" class="hidden">
-                    </label>
-
                     <button type="submit" class="w-full bg-[#810000] text-white rounded-full py-3 font-semibold text-base hover:bg-[#a30000] transition mt-2">
                         Buat
                     </button>

@@ -34,6 +34,14 @@
                         PROFIL
                     </a>
                 </li>
+                @if(Auth::user()->jenis_akun_id == 2)
+                    <li>
+                        <a href="{{ route('campaign.tambah') }}"
+                           class="bg-[#810000] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#a30000] transition">
+                            + Buat Campaign
+                        </a>
+                    </li>
+                @endif
                 <li class="relative">
                     <!-- Tombol titik tiga -->
                     <button id="logout-dropdown-btn" class="relative px-1 pb-3 text-[#810000] hover:border-b-2 hover:border-[#810000] flex items-center gap-2">
@@ -94,6 +102,14 @@
                     PROFIL
                 </a>
             </li>
+            @if(Auth::user()->jenis_akun_id == 2)
+                <li class="border-b border-gray-200">
+                    <a href="{{ route('campaign.tambah') }}"
+                       class="block px-4 py-2 bg-[#810000] text-white rounded-md font-semibold hover:bg-[#a30000] transition">
+                        + Buat Campaign
+                    </a>
+                </li>
+            @endif
             <li class="pb-2">
                 <!-- Tombol titik tiga untuk mobile -->
                 <button id="mobile-logout-dropdown-btn" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
