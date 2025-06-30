@@ -82,6 +82,32 @@
 
 </div>
 
+@if(session('berhasil'))
+    <div id="modal-berhasil" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
+            <button onclick="window.location.href='{{ route('dashboard') }}'" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
+            <h2 class="text-2xl md:text-3xl font-bold text-[#224344] text-center mb-2">Pendaftaran Berhasil!</h2>
+            <img src="{{ asset('ilustration.png') }}" class="w-56 md:w-72 mb-6" />
+            <a href="{{ route('dashboard') }}" class="w-full">
+                <button class="w-full bg-[#810000] text-white rounded-full py-3 font-semibold text-base hover:bg-[#a30000] transition mb-3">Kembali ke beranda</button>
+            </a>
+        </div>
+    </div>
+@endif
+
+@if(session('penuh'))
+    <div id="modal-penuh" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-lg flex flex-col items-center px-10 py-8 relative max-w-md w-full">
+            <button onclick="window.location.href='{{ route('dashboard') }}'" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
+            <h2 class="text-2xl md:text-3xl font-bold text-[#a30000] text-center mb-2">Maaf, campaign sudah penuh!</h2>
+            <img src="{{ asset('ilustration.png') }}" class="w-56 md:w-72 mb-6" />
+            <a href="{{ route('dashboard') }}" class="w-full">
+                <button class="w-full bg-[#810000] text-white rounded-full py-3 font-semibold text-base hover:bg-[#a30000] transition mb-3">Kembali ke beranda</button>
+            </a>
+        </div>
+    </div>
+@endif
+
 <script>
     function validateEmail() {
         const email = document.getElementById('email').value;

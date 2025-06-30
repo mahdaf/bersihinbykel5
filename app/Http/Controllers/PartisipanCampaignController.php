@@ -26,8 +26,15 @@ class PartisipanCampaignController extends Controller
             'motivasi.max' => 'Motivasi tidak boleh melebihi 200 karakter.',
         ]);
 
-        PartisipanCampaign::create([
-            'akun_id' => Auth::id(),
+        $campaign = \App\Models\Campaign::findOrFail($id);
+        $jumlahPartisipan = \App\Models\PartisipanCampaign::where('campaign_id', $id)->count();
+
+        if ($campaign->kuota_partisipan && $jumlahPartisipan >= $campaign->kuota_partisipan) {
+            return redirect()->route('partisipan.create', $id)->with('penuh', true);
+        }
+
+        \App\Models\PartisipanCampaign::create([
+            'akun_id' => \Auth::id(),
             'campaign_id' => $id,
             'nama' => $request->nama,
             'email' => $request->email,
@@ -35,8 +42,7 @@ class PartisipanCampaignController extends Controller
             'motivasi' => $request->motivasi,
         ]);
 
-        // Tampilkan halaman berhasil daftar
-        return view('berhasil-daftar', ['campaign_id' => $id]);
+        return redirect()->route('partisipan.create', $id)->with('berhasil', true);
     }
 
     public function akun()
